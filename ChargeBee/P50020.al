@@ -6,7 +6,8 @@ page 50020 ChargebeeSetup
     InsertAllowed = false;
     PageType = Card;
     SourceTable = ChargebeeSetup;
-
+    ApplicationArea = All;
+    UsageCategory = Administration;
     layout
     {
         area(content)

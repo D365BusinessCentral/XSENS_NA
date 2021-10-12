@@ -11,6 +11,49 @@ pageextension 50006 "Sales Order" extends "Sales Order"
 
     layout
     {
+        addlast(General)
+        {
+            field("Comment Internal"; Rec."Comment Internal")
+            {
+                ApplicationArea = All;
+                Visible = false;
+            }
+            field("Comment External"; Rec."Comment External")
+            {
+                ApplicationArea = All;
+                Visible = false;
+            }
+            group(SalesForce)
+            {
+                CaptionML = ENU = 'SalesForce',
+                                  NLD = 'SalesForce';
+                field("SalesForce Comment"; Rec."SalesForce Comment")
+                {
+                    CaptionML = ENU = 'Comment 1',
+                                      NLD = 'Opmerking';
+                    ApplicationArea = All;
+                }
+                field("Comment 2"; Rec."Comment 2")
+                {
+                    ApplicationArea = All;
+                }
+                field("US Payment Terms"; Rec."US Payment Terms")
+                {
+                    ApplicationArea = All;
+                }
+                field("US Sales Order No."; Rec."US Sales Order No.")
+                {
+                    ApplicationArea = All;
+                }
+            }
+        }
+        addafter("Shipment Method Code")
+        {
+            field("Shipment Method Description"; Rec."Shipment Method Description")
+            {
+                ApplicationArea = All;
+            }
+        }
         addlast(content)
         {
             group("Chinese Localization")
@@ -90,32 +133,32 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 ApplicationArea = Basic, Suite;
             }
         }
-        addlast(content)
-        {
-            group(SalesForce)
-            {
-                CaptionML = ENU = 'SalesForce',
-                                  NLD = 'SalesForce';
-                field("SalesForce Comment"; Rec."SalesForce Comment")
-                {
-                    CaptionML = ENU = 'Comment',
-                                      NLD = 'Opmerking';
-                    ApplicationArea = All;
-                }
-                field("Comment 2"; Rec."Comment 2")
-                {
-                    ApplicationArea = All;
-                }
-                field("US Payment Terms"; Rec."US Payment Terms")
-                {
-                    ApplicationArea = All;
-                }
-                field("US Sales Order No."; Rec."US Sales Order No.")
-                {
-                    ApplicationArea = All;
-                }
-            }
-        }
+        // addlast(content)
+        // {
+        //     group(SalesForce)
+        //     {
+        //         CaptionML = ENU = 'SalesForce',
+        //                           NLD = 'SalesForce';
+        //         field("SalesForce Comment"; Rec."SalesForce Comment")
+        //         {
+        //             CaptionML = ENU = 'Comment',
+        //                               NLD = 'Opmerking';
+        //             ApplicationArea = All;
+        //         }
+        //         field("Comment 2"; Rec."Comment 2")
+        //         {
+        //             ApplicationArea = All;
+        //         }
+        //         field("US Payment Terms"; Rec."US Payment Terms")
+        //         {
+        //             ApplicationArea = All;
+        //         }
+        //         field("US Sales Order No."; Rec."US Sales Order No.")
+        //         {
+        //             ApplicationArea = All;
+        //         }
+        //     }
+        // }
         addafter("Ship-to Contact")
         {
             field("Sell-to IC Customer No."; Rec."Sell-to IC Customer No.")
@@ -135,6 +178,136 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 Importance = Additional;
             }
         }
-
+        modify("Shipment Method Code")
+        {
+            trigger OnAfterValidate()
+            begin
+                if Rec.Status <> Rec.Status::Open then
+                    Error('The document status must be open');
+                case Rec."Shipment Method Code" of
+                    'CPT':
+                        Rec."Shipment Method Description" := 'Carriage Paid To address (excl. import cost) (Incoterms 2010)';
+                    'DDP':
+                        Rec."Shipment Method Description" := 'Delivered Duty Paid address (Incoterms 2010)';
+                    'EXW':
+                        Rec."Shipment Method Description" := 'EX-Works Enschede (Incoterms 2010)';
+                end;
+            end;
+        }
+        modify("Tax Area Code")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Tax Liable")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Sell-to Contact")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to Name")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to Address")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to Address 2")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to City")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to County")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to Post Code")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to Country/Region Code")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to Contact No.")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Bill-to Contact")
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify(BillToContactPhoneNo)
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify(BillToContactMobilePhoneNo)
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify(BillToContactEmail)
+        {
+            Editable = true;
+            Enabled = true;
+        }
+        modify("Ship-to Name")
+        {
+            Editable = true;
+        }
+        modify("Ship-to Address")
+        {
+            Editable = true;
+        }
+        modify("Ship-to Address 2")
+        {
+            Editable = true;
+        }
+        modify("Ship-to City")
+        {
+            Editable = true;
+        }
+        modify("Ship-to County")
+        {
+            Editable = true;
+        }
+        modify("Ship-to Post Code")
+        {
+            Editable = true;
+        }
+        modify("Ship-to Country/Region Code")
+        {
+            Editable = true;
+        }
+        modify("Ship-to Contact")
+        {
+            Editable = true;
+        }
+        modify(Control82)
+        {
+            Visible = true;
+        }
+        modify(Control4)
+        {
+            Visible = true;
+        }
     }
 }

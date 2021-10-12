@@ -30,12 +30,35 @@ pageextension 50007 "Sales Invoice" extends "Sales Invoice"
                 }
             }
         }
+        addafter("Shipment Method Code")
+        {
+            field("Shipment Method Description"; Rec."Shipment Method Description")
+            {
+                ApplicationArea = All;
+            }
+        }
         addlast(Control205)
         {
             field("Bill-to Email"; Rec."Bill-to Email")
             {
                 ApplicationArea = All;
             }
+        }
+        modify("Shipment Method Code")
+        {
+            trigger OnAfterValidate()
+            begin
+                if Rec.Status <> Rec.Status::Open then
+                    Error('The document status must be open');
+                case Rec."Shipment Method Code" of
+                    'CPT':
+                        Rec."Shipment Method Description" := 'Carriage Paid To address (excl. import cost) (Incoterms 2010)';
+                    'DDP':
+                        Rec."Shipment Method Description" := 'Delivered Duty Paid address (Incoterms 2010)';
+                    'EXW':
+                        Rec."Shipment Method Description" := 'EX-Works Enschede (Incoterms 2010)';
+                end;
+            end;
         }
     }
 }

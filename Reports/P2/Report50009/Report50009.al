@@ -4,8 +4,12 @@ report 50009 "Prod. Order - Mat. Req.XSS DCR"
 
     // 20181017 GW         : New report based on R99000765.
     // 20190715 MDO NMSD-59: Nieuwe oplossing voor EAN128 barcode geimplementeerd. Download van Mibuso die er in NAV een Bitmap van maakt in een Blob.
+    // DefaultLayout = RDLC;
+    // RDLCLayout = 'Reports\P2\Prod. Order - Mat. Req.XSS DCR.rdlc';
+    UsageCategory = ReportsAndAnalysis;
+    ApplicationArea = All;
     DefaultLayout = RDLC;
-    RDLCLayout = 'Reports\P2\Prod. Order - Mat. Req.XSS DCR.rdlc';
+    RDLCLayout = 'Reports\P2\Report50009\Report50009.rdl';
 
     CaptionML = ENU = 'Prod. Order - Mat. Requisition',
                 NLD = 'PO - Mat.-behoefte';
@@ -17,10 +21,16 @@ report 50009 "Prod. Order - Mat. Req.XSS DCR"
             DataItemTableView = SORTING(Status, "No.");
             PrintOnlyIfDetail = true;
             RequestFilterFields = Status, "No.", "Source Type", "Source No.";
-            column(lblProdOrder; Trl('ProdOrder'))
+            column(lblProdOrder; Trl('Production Order'))
             {
             }
-            column(lblSalesOrder; Trl('SalesOrder'))
+            column(lblSalesOrder; Trl('Sales Order'))
+            {
+            }
+            column(lblSourceNo; Trl('Source No.'))
+            {
+            }
+            column(lblQuantityHeader; Trl('Quantity'))
             {
             }
             column(lblOperator; Trl('Operator'))
@@ -94,6 +104,9 @@ report 50009 "Prod. Order - Mat. Req.XSS DCR"
             {
             }
             column(BarcodeQuantity; gRecTMPBlob3.Blob)
+            {
+            }
+            column(UserID; UserId)
             {
             }
             dataitem("Prod. Order Line"; "Prod. Order Line")
@@ -190,19 +203,24 @@ report 50009 "Prod. Order - Mat. Req.XSS DCR"
                 //Bestaande code voor Barcode uitgeschakeld. Dit kregen we zo snel niet werkend en daarom
                 //een andere oplossing geimplementeerd waarmee een barcode als Bitmap wordt gemaakt.
 
-                //gTxtBarcodeProdOrder := fCode128("Production Order"."No.");
-                //gTxtBarcodeSourceNo  := fCode128("Production Order"."Source No.");
-                //gTxtBarcodeQuantity  := fCode128(STRSUBSTNO('%1',FORMAT("Production Order".Quantity)));     //20160919 KBG 07475
+                gTxtBarcodeProdOrder := fCode128("Production Order"."No.");
+                gTxtBarcodeSourceNo := fCode128("Production Order"."Source No.");
+                gTxtBarcodeQuantity := fCode128(STRSUBSTNO('%1', FORMAT("Production Order".Quantity)));     //20160919 KBG 07475
 
                 // ------------------------------------------------------------------------------------------------
                 // Hieronder roept het systeem functies aan om Barcodes EAN128 te genereren. De functies maken
                 // hiervan een Bitmap in TempBlob wordt ingelezen en als afbeelding wordt afgedrukt op het rapport.
                 // ------------------------------------------------------------------------------------------------
-
+                gRecTMPBlob.Reset();
+                gRecTMPBlob2.Reset();
+                gRecTMPBlob3.Reset();
                 gCduGeneral.fBarcodeCreatorV15EncodeCode128("Production Order"."No.", 2, false, gRecTMPBlob);
                 gCduGeneral.fBarcodeCreatorV15EncodeCode128("Production Order"."Source No.", 2, false, gRecTMPBlob2);
                 gCduGeneral.fBarcodeCreatorV15EncodeCode128(STRSUBSTNO('%1', FORMAT("Production Order".Quantity)), 2, false, gRecTMPBlob3);
                 //NM_END 20190715 MDO NMSD-59
+
+                // Barcode.DoGenerateBarcode("No.", 2, TempBlob);
+                // Barcode.DoGenerateBarcode("Source No.", 2, gRecTMPBlob2);
             end;
 
             trigger OnPreDataItem();
@@ -266,6 +284,7 @@ report 50009 "Prod. Order - Mat. Req.XSS DCR"
         gRecTMPBlob: Record TempBlob temporary;
         gRecTMPBlob2: Record TempBlob temporary;
         gRecTMPBlob3: Record TempBlob temporary;
+        TempBlob: Record TempBlob temporary;
 
     procedure "fEncodeBarcode128-1"(pText: Text[250]) RetVal: Text[250];
     var
@@ -339,27 +358,27 @@ report 50009 "Prod. Order - Mat. Req.XSS DCR"
     begin
         /* fEncodeBarcode128 */
 
-        //NM_BEGIN 20071011 GFR 14567
+        // NM_BEGIN 20071011 GFR 14567
         // Nederland:
         // Hoe wordt de codering van de 129 barcode gebruikt. How to encode a 128 barcode:
-        //
+
         // Elk karakter heeft een waarde van 0 tot en met 105. Deze waarde is nodig om de berekening te
         // maken voor elk symbool
 
         // De berekening is een Nodules 103 chechsum dat wordt berekent door de ("start code"
         // waarde plus) de (uitkomst van elke karakter zijn waarde maal de positie van het karakter).
-        //
+
         // Het resultaat van de berekening is de waarde van de check karakter, de uitkomst wordt dan gedeeld
         // door 103
-        //
+
         // The check character is a Modulus 103 Checksum that is calculated by summing the start code
         // value plus the product of each character position (most significant character position equals 1)
         // and the character value of the character at that position. This sum is divided by 103. The
         // remainder of the answer is the value of the Check Character (which can be looked up from the
         // table). Every encoded character is included except the Stop and Check Character.
-        //
-        //NM_END 20071011 GFR 14567
-        //
+
+        // NM_END 20071011 GFR 14567
+
         // Example: BarCode 1
         // Message : Start B   B   a   r   C   o   d   e      1
         // Value      104      34  65  82  35  79  68  69  0  17
@@ -1093,10 +1112,10 @@ report 50009 "Prod. Order - Mat. Req.XSS DCR"
     begin
         // Gegeven: pTxtCode
         // Levert: Code128 gecodeerde string voor gebruik icm Code128bWin.ttf font
-        //IF flIsNumeric(pTxtCode) THEN        //20160919 KBG 07475
-        //  EXIT(flCode128c(pTxtCode))
-        //ELSE
-        exit(flCode128b(pTxtCode));
+        IF flIsNumeric(pTxtCode) THEN        //20160919 KBG 07475
+            EXIT(flCode128c(pTxtCode))
+        ELSE
+            exit(flCode128b(pTxtCode));
     end;
 
     local procedure flCode128b(pTxtCode: Text[250]) lTxtCode128Barcode: Text[250];

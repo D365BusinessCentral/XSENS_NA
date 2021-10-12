@@ -190,6 +190,12 @@ report 50003 "Sales - Shipment XSS DCR"
             column(CompanyAddr6; wgCompanyAddr[6])
             {
             }
+            column(CompanyAddr7; wgCompanyAddr[7])
+            {
+            }
+            column(CompanyAddr8; wgCompanyAddr[8])
+            {
+            }
             column(CompanyBankAccNo; wgRecCompanyInfo."Bank Account No.")
             {
             }
@@ -280,7 +286,16 @@ report 50003 "Sales - Shipment XSS DCR"
             column(SelltoCustNo; "Sell-to Customer No.")
             {
             }
-            column(ShipmentMethodDesc; "Shipment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetShipmMethodTrl("Shipment Method Code"))//Krishna)
+            column(ShipmentMethodDesc; ShipmentMethodG.Description) //"Shipment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetShipmMethodTrl("Shipment Method Code"))//Krishna)
+            {
+            }
+            column(PaymentMethodDesc; PaymentMethodG.Description)
+            {
+            }
+            column(PaymentTermsDesc; PaymentTermsG.Description)
+            {
+            }
+            column(ShipmentMethodExternal; "Shipment Method Description")
             {
             }
             column(ShipToAddr1; wgShipToAddr[1])
@@ -339,6 +354,15 @@ report 50003 "Sales - Shipment XSS DCR"
             }
             //31.08.2021
             column(Sell_to_E_Mail; "Sell-to E-Mail") { }
+            column(SalesForce_Comment; "SalesForce Comment")
+            {
+            }
+            column(ShipmentDate; FORMAT(ShptHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
+            {
+            }
+            column(wgShowLotSN; wgShowLotSN)
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);
@@ -414,6 +438,24 @@ report 50003 "Sales - Shipment XSS DCR"
                     }
                     column(PrintItemDescription2; gRecItem."Print Item Description 2")
                     {
+                    }
+                    dataitem("Item Ledger Entry"; "Item Ledger Entry")
+                    {
+                        DataItemLink = "Item No." = field("No."), "Document No." = field("Document No.");
+                        DataItemTableView = sorting("Document Type", "Item No.", "Document No.") WHERE("Document Type" = CONST("Sales Shipment"));
+                        column(Serial_No_; "Serial No.") { }
+                        column(Lot_No_; "Lot No.") { }
+                        column(ItemQuantity; Abs(Quantity)) { }
+                        column(SetSerialLotNo; SetSerialLotNo) { }
+                        trigger OnAfterGetRecord()
+                        var
+                            myInt: Integer;
+                        begin
+                            if ("Serial No." = '') AND ("Lot No." = '') then
+                                SetSerialLotNo := false
+                            else
+                                SetSerialLotNo := true;
+                        end;
                     }
                     dataitem(LineComment; "Sales Comment Line")
                     {
@@ -537,7 +579,6 @@ report 50003 "Sales - Shipment XSS DCR"
                             //NM_END
                         end else
                             gRecItem.INIT;
-
                     end;
 
                     trigger OnPreDataItem();
@@ -607,6 +648,13 @@ report 50003 "Sales - Shipment XSS DCR"
                     wgCduItemTrackingDocMgt.RetrieveDocumentItemTracking(TrackingSpec, ShptHdr."No.",
                         DATABASE::"Sales Shipment Header", 0);
                 end;
+                //09.09.2021
+                Clear(ShipmentMethodG);
+                if ShipmentMethodG.Get("Shipment Method Code") then;
+                Clear(PaymentMethodG);
+                if PaymentMethodG.Get("Payment Method Code") then;
+                Clear(PaymentTermsG);
+                if PaymentTermsG.Get("Payment Terms Code") then;
             end;
         }
     }
@@ -697,6 +745,7 @@ report 50003 "Sales - Shipment XSS DCR"
 
         gIntCompanyLocation := wgRecCompanyInfo."Company Location";
         //gRecXSENSSetup.GET;
+        wgShowLotSN := true;//13.09.2021
     end;
 
     trigger OnPreReport();
@@ -743,6 +792,10 @@ report 50003 "Sales - Shipment XSS DCR"
         gRecServiceItemGroup: Record "Service Item Group";
         gIntCompanyLocation: Integer;
         wgShowDiskShippingItems: Boolean;
+        PaymentMethodG: Record "Payment Method";
+        ShipmentMethodG: Record "Shipment Method";
+        PaymentTermsG: Record "Payment Terms";
+        SetSerialLotNo: Boolean;
 
     local procedure Trl(pLblName: Text): Text;
     begin

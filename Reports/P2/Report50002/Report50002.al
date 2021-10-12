@@ -31,7 +31,7 @@ report 50002 "Proforma Invoice XSS DCR"
     {
         dataitem(SalesHdr; "Sales Header")
         {
-            DataItemTableView = SORTING("Document Type", "No.") WHERE("Document Type" = CONST(Order));
+            DataItemTableView = SORTING("Document Type", "No.") WHERE("Document Type" = filter(Order | Invoice));
             RequestFilterFields = "No.", "Sell-to Customer No.", "No. Printed";
             RequestFilterHeading = 'Sales Order';
             column(lblAllowInvDisc; Trl('AllowInvDisc'))
@@ -262,6 +262,12 @@ report 50002 "Proforma Invoice XSS DCR"
             column(CompanyAddr6; wgCompanyAddr[6])
             {
             }
+            column(CompanyAddr7; wgCompanyAddr[7])
+            {
+            }
+            column(CompanyAddr8; wgCompanyAddr[8])
+            {
+            }
             column(CompanyBankAccNo; wgRecCompanyInfo."Bank Account No.")
             {
             }
@@ -358,7 +364,7 @@ report 50002 "Proforma Invoice XSS DCR"
             column(LanguageCode; "Language Code")
             {
             }
-            column(PaymentTermsDesc; "Payment Terms Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl("Payment Terms Code")//Krishna)
+            column(PaymentTermsDesc; PaymentTermsG.Description) //"Payment Terms Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl("Payment Terms Code")//Krishna)
             {
             }
             column(PostingDate; "Posting Date")
@@ -379,7 +385,7 @@ report 50002 "Proforma Invoice XSS DCR"
             column(SelltoCustNo; "Sell-to Customer No.")
             {
             }
-            column(ShipmentMethodDesc; "Shipment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetShipmMethodTrl("Shipment Method Code"))//Krishna)
+            column(ShipmentMethodDesc; ShipmentMethodG.Description) //"Shipment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetShipmMethodTrl("Shipment Method Code"))//Krishna)
             {
             }
             column(ShipToAddr1; wgShipToAddr[1])
@@ -454,7 +460,22 @@ report 50002 "Proforma Invoice XSS DCR"
             }
             //31.08.2021
             column(Sell_to_E_Mail; "Sell-to E-Mail") { }
+            column(PaymentMethodDesc; PaymentMethodG.Description) //SalesHdr."Payment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl(SalesHdr."Payment Method Code"))//Krishna)
+            {
+            }
+            column(ShipmentDate; FORMAT(SalesHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
+            {
+            }
+            column(ShipmentDescriptionExternal; "Shipment Method Description")
+            {
+            }
             column(TotLineAmount; wgTotLineAmount)
+            {
+            }
+            column(SalesForce_Comment; "SalesForce Comment")
+            {
+            }
+            column(VatRegulationG; VatRegulationG)
             {
             }
             dataitem(CopyLoop; "Integer")
@@ -558,6 +579,10 @@ report 50002 "Proforma Invoice XSS DCR"
                     {
                     }
                     column(LineNo; "Line No.")
+                    {
+                    }
+                    //09.09.2021
+                    column(Sorting_No_; "Sorting No.")
                     {
                     }
                     column(Description2; "Description 2")
@@ -688,7 +713,7 @@ report 50002 "Proforma Invoice XSS DCR"
                             CurrReport.BREAK;
                         SalesLine.SETRANGE("Line No.", 0, SalesLine."Line No.");
 
-                        SETCURRENTKEY("Document No.", Sorting, "Line No.");
+                        SETCURRENTKEY("Document No.", "Sorting No.", "Line No.");
                     end;
                 }
                 dataitem(VATAmtLine; "VAT Amount Line")
@@ -783,15 +808,15 @@ report 50002 "Proforma Invoice XSS DCR"
                 dataitem(TermsAndConditions; "Integer")
                 {
                     DataItemTableView = SORTING(Number) ORDER(Ascending) WHERE(Number = CONST(1));
-                    column(PaymentMethodDesc; SalesHdr."Payment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl(SalesHdr."Payment Method Code"))//Krishna)
-                    {
-                    }
+                    // column(PaymentMethodDesc; SalesHdr."Payment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl(SalesHdr."Payment Method Code"))//Krishna)
+                    // {
+                    // }
                     column(SalesForceComment; SalesHdr."SalesForce Comment")
                     {
                     }
-                    column(ShipmentDate; FORMAT(SalesHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
-                    {
-                    }
+                    // column(ShipmentDate; FORMAT(SalesHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
+                    // {
+                    // }
                 }
                 dataitem(Total; "Integer")
                 {
@@ -967,6 +992,20 @@ report 50002 "Proforma Invoice XSS DCR"
                 //Set HideLineDiscount
                 wlRecRef.GETTABLE(SalesHdr);
                 //wgHideLineDiscount := wgCduDocCreatorReportFunctions.wgFncHideLineDiscount(wlRecRef);//Krishna
+                //09.09.2021
+                Clear(PaymentTermsG);
+                if PaymentTermsG.Get("Payment Terms Code") then;
+                Clear(ShipmentMethodG);
+                if ShipmentMethodG.Get("Shipment Method Code") then;
+                Clear(PaymentMethodG);
+                if PaymentMethodG.Get("Payment Method Code") then;
+                Clear(VatRegulationG);
+                case SalesHdr."VAT Bus. Posting Group" of
+                    'EU-SALE':
+                        VatRegulationG := '“Subject to Intra Community Supply (Art.138 VAT Directive 2006/112) – 0% VATapplicable”';
+                    'ROW-SALE':
+                        VatRegulationG := '“No tax charged because of EXPORT-shipment”';
+                end;
             end;
         }
     }
@@ -1141,6 +1180,10 @@ report 50002 "Proforma Invoice XSS DCR"
         gRecItem: Record Item;
         gRecXSENSSetup: Record "XSENS Setup";
         gIntCompanyLocation: Integer;
+        PaymentTermsG: Record "Payment Terms";
+        PaymentMethodG: Record "Payment Method";
+        ShipmentMethodG: Record "Shipment Method";
+        VatRegulationG: Text;
 
     local procedure Trl(pLblName: Text): Text;
     begin

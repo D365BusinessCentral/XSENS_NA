@@ -30,6 +30,13 @@ pageextension 50014 "Posted Sales Invoice" extends "Posted Sales Invoice"
                 }
             }
         }
+        addafter("Shipment Method Code")
+        {
+            field("Shipment Method Description"; Rec."Shipment Method Description")
+            {
+                ApplicationArea = All;
+            }
+        }
         addlast("Bill-to")
         {
             field("Bill-to Email"; Rec."Bill-to Email")

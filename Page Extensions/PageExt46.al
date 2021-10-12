@@ -11,6 +11,15 @@ pageextension 50009 "Sales Order Subform" extends "Sales Order Subform"
             field(ExternalID; Rec.ExternalID)
             {
                 ApplicationArea = All;
+                Editable = true;
+                Enabled = true;
+            }
+        }
+        addafter("Line No.")
+        {
+            field("Sorting No."; Rec."Sorting No.")
+            {
+                ApplicationArea = All;
             }
         }
         addafter("Shortcut Dimension 2 Code")

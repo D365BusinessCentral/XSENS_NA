@@ -260,6 +260,12 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(CompanyAddr6; wgCompanyAddr[6])
             {
             }
+            column(CompanyAddr7; wgCompanyAddr[7])
+            {
+            }
+            column(CompanyAddr8; wgCompanyAddr[8])
+            {
+            }
             column(CompanyBankAccNo; wgRecCompanyInfo."Bank Account No.")
             {
             }
@@ -356,7 +362,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(LanguageCode; "Language Code")
             {
             }
-            column(PaymentTermsDesc; "Payment Terms Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl("Payment Terms Code")//Krishna)
+            column(PaymentTermsDesc; PaymentTermsG.Description) //"Payment Terms Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl("Payment Terms Code")//Krishna)
             {
             }
             column(PostingDate; "Posting Date")
@@ -377,7 +383,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(SelltoCustNo; "Sell-to Customer No.")
             {
             }
-            column(ShipmentMethodDesc; "Shipment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetShipmMethodTrl("Shipment Method Code"))//Krishna)
+            column(ShipmentMethodDesc; ShipmentMethodG.Description) //"Shipment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetShipmMethodTrl("Shipment Method Code"))//Krishna)
             {
             }
             column(ShipToAddr1; wgShipToAddr[1])
@@ -407,6 +413,30 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(ShipToAddrSet; wgShowShippingAddr)
             {
             }
+            column(BillToAddr1; wgCustAddr[1])
+            {
+            }
+            column(BillToAddr2; wgCustAddr[2])
+            {
+            }
+            column(BillToAddr3; wgCustAddr[3])
+            {
+            }
+            column(BillToAddr4; wgCustAddr[4])
+            {
+            }
+            column(BillToAddr5; wgCustAddr[5])
+            {
+            }
+            column(BillToAddr6; wgCustAddr[6])
+            {
+            }
+            column(BillToAddr7; wgCustAddr[7])
+            {
+            }
+            column(BillToAddr8; wgCustAddr[8])
+            {
+            }
             column(TotalText; wgTotalText)
             {
             }
@@ -426,7 +456,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
             {
                 AutoFormatType = 1;
             }
-            column(VATRegNo; "VAT Registration No.")
+            column(VATRegNo; CustomerG."VAT Registration No.") //"VAT Registration No.")
             {
             }
             column(YourReference; "Your Reference")
@@ -439,6 +469,9 @@ report 50001 "Sales - Order Confirm XSS DCR"
             {
             }
             column(SellToCustAddr2; gTxtSellToCustAddr[2])
+            {
+            }
+            column(Sell_to_Customer_Name; "Sell-to Customer Name")
             {
             }
             column(USSalesordernumber; "US Sales Order No.")
@@ -463,6 +496,27 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(Sell_to_E_Mail; "Sell-to E-Mail") { }
             //01.09.2021
             column(TotLineAmount; wgTotLineAmount)
+            {
+            }
+            column(VATAmtText; VATAmtLine.VATAmountText())
+            {
+            }
+            column(ShipmentDate; FORMAT(SalesHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
+            {
+            }
+            column(PaymentMethodDesc; PaymentMethodG.Description) //SalesHdr."Payment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl(SalesHdr."Payment Method Code"))//Krishna)
+            {
+            }
+            column(ShipmentMethodExternal; "Shipment Method Description")
+            {
+            }
+            column(AmountInclVAT; "Amount Including VAT")
+            {
+            }
+            column(VATAmount; VATAmtLine."VAT Amount")
+            {
+            }
+            column(SalesForce_Comment; "SalesForce Comment")
             {
             }
             dataitem(CopyLoop; "Integer")
@@ -518,11 +572,6 @@ report 50001 "Sales - Order Confirm XSS DCR"
                         AutoFormatExpression = "Currency Code";
                         AutoFormatType = 1;
                     }
-                    column(AmountInclVAT; "Amount Including VAT")
-                    {
-                        AutoFormatExpression = "Currency Code";
-                        AutoFormatType = 1;
-                    }
                     column(Description; Description)
                     {
                     }
@@ -566,6 +615,10 @@ report 50001 "Sales - Order Confirm XSS DCR"
                     {
                     }
                     column(LineNo; "Line No.")
+                    {
+                    }
+                    //09.09.2021
+                    column(Sorting_No_; "Sorting No.")
                     {
                     }
                     column(Description2; SalesLine."Description 2")
@@ -701,7 +754,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
                             CurrReport.BREAK;
                         SalesLine.SETRANGE("Line No.", 0, SalesLine."Line No.");
 
-                        SETCURRENTKEY("Document No.", Sorting, "Line No.");
+                        SETCURRENTKEY("Document No.", "Sorting No.", "Line No.");
                     end;
                 }
                 dataitem(VATAmtLine; "VAT Amount Line")
@@ -723,11 +776,11 @@ report 50001 "Sales - Order Confirm XSS DCR"
                         AutoFormatExpression = SalesHdr."Currency Code";
                         AutoFormatType = 1;
                     }
-                    column(VATAmount; "VAT Amount")
-                    {
-                        AutoFormatExpression = SalesHdr."Currency Code";
-                        AutoFormatType = 1;
-                    }
+                    // column(VATAmount; "VAT Amount")
+                    // {
+                    //     AutoFormatExpression = SalesHdr."Currency Code";
+                    //     AutoFormatType = 1;
+                    // }
                     column(VATBase; "VAT Base")
                     {
                         AutoFormatExpression = SalesHdr."Currency Code";
@@ -796,15 +849,15 @@ report 50001 "Sales - Order Confirm XSS DCR"
                 dataitem(TermsAndConditions; "Integer")
                 {
                     DataItemTableView = SORTING(Number) ORDER(Ascending) WHERE(Number = CONST(1));
-                    column(PaymentMethodDesc; SalesHdr."Payment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl(SalesHdr."Payment Method Code"))//Krishna)
-                    {
-                    }
+                    // column(PaymentMethodDesc; SalesHdr."Payment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetPaymTermsTrl(SalesHdr."Payment Method Code"))//Krishna)
+                    // {
+                    // }
                     column(SalesForceComment; SalesHdr."SalesForce Comment")
                     {
                     }
-                    column(ShipmentDate; FORMAT(SalesHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
-                    {
-                    }
+                    // column(ShipmentDate; FORMAT(SalesHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
+                    // {
+                    // }
                 }
                 dataitem(Total; "Integer")
                 {
@@ -839,9 +892,9 @@ report 50001 "Sales - Order Confirm XSS DCR"
                         AutoFormatExpression = SalesHdr."Currency Code";
                         AutoFormatType = 1;
                     }
-                    column(VATAmtText; wgVATAmountText)
-                    {
-                    }
+                    // column(VATAmtText; wgVATAmountText)
+                    // {
+                    // }
                     column(TotVALVATBaseLCY; wgTotVALVATBaseLCY)
                     {
                     }
@@ -858,16 +911,16 @@ report 50001 "Sales - Order Confirm XSS DCR"
                             wgRecCompanyInfo."Company Location"::Holland:
                                 begin
                                     if wgMonolithicVAT then
-                                        wgVATAmountText := STRSUBSTNO(Trl('TotalVATAmount%1Perc'), VATAmtLine."VAT %")
+                                        wgVATAmountText := STRSUBSTNO(Trl('Total VAT Amount %1 Perc'), VATAmtLine."VAT %")
                                     else
-                                        wgVATAmountText := Trl('TotalVATAmount');
+                                        wgVATAmountText := Trl('Total VAT Amount');
                                 end;
                             wgRecCompanyInfo."Company Location"::"North America":
                                 begin
                                     if wgMonolithicVAT then
-                                        wgVATAmountText := STRSUBSTNO(Trl('TotalTaxAmount%1Perc'), VATAmtLine."VAT %")
+                                        wgVATAmountText := STRSUBSTNO(Trl('Total Tax Amount %1 Perc'), VATAmtLine."VAT %")
                                     else
-                                        wgVATAmountText := Trl('TotalTaxAmount');
+                                        wgVATAmountText := Trl('Total Tax Amount');
                                 end;
                         end;
                         //NM_END
@@ -909,7 +962,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
                 //wgCduDocCreatorTransLationMgt.wgSetLanguageCode('ENU');    //GW//Krishna
 
                 wlFncFormatAddressFields(SalesHdr);
-                wlFncFormatDocumentFields(SalesHdr);
+                //wlFncFormatDocumentFields(SalesHdr);
 
                 if wgPrint then begin
                     if wgArchiveDocument then
@@ -982,6 +1035,17 @@ report 50001 "Sales - Order Confirm XSS DCR"
                 ////wgHideLineDiscount := wgCduDocCreatorReportFunctions.wgFncHideLineDiscount(wlRecRef);//Krishna
 
                 fUpdateDateOrderConfimation(SalesHdr);
+                //09.09.2021
+                Clear(ShipmentMethodG);
+                if ShipmentMethodG.Get("Shipment Method Code") then;
+                Clear(PaymentMethodG);
+                if PaymentMethodG.Get("Payment Method Code") then;
+                Clear(PaymentTermsG);
+                if PaymentTermsG.Get("Payment Terms Code") then;
+                Clear(CustomerG);
+                if CustomerG.Get("Bill-to Customer No.") then;
+
+                wlFncFormatDocumentFields(SalesHdr);
             end;
         }
     }
@@ -1159,6 +1223,12 @@ report 50001 "Sales - Order Confirm XSS DCR"
         gIntCompanyLocation: Integer;
         //31.08.2021
         TotalSubTotal: Decimal;
+        //09.09.2021
+        PaymentMethodG: Record "Payment Method";
+        ShipmentMethodG: Record "Shipment Method";
+        PaymentTermsG: Record "Payment Terms";
+        Serial: Page "Posted Sales Shipment";
+        CustomerG: Record Customer;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1193,19 +1263,30 @@ report 50001 "Sales - Order Confirm XSS DCR"
             end;
             wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
             //NM_BEGIN GW
-            case wgRecCompanyInfo."Company Location" of
-                wgRecCompanyInfo."Company Location"::Holland:
-                    begin
-                        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-                        wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
-                    end;
-                wgRecCompanyInfo."Company Location"::"North America":
-                    begin
-                        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
-                        wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
-                    end;
-            end;
+            // case wgRecCompanyInfo."Company Location" of
+            //     wgRecCompanyInfo."Company Location"::Holland:
+            //         begin
+            //             if wgTotVATAmount = 0 then
+            //                 wgTotalInclVATText := STRSUBSTNO(Trl('Total %1'), wlCurrencyCode)
+            //             else
+            //                 wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
+            //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
+            //         end;
+            //     wgRecCompanyInfo."Company Location"::"North America":
+            //         begin
+            //             if wgTotVATAmount = 0 then
+            //                 wgTotalInclVATText := STRSUBSTNO(Trl('Total %1'), wlCurrencyCode)
+            //             else
+            //                 wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
+            //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
+            //         end;
+            // end;
             //NM_END
+            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
+            if wgTotVATAmount = 0 then
+                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1'), wlCurrencyCode)
+            else
+                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
             wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
         end;
     end;

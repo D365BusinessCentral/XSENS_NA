@@ -163,6 +163,14 @@ page 50098 "Posted Sales Invoice_LT"
                 {
                     ApplicationArea = All;
                 }
+                field("Tax Liable"; Rec."Tax Liable")
+                {
+                    ApplicationArea = All;
+                }
+                field("Tax Area Code"; Rec."Tax Area Code")
+                {
+                    ApplicationArea = All;
+                }
                 group(Control3)
                 {
                     ShowCaption = false;

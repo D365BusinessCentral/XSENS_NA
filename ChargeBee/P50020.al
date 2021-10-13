@@ -6,8 +6,9 @@ page 50020 ChargebeeSetup
     InsertAllowed = false;
     PageType = Card;
     SourceTable = ChargebeeSetup;
+    UsageCategory = Documents;
     ApplicationArea = All;
-    UsageCategory = Administration;
+
     layout
     {
         area(content)
@@ -42,7 +43,6 @@ page 50020 ChargebeeSetup
                 field("Segment Code"; Rec."Segment Code")
                 {
                     ApplicationArea = All;
-                    Caption = 'Segment Code';
                 }
                 field("Product Lines"; Rec."Product Lines")
                 {

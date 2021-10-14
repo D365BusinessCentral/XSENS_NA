@@ -5662,6 +5662,12 @@ End Function
         <Field Name="TotalInclVATText">
           <DataField>TotalInclVATText</DataField>
         </Field>
+        <Field Name="VATAmount">
+          <DataField>VATAmount</DataField>
+        </Field>
+        <Field Name="VATAmountFormat">
+          <DataField>VATAmountFormat</DataField>
+        </Field>
         <Field Name="VALExchRate">
           <DataField>VALExchRate</DataField>
         </Field>
@@ -5859,12 +5865,6 @@ End Function
         </Field>
         <Field Name="LineAmount_2Format">
           <DataField>LineAmount_2Format</DataField>
-        </Field>
-        <Field Name="VATAmount">
-          <DataField>VATAmount</DataField>
-        </Field>
-        <Field Name="VATAmountFormat">
-          <DataField>VATAmountFormat</DataField>
         </Field>
         <Field Name="VATBase">
           <DataField>VATBase</DataField>

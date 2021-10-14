@@ -441,6 +441,9 @@ report 50004 "Sales - Credit Memo XSS DCR"
             column(VALExchRate; wgVALExchRate)
             {
             }
+            column(VATAmount; "Ava Tax Amount")
+            {
+            }
             column(VALSpecLCYHeader; wgVALSpecLCYHeader)
             {
             }
@@ -722,11 +725,6 @@ report 50004 "Sales - Credit Memo XSS DCR"
                         AutoFormatExpression = InvHdr."Currency Code";
                         AutoFormatType = 1;
                     }
-                    column(VATAmount; "VAT Amount")
-                    {
-                        AutoFormatExpression = InvHdr."Currency Code";
-                        AutoFormatType = 1;
-                    }
                     column(VATBase; "VAT Base")
                     {
                         AutoFormatExpression = InvHdr."Currency Code";
@@ -928,6 +926,7 @@ report 50004 "Sales - Credit Memo XSS DCR"
             var
                 wlRecRef: RecordRef;
             begin
+                CalcFields("Ava Tax Amount");
                 //CurrReport.LANGUAGE := wgRecLanguage.GetLanguageID("Language Code");
                 //wgCduDocCreatorTransLationMgt.wgSetLanguageCode("Language Code");
 
@@ -1446,7 +1445,7 @@ report 50004 "Sales - Credit Memo XSS DCR"
             // end;
             //NM_END
             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-            if wgTotVATAmount = 0 then
+            if "Ava Tax Amount" = 0 then
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
             else
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);

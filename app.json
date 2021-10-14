@@ -10,7 +10,14 @@
   "help": "",
   "url": "",
   "logo": "",
-  "dependencies": [],
+  "dependencies": [
+    {
+      "id": "5fedf952-2450-4bce-b578-f3b7c13cd9a9",
+      "name": "Avalara AvaTax",
+      "publisher": "Avalara",
+      "version": "1.0.0.0"
+    }
+  ],
   "screenshots": [],
   "platform": "1.0.0.0",
   "application": "18.0.0.0",

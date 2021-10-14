@@ -498,7 +498,7 @@ report 50000 "Sales - Invoice XSS DCR"
             column(VATAmtText; VATAmtLine.VATAmountText())
             {
             }
-            column(VATAmount; VATAmtLine."VAT Amount")
+            column(VATAmount; "Ava Tax Amount") //VATAmtLine."VAT Amount")
             {
             }
             dataitem(CopyLoop; "Integer")
@@ -1022,6 +1022,7 @@ report 50000 "Sales - Invoice XSS DCR"
             var
                 wlRecRef: RecordRef;
             begin
+                CalcFields("Ava Tax Amount");
                 // CurrReport.LANGUAGE := wgRecLanguage.GetLanguageID('ENU');//Krishna
                 // wgCduDocCreatorTransLationMgt.wgSetLanguageCode('ENU');//Krishna
 

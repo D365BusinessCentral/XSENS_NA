@@ -3572,7 +3572,7 @@
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.12375cm</Height>
+                                    <Height>0.15021cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -5505,7 +5505,7 @@
                               <DataSetName>DataSet_Result</DataSetName>
                               <Top>8.2822cm</Top>
                               <Left>0.03528cm</Left>
-                              <Height>5.16528cm</Height>
+                              <Height>5.19174cm</Height>
                               <Width>18.81188cm</Width>
                               <ZIndex>3</ZIndex>
                               <Style>

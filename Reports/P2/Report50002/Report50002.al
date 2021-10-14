@@ -424,6 +424,9 @@ report 50002 "Proforma Invoice XSS DCR"
             column(TotalInclVATText; wgTotalInclVATText)
             {
             }
+            column(VATAmount; "Ava Tax Amount")
+            {
+            }
             column(VALExchRate; wgVALExchRate)
             {
             }
@@ -735,11 +738,11 @@ report 50002 "Proforma Invoice XSS DCR"
                         AutoFormatExpression = SalesHdr."Currency Code";
                         AutoFormatType = 1;
                     }
-                    column(VATAmount; "VAT Amount")
-                    {
-                        AutoFormatExpression = SalesHdr."Currency Code";
-                        AutoFormatType = 1;
-                    }
+                    // column(VATAmount; "VAT Amount")
+                    // {
+                    //     AutoFormatExpression = SalesHdr."Currency Code";
+                    //     AutoFormatType = 1;
+                    // }
                     column(VATBase; "VAT Base")
                     {
                         AutoFormatExpression = SalesHdr."Currency Code";
@@ -917,6 +920,7 @@ report 50002 "Proforma Invoice XSS DCR"
                 wlCduSalesPost: Codeunit "Sales-Post";
                 wlRecRef: RecordRef;
             begin
+                CalcFields("Ava Tax Amount");
                 //CurrReport.LANGUAGE := wgRecLanguage.GetLanguageID('ENU'); //GW//krishna
                 //wgCduDocCreatorTransLationMgt.wgSetLanguageCode('ENU');    //GW//Krishna   //GW
 

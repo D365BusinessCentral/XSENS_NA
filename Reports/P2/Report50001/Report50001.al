@@ -513,7 +513,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(AmountInclVAT; "Amount Including VAT")
             {
             }
-            column(VATAmount; VATAmtLine."VAT Amount")
+            column(VATAmount; "Ava Tax Amount")
             {
             }
             column(SalesForce_Comment; "SalesForce Comment")
@@ -958,6 +958,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
                 wlCduSalesPost: Codeunit "Sales-Post";
                 wlRecRef: RecordRef;
             begin
+                CalcFields("Ava Tax Amount");
                 //CurrReport.LANGUAGE := wgRecLanguage.GetLanguageID('ENU'); //GW//krishna
                 //wgCduDocCreatorTransLationMgt.wgSetLanguageCode('ENU');    //GW//Krishna
 
@@ -1283,7 +1284,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
             // end;
             //NM_END
             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-            if wgTotVATAmount = 0 then
+            if "Ava Tax Amount" = 0 then
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1'), wlCurrencyCode)
             else
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);

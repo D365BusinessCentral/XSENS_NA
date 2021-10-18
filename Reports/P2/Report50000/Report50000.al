@@ -495,10 +495,10 @@ report 50000 "Sales - Invoice XSS DCR"
             column(VatRegulationG; VatRegulationG)
             {
             }
-            column(VATAmtText; VATAmtLine.VATAmountText())
+            column(VATAmtText; Result) //VATAmtLine.VATAmountText())
             {
             }
-            column(VATAmount; "Ava Tax Amount") //VATAmtLine."VAT Amount")
+            column(VATAmount; VATAmount) //VATAmtLine."VAT Amount")
             {
             }
             dataitem(CopyLoop; "Integer")
@@ -1058,6 +1058,25 @@ report 50000 "Sales - Invoice XSS DCR"
                 wgTotPaymentDiscOnVAT := -(wgTotLineAmount - wgTotInvDiscAmount - VATAmtLine.GetTotalAmountInclVAT);
                 wgTotAmount := VATAmtLine.GetTotalVATBase;
 
+                Clear(Result);
+                Clear(VATAmount);
+                VATPercentage := 0;
+                if InvLine.FindSet() then
+                    repeat
+                        if InvLine."Ava Tax Rate" <> 0 then begin
+                            VATPercentage := InvLine."Ava Tax Rate";
+                            VATAmount := "Ava Tax Amount";
+                        end else
+                            if InvLine."VAT %" <> 0 then begin
+                                VATPercentage := InvLine."VAT %";
+                                VATAmount := VATAmtLine."VAT Amount";
+                            end;
+                    until InvLine.Next() = 0;
+                if VATPercentage = 0 then
+                    Result := Text001
+                else
+                    Result := StrSubstNo(Text000, VATPercentage);
+
                 //Prepare VAT Amount Lines LCY
                 if (not wgRecGLSetup."Print VAT specification in LCY") or
                    (InvHdr."Currency Code" = '') or
@@ -1290,6 +1309,11 @@ report 50000 "Sales - Invoice XSS DCR"
         PaymentMethodG: Record "Payment Method";
         ShipmentMethodG: Record "Shipment Method";
         VatRegulationG: Text;
+        Text000: Label '%1% Sales Tax';
+        Text001: Label 'Sales Tax';
+        Result: Text;
+        VATPercentage: Decimal;
+        VATAmount: Decimal;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1626,11 +1650,11 @@ report 50000 "Sales - Invoice XSS DCR"
             //         end;
             // end;
             //NM_END
-            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-            if wgTotVATAmount = 0 then
+            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl. Sales Tax'), wlCurrencyCode);
+            if VATAmount = 0 then
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
             else
-                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
+                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
             wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
         end;
     end;

@@ -498,7 +498,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(TotLineAmount; wgTotLineAmount)
             {
             }
-            column(VATAmtText; VATAmtLine.VATAmountText())
+            column(VATAmtText; Result) //VATAmtLine.VATAmountText())
             {
             }
             column(ShipmentDate; FORMAT(SalesHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
@@ -513,7 +513,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(AmountInclVAT; "Amount Including VAT")
             {
             }
-            column(VATAmount; "Ava Tax Amount")
+            column(VATAmount; VATAmount)
             {
             }
             column(SalesForce_Comment; "SalesForce Comment")
@@ -994,7 +994,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
 
                 //Get VAT Amount Lines
                 SalesLine.CalcVATAmountLines(0, SalesHdr, SalesLine, VATAmtLine); //0 = General
-                SalesLine.UpdateVATOnLines(0, SalesHdr, SalesLine, VATAmtLine);   //0 = General
+                SalesLine.UpdateVATOnLines(0, SalesHdr, SalesLine, VATAmtLine);   //0 = 
 
                 wgTotInvDiscAmount := VATAmtLine.GetTotalInvDiscAmount;
                 wgTotInvDiscBaseAmount := VATAmtLine.GetTotalInvDiscBaseAmount(SalesHdr."Prices Including VAT", SalesHdr."Currency Code");
@@ -1002,6 +1002,25 @@ report 50001 "Sales - Order Confirm XSS DCR"
                 wgTotVATAmount := VATAmtLine.GetTotalVATAmount;
                 wgTotPaymentDiscOnVAT := -(wgTotLineAmount - wgTotInvDiscAmount - VATAmtLine.GetTotalAmountInclVAT);
                 wgTotAmount := VATAmtLine.GetTotalVATBase;
+
+                Clear(Result);
+                Clear(VATAmount);
+                VATPercentage := 0;
+                if SalesLine.FindSet() then
+                    repeat
+                        if SalesLine."Ava Tax Rate" <> 0 then begin
+                            VATPercentage := SalesLine."Ava Tax Rate";
+                            VATAmount := "Ava Tax Amount";
+                        end else
+                            if SalesLine."VAT %" <> 0 then begin
+                                VATPercentage := SalesLine."VAT %";
+                                VATAmount := VATAmtLine."VAT Amount";
+                            end;
+                    until SalesLine.Next() = 0;
+                if VATPercentage = 0 then
+                    Result := Text001
+                else
+                    Result := StrSubstNo(Text000, VATPercentage);
 
                 //Prepare VAT Amount Lines LCY
                 if (not wgRecGLSetup."Print VAT specification in LCY") or
@@ -1230,6 +1249,11 @@ report 50001 "Sales - Order Confirm XSS DCR"
         PaymentTermsG: Record "Payment Terms";
         Serial: Page "Posted Sales Shipment";
         CustomerG: Record Customer;
+        Text000: Label '%1% Sales Tax';
+        Text001: Label 'Sales Tax';
+        Result: Text;
+        VATPercentage: Decimal;
+        VATAmount: Decimal;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1283,11 +1307,11 @@ report 50001 "Sales - Order Confirm XSS DCR"
             //         end;
             // end;
             //NM_END
-            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-            if "Ava Tax Amount" = 0 then
+            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl. Sales Tax'), wlCurrencyCode);
+            if VATAmount = 0 then
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1'), wlCurrencyCode)
             else
-                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
+                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
             wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
         end;
     end;

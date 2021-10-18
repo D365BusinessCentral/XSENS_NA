@@ -84,6 +84,7 @@ page 50020 ChargebeeSetup
             {
                 Image = AddWatch;
                 Promoted = true;
+                PromotedCategory = Process;
                 RunObject = Codeunit ProcessChargebee;
                 ApplicationArea = All;
             }

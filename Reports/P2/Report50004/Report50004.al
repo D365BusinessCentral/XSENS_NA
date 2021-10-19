@@ -441,7 +441,10 @@ report 50004 "Sales - Credit Memo XSS DCR"
             column(VALExchRate; wgVALExchRate)
             {
             }
-            column(VATAmount; "Ava Tax Amount")
+            column(VATAmtText; Result)
+            {
+            }
+            column(VATAmount; VATAmount)
             {
             }
             column(VALSpecLCYHeader; wgVALSpecLCYHeader)
@@ -861,9 +864,9 @@ report 50004 "Sales - Credit Memo XSS DCR"
                         AutoFormatExpression = InvHdr."Currency Code";
                         AutoFormatType = 1;
                     }
-                    column(VATAmtText; wgVATAmountText)
-                    {
-                    }
+                    // column(VATAmtText; wgVATAmountText)
+                    // {
+                    // }
                     column(TotVALVATBaseLCY; wgTotVALVATBaseLCY)
                     {
                     }
@@ -931,7 +934,6 @@ report 50004 "Sales - Credit Memo XSS DCR"
                 //wgCduDocCreatorTransLationMgt.wgSetLanguageCode("Language Code");
 
                 wlFncFormatAddressFields(InvHdr);
-                wlFncFormatDocumentFields(InvHdr);
 
                 if wgLogInteraction then
                     if not CurrReport.PREVIEW then begin
@@ -964,6 +966,25 @@ report 50004 "Sales - Credit Memo XSS DCR"
 
                 Clear(TotalAmountInclVAT);
                 TotalAmountInclVAT := VATAmtLine.GetTotalAmountInclVAT;
+
+                Clear(Result);
+                Clear(VATAmount);
+                VATPercentage := 0;
+                if InvLine.FindSet() then
+                    repeat
+                        if InvLine."Ava Tax Rate" <> 0 then begin
+                            VATPercentage := InvLine."Ava Tax Rate";
+                            VATAmount := "Ava Tax Amount";
+                        end else
+                            if InvLine."VAT %" <> 0 then begin
+                                VATPercentage := InvLine."VAT %";
+                                VATAmount := VATAmtLine."VAT Amount";
+                            end;
+                    until InvLine.Next() = 0;
+                if VATPercentage = 0 then
+                    Result := Text001
+                else
+                    Result := StrSubstNo(Text000, VATPercentage);
 
                 //Prepare VAT Amount Lines LCY
                 if (not wgRecGLSetup."Print VAT specification in LCY") or
@@ -1024,6 +1045,8 @@ report 50004 "Sales - Credit Memo XSS DCR"
                     'ROW-SALE':
                         VatRegulationG := 'No tax charged because of EXPORT-shipment';
                 end;
+
+                wlFncFormatDocumentFields(InvHdr);
             end;
         }
     }
@@ -1171,6 +1194,11 @@ report 50004 "Sales - Credit Memo XSS DCR"
         ShipmentMethodG: Record "Shipment Method";
         VatRegulationG: Text;
         TotalAmountInclVAT: Decimal;
+        Text000: Label '%1% Sales Tax';
+        Text001: Label 'Sales Tax';
+        Result: Text;
+        VATPercentage: Decimal;
+        VATAmount: Decimal;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1444,11 +1472,11 @@ report 50004 "Sales - Credit Memo XSS DCR"
             //         end;
             // end;
             //NM_END
-            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-            if "Ava Tax Amount" = 0 then
+            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl. Sales Tax'), wlCurrencyCode);
+            if VATAmount = 0 then
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
             else
-                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
+                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
             wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
         end;
     end;

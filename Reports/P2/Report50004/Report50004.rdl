@@ -3169,7 +3169,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>lbl Line Amount</Value>
+                                                    <Value />
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -4715,7 +4715,7 @@
                                   </TablixMember>
                                   <TablixMember>
                                     <Visibility>
-                                      <Hidden>true</Hidden>
+                                      <Hidden>=Fields!VATAmount.Value =0</Hidden>
                                     </Visibility>
                                     <KeepWithGroup>Before</KeepWithGroup>
                                   </TablixMember>
@@ -4724,7 +4724,7 @@
                                   </TablixMember>
                                   <TablixMember>
                                     <Visibility>
-                                      <Hidden>true</Hidden>
+                                      <Hidden>=Fields!VATAmount.Value =0</Hidden>
                                     </Visibility>
                                     <KeepWithGroup>Before</KeepWithGroup>
                                   </TablixMember>
@@ -5593,6 +5593,9 @@ End Function
         <Field Name="VALExchRate">
           <DataField>VALExchRate</DataField>
         </Field>
+        <Field Name="VATAmtText">
+          <DataField>VATAmtText</DataField>
+        </Field>
         <Field Name="VATAmount">
           <DataField>VATAmount</DataField>
         </Field>
@@ -5868,9 +5871,6 @@ End Function
         </Field>
         <Field Name="TotVATAmountFormat">
           <DataField>TotVATAmountFormat</DataField>
-        </Field>
-        <Field Name="VATAmtText">
-          <DataField>VATAmtText</DataField>
         </Field>
         <Field Name="TotVALVATBaseLCY">
           <DataField>TotVALVATBaseLCY</DataField>

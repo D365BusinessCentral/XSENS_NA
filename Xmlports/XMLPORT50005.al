@@ -10,7 +10,7 @@ xmlport 50005 "Import Journaalposten"
     Direction = Import;
     Format = VariableText;
     TextEncoding = UTF8;
-    FieldSeparator = ',';
+    FieldSeparator = ';';
     //kk
 
     //default***************
@@ -64,16 +64,16 @@ xmlport 50005 "Import Journaalposten"
                     XmlName = 'Field7';
                     Width = 30;
                 }
-                textelement(gtxtdimension3)
-                {
-                    MinOccurs = Zero;//kk
-                    XmlName = 'Field8';
-                    Width = 25;
-                }
                 textelement(gtxtInterCompanyPartner)
                 {
                     MinOccurs = Zero;//kk
                     XmlName = 'Field9';
+                    Width = 25;
+                }
+                textelement(gtxtdimension3)
+                {
+                    MinOccurs = Zero;//kk
+                    XmlName = 'Field8';
                     Width = 25;
                 }
 
@@ -82,18 +82,22 @@ xmlport 50005 "Import Journaalposten"
                     MinOccurs = Zero;//kk
                     XmlName = 'Field10';
                     Width = 25;
-                }
-                textelement(gtxtCreditCardPayee)
-                {
-                    MinOccurs = Zero;//kk
-                    XmlName = 'Field11';
-                    Width = 25;
-
                     trigger OnAfterAssignVariable()
                     begin
                         fImportRecord;
                     end;
                 }
+                // textelement(gtxtCreditCardPayee)
+                // {
+                //     MinOccurs = Zero;//kk
+                //     XmlName = 'Field11';
+                //     Width = 25;
+
+                //     trigger OnAfterAssignVariable()
+                //     begin
+                //         fImportRecord;
+                //     end;
+                // }
 
                 trigger OnBeforeInsertRecord();
                 begin
@@ -249,6 +253,8 @@ xmlport 50005 "Import Journaalposten"
         gTxtDimension1 := '';
         gTxtDimension2 := '';
         gTxtDimension3 := '';
+        gtxtTax := '';
+        gtxtInterCompanyPartner := '';
     end;
 
     procedure fImportRecord();
@@ -334,17 +340,18 @@ xmlport 50005 "Import Journaalposten"
         //pRecGenJournalLine.Validate("Credit Card Payee No.", gtxtVendorNumber);
 
         if Evaluate(gShortcutDim5, gtxtInterCompanyPartner) then
-            pRecGenJournalLine.ValidateShortcutDimCode(5, gShortcutDim5);
+            pRecGenJournalLine.ValidateShortcutDimCode(3, gShortcutDim5);
+
+        if EVALUATE(gCodShortcutDimCode3, gTxtDimension3) then
+            pRecGenJournalLine.ValidateShortcutDimCode(4, gCodShortcutDimCode3); //20190102 KBG NMSD-240
 
         if Evaluate(gShortcutDim7, gtxtTax) then
-            pRecGenJournalLine.ValidateShortcutDimCode(7, gShortcutDim7);
+            pRecGenJournalLine.ValidateShortcutDimCode(5, gShortcutDim7);
 
-        if Evaluate(gShortcutDim8, gtxtCreditCardPayee) then
-            pRecGenJournalLine.ValidateShortcutDimCode(8, gShortcutDim8);
+        // if Evaluate(gShortcutDim8, gtxtCreditCardPayee) then
+        //     pRecGenJournalLine.ValidateShortcutDimCode(8, gShortcutDim8);
 
         //LT-End
-        if EVALUATE(gCodShortcutDimCode3, gTxtDimension3) then
-            pRecGenJournalLine.ValidateShortcutDimCode(3, gCodShortcutDimCode3); //20190102 KBG NMSD-240
         //pRecGenJournalLine."Shortcut Dimension 3 Code"         := gTxtDimension3;
         //pRecGenJournalLine."Shortcut Dimension 3 Code"         := gTxtDimension3; //20181122 JS Projectveld=Dimension3 toegevoegd
 

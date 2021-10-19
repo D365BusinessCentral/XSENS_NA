@@ -88,12 +88,12 @@ page 50020 ChargebeeSetup
                 RunObject = Codeunit ProcessChargebee;
                 ApplicationArea = All;
             }
-            /*action("Transaction Logging")
+            action("Transaction Logging")
             {
                 Image = TransferOrder;
                 Promoted = true;
-                RunObject = Page Page50021;//Krishna The page is not available
-            }*/
+                RunObject = Page "ChargeBee Transactions"; //Page50021;//Krishna The page is not available
+            }
         }
     }
 

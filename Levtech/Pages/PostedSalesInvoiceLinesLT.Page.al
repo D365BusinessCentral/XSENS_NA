@@ -172,6 +172,10 @@ page 50097 "Posted Sales Invoice Lines_LT"
                     ToolTip = 'Specifies the number of the related job.';
                     Visible = false;
                 }
+                field(ExternalID; ExternalID)
+                {
+                    ApplicationArea = All;
+                }
             }
         }
         area(factboxes)

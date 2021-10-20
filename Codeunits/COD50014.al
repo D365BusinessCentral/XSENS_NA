@@ -31,4 +31,13 @@ codeunit 50014 "Sales Order Customization"
              City, "Post Code", County, "Country/Region Code");
         IsHandled := true;
     end;
+
+    [EventSubscriber(ObjectType::Report, Report::"Get Sales Orders", 'OnBeforeInsertReqWkshLine', '', false, false)]
+    local procedure OnBeforeInsertReqWkshLine(SalesLine: Record "Sales Line"; SpecOrder: Integer;
+    var ReqLine: Record "Requisition Line")
+    begin
+        ReqLine."Shortcut Dimension 1 Code" := SalesLine."Shortcut Dimension 1 Code";
+        ReqLine."Shortcut Dimension 2 Code" := SalesLine."Shortcut Dimension 2 Code";
+        ReqLine."Dimension Set ID" := SalesLine."Dimension Set ID"
+    end;
 }

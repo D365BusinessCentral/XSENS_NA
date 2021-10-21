@@ -424,11 +424,12 @@ codeunit 50101 "Events"
     begin
         Clear(ICOutboxTransaction2);
         Clear(ICOutboxImpExpXML);
-        ICOutboxTransaction2.SetRange("Transaction No.", ICOutboxTransaction."Transaction No.");
-        ICOutboxTransaction2.SetRange("IC Partner Code", ICOutboxTransaction."IC Partner Code");
-        ICOutboxTransaction2.SetRange("Transaction Source", ICOutboxTransaction."Transaction Source");
-        ICOutboxTransaction2.SetRange("Document Type", ICOutboxTransaction."Document Type");
-        if ICOutboxTransaction2.FindFirst() then begin
+        // ICOutboxTransaction2.SetRange("Transaction No.", ICOutboxTransaction."Transaction No.");
+        // ICOutboxTransaction2.SetRange("IC Partner Code", ICOutboxTransaction."IC Partner Code");
+        // ICOutboxTransaction2.SetRange("Transaction Source", ICOutboxTransaction."Transaction Source");
+        // ICOutboxTransaction2.SetRange("Document Type", ICOutboxTransaction."Document Type");
+        ICOutboxTransaction2.SetRange("Line Action", ICOutboxTransaction2."Line Action"::"Send to IC Partner");
+        if ICOutboxTransaction2.FindSet() then begin
             ICOutboxImpExpXML.SetICOutboxTrans(ICOutboxTransaction2);
             ICOutboxImpExpXML.SetDestination(OutStr);
             ICOutboxImpExpXML.Export;
@@ -437,6 +438,7 @@ codeunit 50101 "Events"
         Clear(OutStr);
         Clear(ICOutboxImpExpXML);
     end;
+
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"IC Inbox Import", 'OnBeforeImportInboxTransaction', '', false, false)]
     local procedure OnBeforeImportInboxTransaction(CompanyInfo: Record "Company Information"; var IStream: InStream; var TempICOutboxTransaction: Record "IC Outbox Transaction"; var TempICOutboxJnlLine: Record "IC Outbox Jnl. Line"; var TempICInboxOutboxJnlLineDim: Record "IC Inbox/Outbox Jnl. Line Dim."; var TempICOutboxSalesHeader: Record "IC Outbox Sales Header"; var TempICOutboxSalesLine: Record "IC Outbox Sales Line"; var TempICOutboxPurchaseHeader: Record "IC Outbox Purchase Header"; var TempICOutboxPurchaseLine: Record "IC Outbox Purchase Line"; var TempICDocDim: Record "IC Document Dimension"; var FromICPartnerCode: Code[20]; var IsHandled: Boolean);

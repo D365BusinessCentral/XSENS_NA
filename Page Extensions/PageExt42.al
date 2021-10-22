@@ -23,6 +23,10 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 ApplicationArea = All;
                 Visible = false;
             }
+            field(ExternalID; Rec.ExternalID)
+            {
+                ApplicationArea = All;
+            }
             group(SalesForce)
             {
                 CaptionML = ENU = 'SalesForce',

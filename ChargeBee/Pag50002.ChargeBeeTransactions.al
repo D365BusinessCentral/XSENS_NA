@@ -1,12 +1,12 @@
 page 50002 "ChargeBee Transactions"
 {
-    
+
     ApplicationArea = All;
     Caption = 'ChargeBee Transactions';
     PageType = List;
     SourceTable = "Chargebee Transactions";
     UsageCategory = Lists;
-    
+
     layout
     {
         area(content)
@@ -56,5 +56,5 @@ page 50002 "ChargeBee Transactions"
             }
         }
     }
-    
+
 }

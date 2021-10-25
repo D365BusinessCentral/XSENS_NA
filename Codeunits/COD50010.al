@@ -20,14 +20,14 @@ codeunit 50010 "XSS Check Sales Force Order"
             // Check the sorting number.
             SETRANGE("Document Type", "Document Type"::Order);
             SETRANGE("Document No.", SalesHeader."No.");
-            SETRANGE("Sorting No.", 0);
+            SETRANGE("Sorting", 0);
             if FINDFIRST then begin
                 repeat
                     if not "Checked by SalesForce" then begin
                         repeat
                             lIntSortingNo += 10;
                         until CheckSortingOrder(lRecSalesLine, lIntSortingNo);
-                        "Sorting No." := lIntSortingNo;
+                        "Sorting" := lIntSortingNo;
                         MODIFY(false);
                     end;
                 until NEXT = 0;
@@ -119,20 +119,20 @@ codeunit 50010 "XSS Check Sales Force Order"
         pRecSalesLine."Promised Delivery Date" := lRecTMPSalesLine."Promised Delivery Date";
         pRecSalesLine."Planned Delivery Date" := lRecTMPSalesLine."Planned Delivery Date";
         pRecSalesLine."Planned Shipment Date" := lRecTMPSalesLine."Planned Shipment Date";
-        pRecSalesLine."Sorting No." := lRecTMPSalesLine."Sorting No."; //20130408 GW  30312
+        pRecSalesLine."Sorting" := lRecTMPSalesLine."Sorting"; //20130408 GW  30312
         pRecSalesLine.ExternalID := lRecTMPSalesLine.ExternalID;
         pRecSalesLine.COC := lRecTMPSalesLine.COC;  //20180417 KBG 12766
         pRecSalesLine.MODIFY(true);
     end;
 
-    [EventSubscriber(ObjectType::Table, 37, 'OnAfterValidateEvent', 'Sorting No.', false, false)]
+    [EventSubscriber(ObjectType::Table, 37, 'OnAfterValidateEvent', 'Sorting', false, false)]
     local procedure ValidateSortingNo(var Rec: Record "Sales Line"; var xRec: Record "Sales Line"; CurrFieldNo: Integer);
     var
         lCtxSorting: TextConst ENU = 'Sorting number %1 is already in use.', NLD = 'Sorteringsnummer %1 is reedsl in gebruik.';
     begin
-        if Rec."Sorting No." <> xRec."Sorting No." then
-            if not (CheckSortingOrder(Rec, Rec."Sorting No.")) then
-                ERROR(lCtxSorting, Rec."Sorting No.");
+        if Rec."Sorting" <> xRec."Sorting" then
+            if not (CheckSortingOrder(Rec, Rec."Sorting")) then
+                ERROR(lCtxSorting, Rec."Sorting");
     end;
 
     local procedure CheckSortingOrder(pRecSalesLine: Record "Sales Line"; pSortingNo: Integer): Boolean;
@@ -143,10 +143,10 @@ codeunit 50010 "XSS Check Sales Force Order"
             exit(true);
 
         with lRecSalesLine do begin
-            SETCURRENTKEY("Document Type", "Document No.", "Sorting No.");
+            SETCURRENTKEY("Document Type", "Document No.", "Sorting");
             SETRANGE("Document Type", "Document Type"::Order);
             SETRANGE("Document No.", pRecSalesLine."Document No.");
-            SETRANGE("Sorting No.", pSortingNo);
+            SETRANGE("Sorting", pSortingNo);
             if lRecSalesLine.FINDFIRST then begin
                 exit(false);
             end else

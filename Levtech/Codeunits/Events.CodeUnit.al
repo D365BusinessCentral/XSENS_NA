@@ -292,7 +292,7 @@ codeunit 50101 "Events"
         SalesLine."Sales Order No." := ICInboxSalesLine."Sales Order No.";
         SalesLine."Sales Order Line No." := ICInboxSalesLine."Sales Order Line No.";
         SalesLine."Shipment Date" := ICInboxSalesLine."Shipment Date";          // 20160510 KBG 06458
-        SalesLine."Sorting No." := ICInboxSalesLine.Sorting;                  // 20160510 KBG 06458
+        SalesLine."Sorting" := ICInboxSalesLine.Sorting;                  // 20160510 KBG 06458
                                                                               // NM_END 20100829 TG 23475
     end;
 
@@ -411,7 +411,7 @@ codeunit 50101 "Events"
         IF lRecSalesLine.GET(lRecSalesLine."Document Type"::Order, PurchaseLine."Sales Order no.",
             PurchaseLine."Sales Order Line No.") THEN BEGIN
             ICOutboxPurchaseLine."Shipment Date" := lRecSalesLine."Shipment Date";         // 20160510 KBG 06458
-            ICOutboxPurchaseLine.Sorting := lRecSalesLine."Sorting No.";                 // 20160510 KBG 06458
+            ICOutboxPurchaseLine.Sorting := lRecSalesLine."Sorting";                 // 20160510 KBG 06458
         END;
         ICOutboxPurchaseLine.Modify();
         // NM_END 20100829 TG 23475

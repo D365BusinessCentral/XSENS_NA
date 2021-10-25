@@ -17,7 +17,7 @@ pageextension 50009 "Sales Order Subform" extends "Sales Order Subform"
         }
         addafter("Line No.")
         {
-            field("Sorting No."; Rec."Sorting No.")
+            field("Sorting No."; Rec."Sorting")
             {
                 ApplicationArea = All;
             }

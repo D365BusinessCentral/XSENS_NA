@@ -147,7 +147,7 @@ tableextension 50012 "Sales Line" extends "Sales Line"
         //     CaptionML = ENU = 'Sorting',
         //                 NLD = 'Sortering';
         // }
-        field(50450; "Sorting No."; Integer)
+        field(50450; "Sorting"; Integer)
         {
             CaptionML = ENU = 'Sorting',
                         NLD = 'Sortering';

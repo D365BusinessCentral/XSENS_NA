@@ -618,7 +618,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
                     {
                     }
                     //09.09.2021
-                    column(Sorting_No_; "Sorting No.")
+                    column(Sorting_No_; "Sorting")
                     {
                     }
                     column(Description2; SalesLine."Description 2")
@@ -754,7 +754,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
                             CurrReport.BREAK;
                         SalesLine.SETRANGE("Line No.", 0, SalesLine."Line No.");
 
-                        SETCURRENTKEY("Document No.", "Sorting No.", "Line No.");
+                        SETCURRENTKEY("Document No.", "Sorting", "Line No.");
                     end;
                 }
                 dataitem(VATAmtLine; "VAT Amount Line")

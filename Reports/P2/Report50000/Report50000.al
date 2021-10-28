@@ -501,6 +501,9 @@ report 50000 "Sales - Invoice XSS DCR"
             column(VATAmount; VATAmount) //VATAmtLine."VAT Amount")
             {
             }
+            column(HeaderFooterVisible; HeaderFooterVisible)
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);
@@ -1225,6 +1228,7 @@ report 50000 "Sales - Invoice XSS DCR"
         wgRecSalesSetup.GET;
 
         wgRecCompanyInfo.GET;
+
         wgRecCompanyInfo.VerifyAndSetPaymentInfo;
 
         if wgRecSalesSetup."Logo Position on Documents" <> wgRecSalesSetup."Logo Position on Documents"::"No Logo" then
@@ -1314,6 +1318,7 @@ report 50000 "Sales - Invoice XSS DCR"
         Result: Text;
         VATPercentage: Decimal;
         VATAmount: Decimal;
+        HeaderFooterVisible: Boolean;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1655,7 +1660,21 @@ report 50000 "Sales - Invoice XSS DCR"
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
             else
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
-            wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+
+            case wgRecCompanyInfo.Name of
+                'Kinduct Tech - Backup101121':
+                    HeaderFooterVisible := false;
+                'Kinduct Technologies':
+                    HeaderFooterVisible := false;
+                else begin
+                        HeaderFooterVisible := true;
+                        wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+                    end;
+            end;
+            // if Company.Name <> 'Kinduct Technologies' then begin
+            //     HeaderFooterVisible := true;
+            //     wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+            // end;
         end;
     end;
 

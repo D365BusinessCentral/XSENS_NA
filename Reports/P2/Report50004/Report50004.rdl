@@ -1661,12 +1661,12 @@
                                   </TablixMember>
                                   <TablixMember>
                                     <Visibility>
-                                      <Hidden>=Fields!SalesPurchPersonName.Value =""</Hidden>
+                                      <Hidden>=IIF(Fields!HeaderFooterVisible.Value = True,False,True) OR IIF(Fields!SalesPurchPersonName.Value ="",True,False)</Hidden>
                                     </Visibility>
                                   </TablixMember>
                                   <TablixMember>
                                     <Visibility>
-                                      <Hidden>=Fields!SalesPurchPersonEMail.Value =""</Hidden>
+                                      <Hidden>=IIF(Fields!HeaderFooterVisible.Value = True,False,True) OR IIF(Fields!SalesPurchPersonEMail.Value ="",True,False)</Hidden>
                                     </Visibility>
                                   </TablixMember>
                                   <TablixMember>
@@ -5658,6 +5658,9 @@ End Function
         </Field>
         <Field Name="ShipmentDate">
           <DataField>ShipmentDate</DataField>
+        </Field>
+        <Field Name="HeaderFooterVisible">
+          <DataField>HeaderFooterVisible</DataField>
         </Field>
         <Field Name="OutputNo">
           <DataField>OutputNo</DataField>

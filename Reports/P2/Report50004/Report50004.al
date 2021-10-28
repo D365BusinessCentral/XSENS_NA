@@ -499,6 +499,9 @@ report 50004 "Sales - Credit Memo XSS DCR"
             column(ShipmentDate; FORMAT(InvHdr."Shipment Date", 0, '<Day> <Month Text> <Year4>'))
             {
             }
+            column(HeaderFooterVisible; HeaderFooterVisible)
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);
@@ -1199,6 +1202,7 @@ report 50004 "Sales - Credit Memo XSS DCR"
         Result: Text;
         VATPercentage: Decimal;
         VATAmount: Decimal;
+        HeaderFooterVisible: Boolean;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1477,7 +1481,19 @@ report 50004 "Sales - Credit Memo XSS DCR"
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
             else
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
-            wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+
+            case wgRecCompanyInfo.Name of
+                'Kinduct Tech - Backup101121':
+                    HeaderFooterVisible := false;
+                'Kinduct Technologies':
+                    HeaderFooterVisible := false;
+                else begin
+                        HeaderFooterVisible := true;
+                        wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+                    end;
+            end;
+
+            //wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
         end;
     end;
 

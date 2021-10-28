@@ -481,6 +481,9 @@ report 50002 "Proforma Invoice XSS DCR"
             column(VatRegulationG; VatRegulationG)
             {
             }
+            column(HeaderFooterVisible; HeaderFooterVisible)
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);
@@ -1188,6 +1191,7 @@ report 50002 "Proforma Invoice XSS DCR"
         PaymentMethodG: Record "Payment Method";
         ShipmentMethodG: Record "Shipment Method";
         VatRegulationG: Text;
+        HeaderFooterVisible: Boolean;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1225,8 +1229,8 @@ report 50002 "Proforma Invoice XSS DCR"
             case wgRecCompanyInfo."Company Location" of
                 wgRecCompanyInfo."Company Location"::Holland:
                     begin
-                        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-                        wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
+                        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
+                        wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
                     end;
                 wgRecCompanyInfo."Company Location"::"North America":
                     begin
@@ -1235,7 +1239,18 @@ report 50002 "Proforma Invoice XSS DCR"
                     end;
             end;
             //NM_END
-            wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+
+            case wgRecCompanyInfo.Name of
+                'Kinduct Tech - Backup101121':
+                    HeaderFooterVisible := false;
+                'Kinduct Technologies':
+                    HeaderFooterVisible := false;
+                else begin
+                        HeaderFooterVisible := true;
+                        wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+                    end;
+            end;
+            //wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
         end;
     end;
 

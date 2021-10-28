@@ -363,6 +363,9 @@ report 50003 "Sales - Shipment XSS DCR"
             column(wgShowLotSN; wgShowLotSN)
             {
             }
+            column(HeaderFooterVisible; HeaderFooterVisible)
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);
@@ -796,6 +799,7 @@ report 50003 "Sales - Shipment XSS DCR"
         ShipmentMethodG: Record "Shipment Method";
         PaymentTermsG: Record "Payment Terms";
         SetSerialLotNo: Boolean;
+        HeaderFooterVisible: Boolean;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -863,9 +867,20 @@ report 50003 "Sales - Shipment XSS DCR"
     var
         wlSalesPersonText: Text[30];
     begin
-        with pRecSalesShptHeader do begin
-            wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+        case wgRecCompanyInfo.Name of
+            'Kinduct Tech - Backup101121':
+                HeaderFooterVisible := false;
+            'Kinduct Technologies':
+                HeaderFooterVisible := false;
+            else begin
+                    HeaderFooterVisible := true;
+                    with pRecSalesShptHeader do
+                        wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+                end;
         end;
+        // with pRecSalesShptHeader do begin
+        //     wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+        // end;
     end;
 
     local procedure wlFncFormatAddressFields(var vRecSalesShptHeader: Record "Sales Shipment Header");

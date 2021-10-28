@@ -5966,7 +5966,6 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Left>0cm</Left>
             <Height>11.25082cm</Height>
             <Width>18.81188cm</Width>
             <Style>
@@ -6002,7 +6001,6 @@
               </Paragraphs>
               <rd:DefaultName>Textbox78</rd:DefaultName>
               <Top>0.28184cm</Top>
-              <Left>0cm</Left>
               <Height>0.44125cm</Height>
               <Width>18.81187cm</Width>
               <Style>
@@ -6766,6 +6764,9 @@ End Function
         </Field>
         <Field Name="VATAmountFormat">
           <DataField>VATAmountFormat</DataField>
+        </Field>
+        <Field Name="HeaderFooterVisible">
+          <DataField>HeaderFooterVisible</DataField>
         </Field>
         <Field Name="OutputNo">
           <DataField>OutputNo</DataField>

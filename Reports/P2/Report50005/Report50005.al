@@ -499,6 +499,9 @@ report 50005 "Purchase - Order XSS DCR"
             column(VATAmount; VATAmtLine."VAT Amount")
             {
             }
+            column(HeaderFooterVisible; HeaderFooterVisible)
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);
@@ -1153,6 +1156,7 @@ report 50005 "Purchase - Order XSS DCR"
         wgRecPurchSetup.GET;
 
         wgRecCompanyInfo.GET;
+
         wgRecCompanyInfo.CALCFIELDS(Picture);
 
         gIntCompanyLocation := wgRecCompanyInfo."Company Location";
@@ -1230,6 +1234,7 @@ report 50005 "Purchase - Order XSS DCR"
         //01.09.2021
         TotalAmountInclVAT: Decimal;
         VendorG: Record Vendor;
+        HeaderFooterVisible: Boolean;
 
     local procedure Trl(pLblName: Text): Text;
     begin

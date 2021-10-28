@@ -223,9 +223,10 @@ codeunit 50020 ProcessChargebee
         //...
 
         SalesHeader.INSERT(true);
-        SalesHeader."No. Series" := '';
-        SalesHeader."Posting No. Series" := '';
-        SalesHeader.MODIFY(false);
+        //PdV: In verband met problemen met Avalar - AvaTax onderstaande uitgeslasht
+        //SalesHeader."No. Series" := '';
+        //SalesHeader."Posting No. Series" := '';
+        //SalesHeader.MODIFY(false);
 
         // ADD SALES INVOICE LINE
         Counter := 0;
@@ -373,8 +374,8 @@ codeunit 50020 ProcessChargebee
                 AddSalesTaxLine(dAmount, bCredit, InvoiceNo, iLineNo);
             end;
         end;
-        if CanRelease then
-            SalesPost.ReleaseSalesDocument(SalesHeader);
+        //if CanRelease then
+        //    SalesPost.ReleaseSalesDocument(SalesHeader);
         if bPost then begin
             CLEAR(SalesPost);
             SalesPost.RUN(SalesHeader);
@@ -486,7 +487,7 @@ codeunit 50020 ProcessChargebee
         HttpRequestMessage.SetRequestUri(sURL);
         HttpHeaders := HttpClient.DefaultRequestHeaders();
         HttpHeaders.Add('Authorization', CreateXSensAuthHeader(APIKey));
-        if Method = 'POST' then HttpRequestMessage.Method := 'POST' else HttpRequestMessage.Method := 'GET';
+        HttpRequestMessage.Method := Method;
         if HttpClient.Send(HttpRequestMessage, HttpResponseMessage) then begin
             if HttpResponseMessage.IsSuccessStatusCode() then begin
                 HttpResponseMessage.Content().ReadAs(ApiResult);

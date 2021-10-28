@@ -519,6 +519,9 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(SalesForce_Comment; "SalesForce Comment")
             {
             }
+            column(HeaderFooterVisible; HeaderFooterVisible)
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);
@@ -1254,6 +1257,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
         Result: Text;
         VATPercentage: Decimal;
         VATAmount: Decimal;
+        HeaderFooterVisible: Boolean;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1312,7 +1316,22 @@ report 50001 "Sales - Order Confirm XSS DCR"
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1'), wlCurrencyCode)
             else
                 wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
-            wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+
+            case wgRecCompanyInfo.Name of
+                'Kinduct Tech - Backup101121':
+                    HeaderFooterVisible := false;
+                'Kinduct Technologies':
+                    HeaderFooterVisible := false;
+                else begin
+                        HeaderFooterVisible := true;
+                        wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+                    end;
+            end;
+
+            // if wgRecCompanyInfo.Name <> 'Kinduct Technologies' then begin
+            //     HeaderFooterVisible := true;
+            //     wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+            // end;
         end;
     end;
 

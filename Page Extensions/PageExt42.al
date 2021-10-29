@@ -314,4 +314,33 @@ pageextension 50006 "Sales Order" extends "Sales Order"
             Visible = true;
         }
     }
+    actions
+    {
+        addfirst(processing)
+        {
+            action("Revenue Schedule")
+            {
+                ApplicationArea = All;
+                Image = Link;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = true;
+                trigger OnAction()
+                var
+                    RecRevRecSchedule: Record "Revenue Recognition Schedule";
+                    PageRevRecog: Page "Revenue Recognition Schedule";
+                begin
+                    Rec.TestField("Created From Contract");
+                    Clear(RecRevRecSchedule);
+                    RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");
+                    RecRevRecSchedule.SetRange("Sales Order No.", Rec."No.");
+                    If RecRevRecSchedule.FindSet() then begin
+                        Clear(PageRevRecog);
+                        PageRevRecog.SetTableView(RecRevRecSchedule);
+                        PageRevRecog.Run();
+                    end;
+                end;
+            }
+        }
+    }
 }

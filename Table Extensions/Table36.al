@@ -41,6 +41,18 @@ tableextension 50011 "Sales Header" extends "Sales Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(50019; "Created From Contract"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50020; "Contract No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50021; "Contract Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
         field(50100; "VAT Customer Name"; Text[50])
         {
             DataClassification = ToBeClassified;

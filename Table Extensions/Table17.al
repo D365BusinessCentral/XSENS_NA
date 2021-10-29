@@ -52,6 +52,34 @@ tableextension 50005 "G/L Entry" extends "G/L Entry"
             DataClassification = ToBeClassified;
             Editable = false;
         }*/
+        field(50008; "Revenue SO No."; code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50009; "Revenue SO Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50010; "Revenue Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50011; "Contract No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50012; "Revenue Sales Invoice No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50013; "Revenue Sales Invoice Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50014; "Contract Line No."; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
         //- Above two fields added by LT - 22JUNE2021
         field(87000; Permanence; Boolean)
         {

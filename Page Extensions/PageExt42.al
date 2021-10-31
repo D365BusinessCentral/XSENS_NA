@@ -313,6 +313,13 @@ pageextension 50006 "Sales Order" extends "Sales Order"
         {
             Visible = true;
         }
+        addlast("Invoice Details")
+        {
+            field("VAT Registration No."; Rec."VAT Registration No.")
+            {
+                ApplicationArea = All;
+            }
+        }
     }
     actions
     {

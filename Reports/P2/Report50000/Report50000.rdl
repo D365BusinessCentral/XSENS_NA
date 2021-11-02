@@ -1055,10 +1055,10 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>2.44598cm</Width>
+                                    <Width>2.55181cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>5.41044cm</Width>
+                                    <Width>5.4369cm</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
@@ -1752,9 +1752,9 @@
                               </TablixRowHierarchy>
                               <DataSetName>DataSet_Result</DataSetName>
                               <Top>0.01661cm</Top>
-                              <Left>6.06406cm</Left>
+                              <Left>5.96881cm</Left>
                               <Height>3.1339cm</Height>
-                              <Width>7.85642cm</Width>
+                              <Width>7.98871cm</Width>
                               <ZIndex>2</ZIndex>
                               <Style>
                                 <Border>
@@ -2417,7 +2417,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!LineDiscPerc.Value</Value>
+                                                    <Value>=IIF(Fields!LineDiscPerc.Value = 0,"",Fields!LineDiscPerc.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>

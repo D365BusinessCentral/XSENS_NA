@@ -522,6 +522,9 @@ report 50001 "Sales - Order Confirm XSS DCR"
             column(HeaderFooterVisible; HeaderFooterVisible)
             {
             }
+            column(Sell_to_Contact; "Sell-to Contact")
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);

@@ -960,6 +960,7 @@ report 50001 "Sales - Order Confirm XSS DCR"
             var
                 wlCduSalesPost: Codeunit "Sales-Post";
                 wlRecRef: RecordRef;
+                TrimVatPercentage: Text;
             begin
                 CalcFields("Ava Tax Amount");
                 //CurrReport.LANGUAGE := wgRecLanguage.GetLanguageID('ENU'); //GW//krishna
@@ -1020,10 +1021,16 @@ report 50001 "Sales - Order Confirm XSS DCR"
                                 VATAmount := VATAmtLine."VAT Amount";
                             end;
                     until SalesLine.Next() = 0;
+
                 if VATPercentage = 0 then
                     Result := Text001
-                else
-                    Result := StrSubstNo(Text000, VATPercentage);
+                else begin
+                    if StrLen(Format(VATPercentage)) > 5 then begin
+                        TrimVatPercentage := CopyStr(Format(VATPercentage), 1, 5);
+                        Result := StrSubstNo(Text000, TrimVatPercentage);
+                    end else
+                        Result := StrSubstNo(Text000, VATPercentage);
+                end;
 
                 //Prepare VAT Amount Lines LCY
                 if (not wgRecGLSetup."Print VAT specification in LCY") or

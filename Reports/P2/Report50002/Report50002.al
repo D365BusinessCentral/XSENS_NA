@@ -424,9 +424,9 @@ report 50002 "Proforma Invoice XSS DCR"
             column(TotalInclVATText; wgTotalInclVATText)
             {
             }
-            column(VATAmount; "Ava Tax Amount")
-            {
-            }
+            // column(VATAmount; "Ava Tax Amount")
+            // {
+            // }
             column(VALExchRate; wgVALExchRate)
             {
             }
@@ -484,6 +484,13 @@ report 50002 "Proforma Invoice XSS DCR"
             column(HeaderFooterVisible; HeaderFooterVisible)
             {
             }
+            column(VATAmtText; Result) //VATAmtLine.VATAmountText())
+            {
+            }
+            column(VATAmount; VATAmount) //VATAmtLine."VAT Amount")
+            {
+            }
+            column(TotalAmountInclVAT; "Amount Including VAT") { }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = SORTING(Number);
@@ -857,9 +864,9 @@ report 50002 "Proforma Invoice XSS DCR"
                         AutoFormatExpression = SalesHdr."Currency Code";
                         AutoFormatType = 1;
                     }
-                    column(VATAmtText; wgVATAmountText)
-                    {
-                    }
+                    // column(VATAmtText; wgVATAmountText)
+                    // {
+                    // }
                     column(TotVALVATBaseLCY; wgTotVALVATBaseLCY)
                     {
                     }
@@ -928,7 +935,7 @@ report 50002 "Proforma Invoice XSS DCR"
                 //wgCduDocCreatorTransLationMgt.wgSetLanguageCode('ENU');    //GW//Krishna   //GW
 
                 wlFncFormatAddressFields(SalesHdr);
-                wlFncFormatDocumentFields(SalesHdr);
+                // wlFncFormatDocumentFields(SalesHdr);
 
                 if wgPrint then begin
                     if wgArchiveDocument then
@@ -967,6 +974,25 @@ report 50002 "Proforma Invoice XSS DCR"
                 wgTotVATAmount := VATAmtLine.GetTotalVATAmount;
                 wgTotPaymentDiscOnVAT := -(wgTotLineAmount - wgTotInvDiscAmount - VATAmtLine.GetTotalAmountInclVAT);
                 wgTotAmount := VATAmtLine.GetTotalVATBase;
+
+                Clear(Result);
+                Clear(VATAmount);
+                VATPercentage := 0;
+                if SalesLine.FindSet() then
+                    repeat
+                        if SalesLine."Ava Tax Rate" <> 0 then begin
+                            VATPercentage := SalesLine."Ava Tax Rate";
+                            VATAmount := "Ava Tax Amount";
+                        end else
+                            if SalesLine."VAT %" <> 0 then begin
+                                VATPercentage := SalesLine."VAT %";
+                                VATAmount := VATAmtLine."VAT Amount";
+                            end;
+                    until SalesLine.Next() = 0;
+                if VATPercentage = 0 then
+                    Result := Text001
+                else
+                    Result := StrSubstNo(Text000, VATPercentage);
 
                 //Prepare VAT Amount Lines LCY
                 if (not wgRecGLSetup."Print VAT specification in LCY") or
@@ -1013,6 +1039,8 @@ report 50002 "Proforma Invoice XSS DCR"
                     'ROW-SALE':
                         VatRegulationG := '“No tax charged because of EXPORT-shipment”';
                 end;
+
+                wlFncFormatDocumentFields(SalesHdr);
             end;
         }
     }
@@ -1192,6 +1220,12 @@ report 50002 "Proforma Invoice XSS DCR"
         ShipmentMethodG: Record "Shipment Method";
         VatRegulationG: Text;
         HeaderFooterVisible: Boolean;
+        Text000: Label '%1% Sales Tax';
+        Text001: Label 'Sales Tax';
+        Result: Text;
+        VATPercentage: Decimal;
+        VATAmount: Decimal;
+        TotalAmountInclVAT: Decimal;
 
     local procedure Trl(pLblName: Text): Text;
     begin
@@ -1226,19 +1260,24 @@ report 50002 "Proforma Invoice XSS DCR"
             end;
             wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
             //NM_BEGIN GW
-            case wgRecCompanyInfo."Company Location" of
-                wgRecCompanyInfo."Company Location"::Holland:
-                    begin
-                        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
-                        wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
-                    end;
-                wgRecCompanyInfo."Company Location"::"North America":
-                    begin
-                        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
-                        wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
-                    end;
-            end;
+            // case wgRecCompanyInfo."Company Location" of
+            //     wgRecCompanyInfo."Company Location"::Holland:
+            //         begin
+            //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
+            //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
+            //         end;
+            //     wgRecCompanyInfo."Company Location"::"North America":
+            //         begin
+            //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
+            //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
+            //         end;
+            // end;
             //NM_END
+            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl. Sales Tax'), wlCurrencyCode);
+            if VATAmount = 0 then
+                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
+            else
+                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
 
             case wgRecCompanyInfo.Name of
                 'Kinduct Tech - Backup101121':

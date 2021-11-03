@@ -83,7 +83,7 @@ codeunit 50101 "Events"
                     Clear(RecSalesHeader);
                     RecSalesHeader.GET(RecSalesHeader."Document Type"::Order, ReqLine."Sales Order No.");
                     if RecSalesHeader."Currency Code" = PurchOrderHeader."Currency Code" then begin
-                        PurchOrderLine.Validate("Direct Unit Cost", RecSalesLine."Unit Price" * RecVendor.Percentage / 100);
+                        PurchOrderLine.Validate("Direct Unit Cost", RecSalesLine."Line Amount" * RecVendor.Percentage / 100);
                     end else begin
 
                         Clear(CurrencyFactor);
@@ -293,7 +293,7 @@ codeunit 50101 "Events"
         SalesLine."Sales Order Line No." := ICInboxSalesLine."Sales Order Line No.";
         SalesLine."Shipment Date" := ICInboxSalesLine."Shipment Date";          // 20160510 KBG 06458
         SalesLine."Sorting" := ICInboxSalesLine.Sorting;                  // 20160510 KBG 06458
-                                                                              // NM_END 20100829 TG 23475
+                                                                          // NM_END 20100829 TG 23475
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::ICInboxOutboxMgt, 'OnBeforeICInboxPurchLineInsert', '', false, false)]

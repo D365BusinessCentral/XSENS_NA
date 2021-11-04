@@ -584,7 +584,7 @@ report 50005 "Purchase - Order XSS DCR"
                     column(LineDiscPerc; "Line Discount %")
                     {
                     }
-                    column(No_2; "No.")
+                    column(No_2; No)
                     {
                     }
                     column(PromisedReceiptDate; "Promised Receipt Date")
@@ -671,6 +671,12 @@ report 50005 "Purchase - Order XSS DCR"
                         // Add Project Code & Cost Center to Purch Line
                         gTxtProjectCode := gCduFinancieel.fGetDimensionFromID(PurchLine."Dimension Set ID", 'PROJECT');
                         gTxtCostCenter := gCduFinancieel.fGetDimensionValueFromID(PurchLine."Dimension Set ID", 'COST CENTER');
+
+                        Clear(No);
+                        if "Vendor Item No." <> '' then
+                            No := "Vendor Item No."
+                        else
+                            No := "No.";
                     end;
 
                     trigger OnPreDataItem();
@@ -1235,6 +1241,7 @@ report 50005 "Purchase - Order XSS DCR"
         TotalAmountInclVAT: Decimal;
         VendorG: Record Vendor;
         HeaderFooterVisible: Boolean;
+        No: Code[50];
 
     local procedure Trl(pLblName: Text): Text;
     begin

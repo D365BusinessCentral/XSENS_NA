@@ -83,7 +83,7 @@ codeunit 50101 "Events"
                     Clear(RecSalesHeader);
                     RecSalesHeader.GET(RecSalesHeader."Document Type"::Order, ReqLine."Sales Order No.");
                     if RecSalesHeader."Currency Code" = PurchOrderHeader."Currency Code" then begin
-                        PurchOrderLine.Validate("Direct Unit Cost", RecSalesLine."Line Amount" * RecVendor.Percentage / 100);
+                        PurchOrderLine.Validate("Direct Unit Cost", (RecSalesLine."Line Amount" * RecVendor.Percentage / 100) / RecSalesLine.Quantity);
                     end else begin
 
                         Clear(CurrencyFactor);

@@ -32,6 +32,33 @@ codeunit 50014 "Sales Order Customization"
         IsHandled := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Format Address", 'OnBeforePurchHeaderShipTo', '', false, false)]
+    local procedure OnBeforePurchHeaderShipTo(var AddrArray: array[8] of Text[100];
+    var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean)
+    var
+        FormatAddressCUL: Codeunit "Format Address";
+    begin
+        with PurchaseHeader do
+            FormatAddressCUL.FormatAddr(
+              AddrArray, "Ship-to Name", '', "Ship-to Contact", "Ship-to Address", "Ship-to Address 2",
+              "Ship-to City", "Ship-to Post Code", "Ship-to County", "Ship-to Country/Region Code");
+        IsHandled := true;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Format Address", 'OnBeforeSalesHeaderShipTo', '', false, false)]
+    local procedure OnBeforeSalesHeaderShipTo(var AddrArray: array[8] of Text[100]; var CustAddr: array[8] of Text[100];
+    var Handled: Boolean; var Result: Boolean; var SalesHeader: Record "Sales Header")
+    var
+        FormatAddressCUL: Codeunit "Format Address";
+    begin
+        with SalesHeader do begin
+            FormatAddressCUL.FormatAddr(
+              AddrArray, "Ship-to Name", '', "Ship-to Contact", "Ship-to Address", "Ship-to Address 2",
+              "Ship-to City", "Ship-to Post Code", "Ship-to County", "Ship-to Country/Region Code");
+            Handled := true;
+        end;
+    end;
+
     [EventSubscriber(ObjectType::Report, Report::"Get Sales Orders", 'OnBeforeInsertReqWkshLine', '', false, false)]
     local procedure OnBeforeInsertReqWkshLine(SalesLine: Record "Sales Line"; SpecOrder: Integer;
     var ReqLine: Record "Requisition Line")

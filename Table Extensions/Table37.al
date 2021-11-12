@@ -176,5 +176,15 @@ tableextension 50012 "Sales Line" extends "Sales Line"
             Description = 'No longer used';
             MinValue = 1;
         }
+        field(87004; "Contract Start Date"; Date)
+        {
+            Caption = 'Contract Start Date';
+            DataClassification = ToBeClassified;
+        }
+        field(87005; "Invoice Interval"; Integer)
+        {
+            Caption = 'Invoice Interval';
+            DataClassification = ToBeClassified;
+        }
     }
 }

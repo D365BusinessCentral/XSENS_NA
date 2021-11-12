@@ -40,6 +40,7 @@ page 50099 "Sales Order LT"
                     trigger OnValidate()
                     begin
                         Rec.SelltoCustomerNoOnAfterValidate(Rec, xRec);
+                        Rec."Currency Code" := xRec."Currency Code";
                         CurrPage.Update;
                     end;
                 }

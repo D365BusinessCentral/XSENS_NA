@@ -16,5 +16,16 @@ pageextension 50029 GLEntry extends "General Ledger Entries"
                 Caption = 'Vendor Name';
             }*/
         }
+        addafter("G/L Account Name")
+        {
+            field("Customer No."; Rec."Customer No.")
+            {
+                ApplicationArea = All;
+            }
+            field("Customer Name"; Rec."Customer Name")
+            {
+                ApplicationArea = All;
+            }
+        }
     }
 }

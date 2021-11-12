@@ -71,6 +71,14 @@ table 50012 "Revenue Recognition Schedule"
         {
             DataClassification = ToBeClassified;
         }
+        field(16; "Customer Name"; Code[50])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(17; "Country"; Code[50])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

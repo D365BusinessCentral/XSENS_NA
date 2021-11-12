@@ -223,10 +223,11 @@ codeunit 50020 ProcessChargebee
         //...
 
         SalesHeader.INSERT(true);
-        //PdV: In verband met problemen met Avalar - AvaTax onderstaande uitgeslasht
-        //SalesHeader."No. Series" := '';
-        //SalesHeader."Posting No. Series" := '';
-        //SalesHeader.MODIFY(false);
+        SalesHeader."No. Series" := '';
+        SalesHeader."Posting No. Series" := '';
+        SalesHeader."Tax Area Code" := '';
+        SalesHeader."Tax Liable" := false;
+        SalesHeader.MODIFY(false);
 
         // ADD SALES INVOICE LINE
         Counter := 0;
@@ -345,7 +346,13 @@ codeunit 50020 ProcessChargebee
                 //
                 SalesLine.VALIDATE("Shortcut Dimension 1 Code", gBusinessUnit);
                 //SalesLine.Validate("Shortcut Dimension 4 Code", gProductLines);
-                if bUseSalesTax then SalesLine.VALIDATE("VAT Prod. Posting Group", gNoVAT);
+                if bUseSalesTax then begin
+                    SalesLine."Tax Area Code" := '';
+                    SalesLine."Tax Category" := '';
+                    SalesLine."Tax Group Code" := '';
+                    SalesLine."Tax Liable" := false;
+                    SalesLine.VALIDATE("VAT Prod. Posting Group", gNoVAT);
+                end;
                 SalesLine.INSERT(true);
                 if JObject.SelectToken('list[0].' + IC + '.line_items[' + FORMAT(Counter) + '].tax_amount', jsontoken) then
                     vValue := jsontoken.AsValue().AsText()
@@ -374,8 +381,8 @@ codeunit 50020 ProcessChargebee
                 AddSalesTaxLine(dAmount, bCredit, InvoiceNo, iLineNo);
             end;
         end;
-        //if CanRelease then
-        //    SalesPost.ReleaseSalesDocument(SalesHeader);
+        if CanRelease then
+            SalesPost.ReleaseSalesDocument(SalesHeader);
         if bPost then begin
             CLEAR(SalesPost);
             SalesPost.RUN(SalesHeader);
@@ -587,8 +594,12 @@ codeunit 50020 ProcessChargebee
         SalesLine.VALIDATE("No.", gSalesTaxAccount);
         SalesLine.Description := 'Sales Tax amount';
         SalesLine.VALIDATE(Quantity, 1);
-        SalesLine."VAT Prod. Posting Group" := gFullVAT;
+        SalesLine."Tax Area Code" := '';
+        SalesLine."Tax Category" := '';
+        SalesLine."Tax Group Code" := '';
+        SalesLine."Tax Liable" := false;
         SalesLine.VALIDATE("Unit Price", dTax);
+        SalesLine.VALIDATE("VAT Prod. Posting Group", gFullVAT);
         SalesLine.INSERT(true);
     end;
 

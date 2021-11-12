@@ -48,9 +48,20 @@ report 50022 "Recognize Revenue"
             var
                 PageGenJnl: Page "General Journal";
                 RecGenJournal: Record "Gen. Journal Line";
+                RevenueRecognitionScheduleL: Record "Revenue Recognition Schedule";
             begin
                 if IsPost then begin
                     Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch", GenJnlLine);
+                    RevenueRecognitionScheduleL.SetCurrentKey("Sales Order No.", "SO Line No.");
+                    RevenueRecognitionScheduleL.SetRange("Sales Order No.", "Sales Order No.");
+                    RevenueRecognitionScheduleL.SetRange("SO Line No.", "SO Line No.");
+                    RevenueRecognitionScheduleL.SetFilter("Sales invoice No.", '<>%1', '');
+                    RevenueRecognitionScheduleL.SetRange(Posted, false);
+                    if RevenueRecognitionScheduleL.FindSet() then
+                        repeat
+                            RevenueRecognitionScheduleL.Posted := true;
+                            RevenueRecognitionScheduleL.Modify();
+                        until RevenueRecognitionScheduleL.Next() = 0;
                 end else begin
                     Clear(PageGenJnl);
                     PageGenJnl.SetTableView(GenJnlLine);

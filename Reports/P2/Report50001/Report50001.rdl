@@ -2043,16 +2043,16 @@
                                     <Width>3.19679cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>6.92279cm</Width>
+                                    <Width>6.76404cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
                                     <Width>1.55109cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.62687cm</Width>
+                                    <Width>1.94437cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.7363cm</Width>
+                                    <Width>1.57755cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
                                     <Width>1.94627cm</Width>
@@ -2205,7 +2205,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Discount</Value>
+                                                    <Value>Unit Price</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -2239,7 +2239,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Unit Price</Value>
+                                                    <Value>Discount</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -2659,10 +2659,11 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=IIF(Fields!LineDiscPerc.Value = 0,"",Fields!LineDiscPerc.Value)</Value>
+                                                    <Value>=IIf(Fields!UnitPrice.Value =0,"",Fields!UnitPrice.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <Format>#,0.00;(#,0.00)</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -2691,11 +2692,10 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=IIf(Fields!UnitPrice.Value =0,"",Fields!UnitPrice.Value)</Value>
+                                                    <Value>=IIF(Fields!LineDiscPerc.Value = 0,"",Fields!LineDiscPerc.Value)</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>#,0.00;(#,0.00)</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -4210,6 +4210,7 @@
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                      <FontWeight>SemiBold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>

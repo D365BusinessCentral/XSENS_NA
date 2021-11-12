@@ -123,5 +123,13 @@ tableextension 50016 "Gen. Journal Line" extends "Gen. Journal Line"
                         NLD = 'Uitgesteld boeken';
             DataClassification = ToBeClassified;
         }
+        field(87003; "Customer No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(87004; "Customer Name"; Text[100])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

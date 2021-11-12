@@ -24,7 +24,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>11.25082cm</Height>
+                  <Height>11.25493cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2352,16 +2352,16 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>1.64656cm</Width>
+                                    <Width>1.43489cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.92151cm</Width>
+                                    <Width>2.55651cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>5.04359cm</Width>
+                                    <Width>4.77901cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.2496cm</Width>
+                                    <Width>2.06439cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
                                     <Width>2.15964cm</Width>
@@ -2980,6 +2980,18 @@
                                                 </TextRuns>
                                                 <Style />
                                               </Paragraph>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>=Fields!Vendor_Item_No_.Value</Value>
+                                                    <Style>
+                                                      <FontFamily>Segoe UI</FontFamily>
+                                                      <FontSize>8pt</FontSize>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style />
+                                              </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>Description</rd:DefaultName>
                                             <Style>
@@ -3151,7 +3163,7 @@
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.15464cm</Height>
+                                    <Height>0.15875cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -3215,7 +3227,7 @@
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="Textbox85">
+                                          <Textbox Name="Textbox19">
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -3223,22 +3235,21 @@
                                                 <TextRuns>
                                                   <TextRun>
                                                     <Value />
-                                                    <Style>
-                                                      <FontFamily>Segoe UI</FontFamily>
-                                                      <FontSize>8pt</FontSize>
-                                                    </Style>
+                                                    <Style />
                                                   </TextRun>
                                                 </TextRuns>
                                                 <Style />
                                               </Paragraph>
                                             </Paragraphs>
-                                            <rd:DefaultName>Textbox85</rd:DefaultName>
+                                            <rd:DefaultName>Textbox19</rd:DefaultName>
                                             <Style>
                                               <Border>
                                                 <Style>None</Style>
                                               </Border>
-                                              <PaddingLeft>5pt</PaddingLeft>
-                                              <PaddingRight>5pt</PaddingRight>
+                                              <PaddingLeft>2pt</PaddingLeft>
+                                              <PaddingRight>2pt</PaddingRight>
+                                              <PaddingTop>2pt</PaddingTop>
+                                              <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
                                         </CellContents>
@@ -5868,8 +5879,8 @@
                               </TablixRowHierarchy>
                               <DataSetName>DataSet_Result</DataSetName>
                               <Top>7.67895cm</Top>
-                              <Height>3.57187cm</Height>
-                              <Width>18.81188cm</Width>
+                              <Height>3.57598cm</Height>
+                              <Width>18.78542cm</Width>
                               <ZIndex>3</ZIndex>
                               <Style>
                                 <Border>
@@ -5936,7 +5947,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Height>11.25082cm</Height>
+            <Height>11.25493cm</Height>
             <Width>18.81188cm</Width>
             <Style>
               <Border>
@@ -5945,7 +5956,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>11.25082cm</Height>
+        <Height>11.25493cm</Height>
         <Style />
       </Body>
       <Width>18.81188cm</Width>
@@ -6830,6 +6841,9 @@ End Function
         </Field>
         <Field Name="ProjectCode">
           <DataField>ProjectCode</DataField>
+        </Field>
+        <Field Name="Vendor_Item_No_">
+          <DataField>Vendor_Item_No_</DataField>
         </Field>
         <Field Name="Unit_Cost">
           <DataField>Unit_Cost</DataField>

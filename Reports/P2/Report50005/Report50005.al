@@ -584,7 +584,7 @@ report 50005 "Purchase - Order XSS DCR"
                     column(LineDiscPerc; "Line Discount %")
                     {
                     }
-                    column(No_2; No)
+                    column(No_2; "No.")
                     {
                     }
                     column(PromisedReceiptDate; "Promised Receipt Date")
@@ -620,8 +620,21 @@ report 50005 "Purchase - Order XSS DCR"
                     column(ProjectCode; gTxtProjectCode)
                     {
                     }
+                    column(Vendor_Item_No_; "Vendor Item No.")
+                    {
+                    }
                     //01.09.2021
                     column(Unit_Cost; "Unit Cost") { }
+                    dataitem(PurchLine1; "Purchase Line")
+                    {
+                        DataItemTableView = SORTING("Document Type", "Document No.", "Line No.");
+                        DataItemLink = "Document Type" = field("Document Type"), "Document No." = field("Document No."), "No." = field("No."), "Line No." = field("Line No.");
+                        UseTemporary = true;
+                        trigger OnPreDataItem()
+                        begin
+                            SetFilter("Vendor Item No.", '<>%1', '');
+                        end;
+                    }
 
                     dataitem(LineComment; "Sales Comment Line")
                     {
@@ -672,11 +685,11 @@ report 50005 "Purchase - Order XSS DCR"
                         gTxtProjectCode := gCduFinancieel.fGetDimensionFromID(PurchLine."Dimension Set ID", 'PROJECT');
                         gTxtCostCenter := gCduFinancieel.fGetDimensionValueFromID(PurchLine."Dimension Set ID", 'COST CENTER');
 
-                        Clear(No);
-                        if "Vendor Item No." <> '' then
-                            No := "Vendor Item No."
-                        else
-                            No := "No.";
+                        // Clear(No);
+                        // if "Vendor Item No." <> '' then
+                        //     No := "Vendor Item No."
+                        // else
+                        //     No := "No.";
                     end;
 
                     trigger OnPreDataItem();

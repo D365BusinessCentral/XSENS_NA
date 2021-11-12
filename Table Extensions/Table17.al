@@ -92,5 +92,13 @@ tableextension 50005 "G/L Entry" extends "G/L Entry"
                         NLD = 'Permanence Document Nr.';
             Description = 'No longer used';
         }
+        field(87003; "Customer No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(87004; "Customer Name"; Text[100])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }

@@ -29,5 +29,16 @@ pageextension 50009 "Sales Order Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
             }
         }
+        addafter("Unit Price")
+        {
+            field("Contract Start Date"; Rec."Contract Start Date")
+            {
+                ApplicationArea = All;
+            }
+            field("Invoice Interval"; Rec."Invoice Interval")
+            {
+                ApplicationArea = All;
+            }
+        }
     }
 }

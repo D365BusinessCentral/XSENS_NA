@@ -122,7 +122,7 @@ codeunit 50005 "Process Contract Information"
                     RecRevRecSchedule."Sales Order No." := RecContractInfo."Sales Order No.";
                     RecRevRecSchedule."SO Line No." := SoLineNo;
                     RecRevRecSchedule."Line No." := LineNo;
-                    RecRevRecSchedule."Posting Date" := DeferralLine."Posting Date";
+                    RecRevRecSchedule."Posting Date" := CalcDate('CM', DeferralLine."Posting Date");
                     RecRevRecSchedule.Amount := DeferralLine.Amount;
                     RecRevRecSchedule."Deferral Account" := DeferralTemplate."Deferral Account";
                     RecRevRecSchedule."Revenue Account" := DeferralTemplate."Revenue Account";
@@ -140,6 +140,8 @@ codeunit 50005 "Process Contract Information"
         RecRevRecSchedule: Record "Revenue Recognition Schedule";
     begin
         if not (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) then exit;
+        if SalesLine."Qty. to Invoice" = 0 then
+            exit;
         Clear(RecRevRecSchedule);
         RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");
         RecRevRecSchedule.SetRange("Sales Order No.", SalesHeader."No.");

@@ -329,6 +329,35 @@ pageextension 50006 "Sales Order" extends "Sales Order"
     }
     actions
     {
+        modify(Release)
+        {
+            trigger OnAfterAction()
+            var
+                SalesLineL: Record "Sales Line";
+                CreateRevenueSchedule: Codeunit "Create Revenue Schedule";
+            begin
+                SalesLineL.SetRange("Document No.", Rec."No.");
+                if SalesLineL.FindSet() then
+                    repeat
+                        CreateRevenueSchedule.InsertRevenueRecognitionSchedule(Rec, SalesLineL);
+                    until SalesLineL.Next() = 0;
+            end;
+        }
+        modify(Reopen)
+        {
+            trigger OnAfterAction()
+            var
+                RecRevRecSchedule: Record "Revenue Recognition Schedule";
+            begin
+                Message('Revenue Schedule will be deleted');
+                Clear(RecRevRecSchedule);
+                RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");
+                RecRevRecSchedule.SetRange("Sales Order No.", Rec."No.");
+                RecRevRecSchedule.SetFilter("Sales invoice No.", '=%1', '');
+                If RecRevRecSchedule.FindSet() then
+                    RecRevRecSchedule.DeleteAll();
+            end;
+        }
         addfirst(processing)
         {
             action("Revenue Schedule")
@@ -343,7 +372,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                     RecRevRecSchedule: Record "Revenue Recognition Schedule";
                     PageRevRecog: Page "Revenue Recognition Schedule";
                 begin
-                    Rec.TestField("Created From Contract");
+                    //Rec.TestField("Created From Contract");
                     Clear(RecRevRecSchedule);
                     RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");
                     RecRevRecSchedule.SetRange("Sales Order No.", Rec."No.");

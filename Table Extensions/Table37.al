@@ -183,8 +183,9 @@ tableextension 50012 "Sales Line" extends "Sales Line"
         }
         field(87005; "Invoice Interval"; Integer)
         {
-            Caption = 'Invoice Interval';
+            Caption = 'Deferral Invoice';
             DataClassification = ToBeClassified;
+            TableRelation = "Deferral Template"."Deferral Code";
         }
     }
 }

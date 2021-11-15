@@ -61,6 +61,7 @@ page 50002 "Contract Information"
                 {
                     ToolTip = 'Specifies the value of the Invoice Interval field.';
                     ApplicationArea = All;
+                    Caption = 'Deferral Invoice';
                 }
                 field(Quantity; Rec.Quantity)
                 {

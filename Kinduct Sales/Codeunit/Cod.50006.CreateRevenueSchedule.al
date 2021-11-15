@@ -65,7 +65,7 @@ codeunit 50007 "Create Revenue Schedule"
         end;
     end;
 
-    [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", 'OnBeforeValidateEvent', 'Invoice Interval', false, false)]
+   /* [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", 'OnBeforeValidateEvent', 'Invoice Interval', false, false)]
     local procedure OnAfterValidateEvent(var Rec: Record "Sales Line"; var xRec: Record "Sales Line")
     var
         RecRevRecSchedule: Record "Revenue Recognition Schedule";
@@ -74,7 +74,7 @@ codeunit 50007 "Create Revenue Schedule"
             Error('You cannot change the invoice interval for the invoiced Item')
         else
             Rec.Validate("Deferral Code", Format(Rec."Invoice Interval"));
-    end;
+    end;*/
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnBeforeInsertGLEntryBuffer', '', false, false)]
     local procedure OnBeforeInsertGLEntryBuffer(var BalanceCheckAddCurrAmount2: Decimal; var BalanceCheckAddCurrAmount: Decimal;
@@ -102,7 +102,7 @@ codeunit 50007 "Create Revenue Schedule"
         end;
     end;
 
-    [EventSubscriber(ObjectType::Page, Page::"Sales Order", 'OnBeforeActionEvent', 'Post', false, false)]
+   /* [EventSubscriber(ObjectType::Page, Page::"Sales Order", 'OnBeforeActionEvent', 'Post', false, false)]
     local procedure OnBeforeActionEvent(var Rec: Record "Sales Header")
     var
         SalesLineL: Record "Sales Line";
@@ -114,5 +114,5 @@ codeunit 50007 "Create Revenue Schedule"
                 SalesLineL.Validate("Deferral Code", '');
                 SalesLineL.Modify();
             until SalesLineL.Next() = 0;
-    end;
+    end;*/
 }

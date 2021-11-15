@@ -39,9 +39,11 @@ page 50099 "Sales Order LT"
 
                     trigger OnValidate()
                     begin
-                        Rec.SelltoCustomerNoOnAfterValidate(Rec, xRec);
-                        Rec."Currency Code" := xRec."Currency Code";
-                        CurrPage.Update;
+                        Rec."Shipment Date" := 0D;
+                        Rec."Payment Terms Code" := '';
+                        Rec."Payment Method Code" := '';
+                        Rec."Salesperson Code" := '';
+                        Rec."Currency Code" := '';
                     end;
                 }
                 field("Sell-to Customer Name"; Rec."Sell-to Customer Name")

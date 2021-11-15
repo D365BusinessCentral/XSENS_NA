@@ -193,6 +193,10 @@ codeunit 50101 "Events"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::ICInboxOutboxMgt, 'OnCreateSalesDocumentOnBeforeSalesHeaderModify', '', false, false)]
     local procedure OnCreateSalesDocumentOnBeforeSalesHeaderModify(var SalesHeader: Record "Sales Header"; ICInboxSalesHeader: Record "IC Inbox Sales Header");
     begin
+        SalesHeader."Ship-to Address" := ICInboxSalesHeader."Ship-to Address";
+        SalesHeader."Ship-to Address 2" := ICInboxSalesHeader."Ship-to Address 2";
+        SalesHeader."Ship-to Post Code" := ICInboxSalesHeader."Ship-to Post Code";
+        SalesHeader."Ship-to County" := ICInboxSalesHeader."Ship-to County";
         SalesHeader."Ship-to Contact" := ICInboxSalesHeader."Ship-to Contact";                          // 20100930 TG 23475
         SalesHeader."Ship-to Country/Region Code" := ICInboxSalesHeader."Ship-to Country/Region Code";              //20110103 GFR 25048
         SalesHeader."Salesperson Code" := ICInboxSalesHeader."Salesperson Code";                         // 20101001 TG 23475
@@ -321,6 +325,10 @@ codeunit 50101 "Events"
         ICInboxSalesHeader."Sell-to IC City" := ICOutboxPurchaseHeader."Sell-to IC City";
         ICInboxSalesHeader."Sell-to IC Contact" := ICOutboxPurchaseHeader."Sell-to IC Contact";
         ICInboxSalesHeader."Sell-to IC Post Code" := ICOutboxPurchaseHeader."Sell-to IC Post Code";
+        ICInboxSalesHeader."Ship-to Address" := ICOutboxPurchaseHeader."Ship-to Address";
+        ICInboxSalesHeader."Ship-to Address 2" := ICOutboxPurchaseHeader."Ship-to Address 2";
+        ICInboxSalesHeader."Ship-to Post Code" := ICOutboxPurchaseHeader."Ship-to Post Code";
+        ICInboxSalesHeader."Ship-to County" := ICOutboxPurchaseHeader."Ship-to County";
         ICInboxSalesHeader."Ship-to Contact" := ICOutboxPurchaseHeader."Ship-to Contact";   // 20100930 TG 23475
         ICInboxSalesHeader."Ship-to Country/Region Code" := ICOutboxPurchaseHeader."Ship-to Country/Region Code";
         ICInboxSalesHeader."US Payment terms" := ICOutboxPurchaseHeader."Payment Terms Code (US)";    //20160512 KBG 06458
@@ -372,8 +380,10 @@ codeunit 50101 "Events"
     var
         lRecSalesHeader: Record "Sales Header";
     begin
-        //ICOutBoxPurchHeader."Ship-to Post Code"             := PurchHeader."Ship-to Post Code";           // 20100929 TG 23475
-        //ICOutBoxPurchHeader."Ship-to Address 2"             := PurchHeader."Ship-to Address 2";           // 20100928 TG 23475
+        ICOutBoxPurchHeader."Ship-to Post Code" := PurchHeader."Ship-to Post Code";           // 20100929 TG 23475
+        ICOutboxPurchHeader."Ship-to Address" := PurchHeader."Ship-to Address";
+        ICOutBoxPurchHeader."Ship-to Address 2" := PurchHeader."Ship-to Address 2";           // 20100928 TG 23475
+        ICOutboxPurchHeader."Ship-to County" := PurchHeader."Ship-to County";
         ICOutBoxPurchHeader."Ship-to Contact" := PurchHeader."Ship-to Contact";             // 20100930 TG 23475
         ICOutBoxPurchHeader."Salesperson Code" := PurchHeader."Salesperson Code";            // 20101001 TG 23475
         ICOutBoxPurchHeader."Sales Your Reference" := PurchHeader."Sales Your Reference";        // 20101001 TG 23475

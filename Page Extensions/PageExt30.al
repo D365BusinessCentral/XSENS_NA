@@ -36,6 +36,10 @@ pageextension 50003 "Item Card" extends "Item Card"
                 ApplicationArea = All;
                 //
             }
+            field("Default Deferral Template"; Rec."Default Deferral Template")
+            {
+                ApplicationArea = All;
+            }
 
         }
         /* addlast(InventoryGrp)

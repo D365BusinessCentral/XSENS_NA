@@ -32,6 +32,10 @@ tableextension 50009 Item extends Item
                         NLD = 'Door te schuiven prijs';
             MinValue = 0;
         }
+        field(50205; "Default Deferral Template"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
         field(50300; "Item Code"; Option)
         {
             CaptionML = ENU = 'Item Code',

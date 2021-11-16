@@ -21,17 +21,16 @@ codeunit 50007 "Create Revenue Schedule"
             LineNo := RecRevRecSchedule."Line No."
         else
             LineNo := 0;
-        // for i := 1 to RecContractInfo."Invoice Interval" do begin
 
-        // end;
 
         //DeferralTemplate.Get(RecSalesLinep."Deferral Code");
         DeferralTemplate.Get(format(RecSalesLinep."Invoice Interval"));
-        if not DeferralHeader.Get("Deferral Document Type"::Sales.AsInteger(), '', '', RecSalesLinep."Document Type".AsInteger(), RecSalesLinep."Document No.", RecSalesLinep."Line No.") then
-            DeferralUtilities.CreateDeferralSchedule(format(RecSalesLinep."Invoice Interval"), "Deferral Document Type"::Sales.AsInteger(),
-               '', '', RecSalesLinep."Document Type".AsInteger(), RecSalesLinep."Document No.", RecSalesLinep."Line No.", RecSalesLinep.GetDeferralAmount,
-               DeferralTemplate."Calc. Method", RecSalesLinep."Shipment Date", DeferralTemplate."No. of Periods", true,
-                RecSalesLinep.Description, true, RecSalesLinep."Currency Code");
+        if DeferralHeader.Get("Deferral Document Type"::Sales.AsInteger(), '', '', RecSalesLinep."Document Type".AsInteger(), RecSalesLinep."Document No.", RecSalesLinep."Line No.") then
+            DeferralHeader.Delete(true);//deleting to recreate lines with new Deferral Interval
+        DeferralUtilities.CreateDeferralSchedule(format(RecSalesLinep."Invoice Interval"), "Deferral Document Type"::Sales.AsInteger(),
+           '', '', RecSalesLinep."Document Type".AsInteger(), RecSalesLinep."Document No.", RecSalesLinep."Line No.", RecSalesLinep.GetDeferralAmount,
+           DeferralTemplate."Calc. Method", RecSalesLinep."Shipment Date", DeferralTemplate."No. of Periods", true,
+            RecSalesLinep.Description, true, RecSalesLinep."Currency Code");
 
 
         if DeferralHeader.Get("Deferral Document Type"::Sales.AsInteger(), '', '', RecSalesLinep."Document Type".AsInteger(), RecSalesLinep."Document No.", RecSalesLinep."Line No.") then begin
@@ -59,22 +58,26 @@ codeunit 50007 "Create Revenue Schedule"
                     RecRevRecSchedule."Revenue Account" := DeferralTemplate."Revenue Account";
                     RecRevRecSchedule."Customer Name" := SalesHeader."Sell-to Customer Name";
                     RecRevRecSchedule.Country := SalesHeader."Sell-to Country/Region Code";
+                    RecRevRecSchedule."Customer No." := SalesHeader."Sell-to Customer No.";
+                    RecRevRecSchedule."Shortcut Dimension 1 Code" := RecSalesLinep."Shortcut Dimension 1 Code";
+                    RecRevRecSchedule."Shortcut Dimension 2 Code" := RecSalesLinep."Shortcut Dimension 2 Code";
+                    RecRevRecSchedule."Dimension Set Id" := RecSalesLinep."Dimension Set ID";
                     RecRevRecSchedule.Insert();
                 until DeferralLine.Next() = 0;
             end;
         end;
     end;
 
-   /* [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", 'OnBeforeValidateEvent', 'Invoice Interval', false, false)]
-    local procedure OnAfterValidateEvent(var Rec: Record "Sales Line"; var xRec: Record "Sales Line")
-    var
-        RecRevRecSchedule: Record "Revenue Recognition Schedule";
-    begin
-        if Rec."Quantity Invoiced" <> 0 then
-            Error('You cannot change the invoice interval for the invoiced Item')
-        else
-            Rec.Validate("Deferral Code", Format(Rec."Invoice Interval"));
-    end;*/
+    /* [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", 'OnBeforeValidateEvent', 'Invoice Interval', false, false)]
+     local procedure OnAfterValidateEvent(var Rec: Record "Sales Line"; var xRec: Record "Sales Line")
+     var
+         RecRevRecSchedule: Record "Revenue Recognition Schedule";
+     begin
+         if Rec."Quantity Invoiced" <> 0 then
+             Error('You cannot change the invoice interval for the invoiced Item')
+         else
+             Rec.Validate("Deferral Code", Format(Rec."Invoice Interval"));
+     end;*/
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnBeforeInsertGLEntryBuffer', '', false, false)]
     local procedure OnBeforeInsertGLEntryBuffer(var BalanceCheckAddCurrAmount2: Decimal; var BalanceCheckAddCurrAmount: Decimal;
@@ -102,17 +105,17 @@ codeunit 50007 "Create Revenue Schedule"
         end;
     end;
 
-   /* [EventSubscriber(ObjectType::Page, Page::"Sales Order", 'OnBeforeActionEvent', 'Post', false, false)]
-    local procedure OnBeforeActionEvent(var Rec: Record "Sales Header")
-    var
-        SalesLineL: Record "Sales Line";
-    begin
-        SalesLineL.SetRange("Document Type", Rec."Document Type");
-        SalesLineL.SetRange("Document No.", Rec."No.");
-        if SalesLineL.FindSet() then
-            repeat
-                SalesLineL.Validate("Deferral Code", '');
-                SalesLineL.Modify();
-            until SalesLineL.Next() = 0;
-    end;*/
+    /* [EventSubscriber(ObjectType::Page, Page::"Sales Order", 'OnBeforeActionEvent', 'Post', false, false)]
+     local procedure OnBeforeActionEvent(var Rec: Record "Sales Header")
+     var
+         SalesLineL: Record "Sales Line";
+     begin
+         SalesLineL.SetRange("Document Type", Rec."Document Type");
+         SalesLineL.SetRange("Document No.", Rec."No.");
+         if SalesLineL.FindSet() then
+             repeat
+                 SalesLineL.Validate("Deferral Code", '');
+                 SalesLineL.Modify();
+             until SalesLineL.Next() = 0;
+     end;*/
 }

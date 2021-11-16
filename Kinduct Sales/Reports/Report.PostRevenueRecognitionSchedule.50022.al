@@ -35,6 +35,12 @@ report 50022 "Recognize Revenue"
                 GenJnlLine.Validate(Amount, "Revenue Recognition Schedule".Amount);
                 GenJnlLine.Validate("Bal. Account Type", GenJnlLine."Bal. Account Type"::"G/L Account");
                 GenJnlLine.Validate("Bal. Account No.", "Revenue Recognition Schedule"."Revenue Account");
+                GenJnlLine.Validate("Shortcut Dimension 1 Code", "Revenue Recognition Schedule"."Shortcut Dimension 1 Code");
+                GenJnlLine.Validate("Shortcut Dimension 2 Code", "Revenue Recognition Schedule"."Shortcut Dimension 2 Code");
+                GenJnlLine.Validate("Dimension Set ID", "Revenue Recognition Schedule"."Dimension Set Id");
+                GenJnlLine."Customer No." := "Revenue Recognition Schedule"."Customer No.";
+                GenJnlLine."Customer Name" := "Revenue Recognition Schedule"."Customer Name";
+                GenJnlLine."Country/Region Code" := "Revenue Recognition Schedule".Country;
                 GenJnlLine.Insert(true);
             end;
 

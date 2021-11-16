@@ -336,6 +336,8 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 SalesLineL: Record "Sales Line";
                 CreateRevenueSchedule: Codeunit "Create Revenue Schedule";
             begin
+                DeleteRevenueSchedule();
+                Clear(SalesLineL);
                 SalesLineL.SetRange("Document No.", Rec."No.");
                 if SalesLineL.FindSet() then
                     repeat
@@ -346,17 +348,10 @@ pageextension 50006 "Sales Order" extends "Sales Order"
         modify(Reopen)
         {
             trigger OnAfterAction()
-            var
-                RecRevRecSchedule: Record "Revenue Recognition Schedule";
             begin
-                Message('Revenue Schedule will be deleted');
-                Clear(RecRevRecSchedule);
-                RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");
-                RecRevRecSchedule.SetRange("Sales Order No.", Rec."No.");
-                RecRevRecSchedule.SetFilter("Sales invoice No.", '=%1', '');
-                If RecRevRecSchedule.FindSet() then
-                    RecRevRecSchedule.DeleteAll();
+                DeleteRevenueSchedule();
             end;
+
         }
         addfirst(processing)
         {
@@ -385,4 +380,15 @@ pageextension 50006 "Sales Order" extends "Sales Order"
             }
         }
     }
+    local procedure DeleteRevenueSchedule()
+    var
+        RecRevRecSchedule: Record "Revenue Recognition Schedule";
+    begin
+        Clear(RecRevRecSchedule);
+        RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");
+        RecRevRecSchedule.SetRange("Sales Order No.", Rec."No.");
+        RecRevRecSchedule.SetFilter("Sales invoice No.", '=%1', '');
+        If RecRevRecSchedule.FindSet() then
+            RecRevRecSchedule.DeleteAll();
+    end;
 }

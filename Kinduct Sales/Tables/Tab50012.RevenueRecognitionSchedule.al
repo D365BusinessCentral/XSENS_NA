@@ -79,6 +79,28 @@ table 50012 "Revenue Recognition Schedule"
         {
             DataClassification = ToBeClassified;
         }
+        field(18; "Customer No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(19; "Dimension Set Id"; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(20; "Shortcut Dimension 1 Code"; Code[20])
+        {
+            CaptionClass = '1,2,1';
+            Caption = 'Shortcut Dimension 1 Code';
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(1),
+                                                          Blocked = CONST(false));
+        }
+        field(21; "Shortcut Dimension 2 Code"; Code[20])
+        {
+            CaptionClass = '1,2,2';
+            Caption = 'Shortcut Dimension 2 Code';
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2),
+                                                          Blocked = CONST(false));
+        }
     }
     keys
     {

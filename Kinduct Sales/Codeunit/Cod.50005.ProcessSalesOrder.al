@@ -165,6 +165,12 @@ codeunit 50005 "Process Contract Information"
         GLEntry."Revenue Sales Invoice No." := GenJournalLine."Revenue Sales Invoice No.";
         GLEntry."Revenue Sales Invoice Date" := GenJournalLine."Revenue Sales Invoice Date";
         GLEntry."Contract Line No." := GenJournalLine."Contract Line No.";
+        GLEntry."Customer No." := GenJournalLine."Customer No.";
+        GLEntry."Customer Name" := GenJournalLine."Customer Name";
+        GLEntry."Global Dimension 1 Code" := GenJournalLine."Shortcut Dimension 1 Code";
+        GLEntry."Global Dimension 2 Code" := GenJournalLine."Shortcut Dimension 2 Code";
+        GLEntry."Dimension Set ID" := GenJournalLine."Dimension Set ID";
+        GLEntry."Country/Region Code" := GenJournalLine."Country/Region Code";
     end;
 
     var

@@ -35,8 +35,9 @@ pageextension 50009 "Sales Order Subform" extends "Sales Order Subform"
             {
                 ApplicationArea = All;
             }
-            field("Invoice Interval"; Rec."Invoice Interval")
+            field("Deferral Interval"; Rec."Invoice Interval")
             {
+                Caption = 'Deferral Interval';
                 ApplicationArea = All;
             }
         }

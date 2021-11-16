@@ -80,6 +80,11 @@ tableextension 50005 "G/L Entry" extends "G/L Entry"
         {
             DataClassification = ToBeClassified;
         }
+        field(50015; "Country/Region Code"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Country/Region";
+        }
         //- Above two fields added by LT - 22JUNE2021
         field(87000; Permanence; Boolean)
         {

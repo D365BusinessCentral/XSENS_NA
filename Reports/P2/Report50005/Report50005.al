@@ -1312,7 +1312,17 @@ report 50005 "Purchase - Order XSS DCR"
             wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
-            wgCduFormatDoc.SetPurchaser(wgRecSalesPurchPerson, "Purchaser Code", wlPurchPersonText);
+
+            case wgRecCompanyInfo.Name of
+                'Kinduct Tech - Backup101121':
+                    HeaderFooterVisible := false;
+                'Kinduct Technologies':
+                    HeaderFooterVisible := false;
+                else begin
+                        HeaderFooterVisible := true;
+                        wgCduFormatDoc.SetPurchaser(wgRecSalesPurchPerson, "Purchaser Code", wlPurchPersonText);
+                    end;
+            end;
         end;
     end;
 

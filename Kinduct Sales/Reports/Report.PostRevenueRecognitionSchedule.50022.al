@@ -10,7 +10,7 @@ report 50022 "Recognize Revenue"
         dataitem("Revenue Recognition Schedule"; "Revenue Recognition Schedule")
         {
             DataItemTableView = sorting("Sales Order No.", "SO Line No.", "Line No.") order(ascending) where(Posted = const(false), "Sales invoice No." = filter(<> ''), "Document No." = filter(= ''));
-            RequestFilterFields = "Posting Date";
+            RequestFilterFields = "Posting Date", "Sales invoice No.";
             trigger OnAfterGetRecord()
             var
                 NoSeriesMgmt: Codeunit NoSeriesManagement;
@@ -101,6 +101,13 @@ report 50022 "Recognize Revenue"
             }
         }
     }
+
+    trigger OnInitReport()
+    var
+        myInt: Integer;
+    begin
+        IsPost := true;
+    end;
 
 
     local procedure GetLastLineNumber(): Integer

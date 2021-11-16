@@ -17,12 +17,12 @@ table 50012 "Revenue Recognition Schedule"
         }
         field(3; "Sales invoice No."; Code[20])
         {
-            Caption = 'Sales invoice No.';
+            Caption = 'Posted Sales invoice No.';
             DataClassification = ToBeClassified;
         }
         field(4; "Sales Invoice Date"; Date)
         {
-            Caption = 'Sales Invoice Date';
+            Caption = 'Posted Sales Invoice Date';
             DataClassification = ToBeClassified;
         }
         field(5; "Posting Date"; Date)

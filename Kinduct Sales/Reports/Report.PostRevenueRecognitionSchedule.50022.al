@@ -22,7 +22,7 @@ report 50022 "Recognize Revenue"
                 GenJnlLine.Validate("Journal Batch Name", SalesSetup."Revenue Rec. Batch Name");
                 GenJnlLine.Validate("Line No.", LineNo);
                 GenJnlLine.Validate("Posting Date", "Revenue Recognition Schedule"."Posting Date");
-                GenJnlLine.Validate("Document No.", NoSeriesMgmt.GetNextNo(SalesSetup."Revenue Recognition Nos.", WorkDate(), IsPost));
+                GenJnlLine.Validate("Document No.", NoSeriesMgmt.GetNextNo(SalesSetup."Revenue Recognition Nos.", WorkDate(), true));
                 GenJnlLine.Validate("Account Type", GenJnlLine."Account Type"::"G/L Account");
                 GenJnlLine.Validate("Account No.", "Revenue Recognition Schedule"."Deferral Account");
                 GenJnlLine.Validate("Revenue SO No.", "Revenue Recognition Schedule"."Sales Order No.");
@@ -41,6 +41,12 @@ report 50022 "Recognize Revenue"
                 GenJnlLine."Customer No." := "Revenue Recognition Schedule"."Customer No.";
                 GenJnlLine."Customer Name" := "Revenue Recognition Schedule"."Customer Name";
                 GenJnlLine."Country/Region Code" := "Revenue Recognition Schedule".Country;
+                "Revenue Recognition Schedule".Posted := IsPost;
+                if IsPost then begin
+                    "Revenue Recognition Schedule"."Document No." := GenJnlLine."Document No.";
+                    "Revenue Recognition Schedule"."Document Date" := GenJnlLine."Posting Date";
+                end;
+                "Revenue Recognition Schedule".Modify();
                 GenJnlLine.Insert(true);
             end;
 
@@ -55,30 +61,19 @@ report 50022 "Recognize Revenue"
                 PageGenJnl: Page "General Journal";
                 RecGenJournal: Record "Gen. Journal Line";
                 RevenueRecognitionScheduleL: Record "Revenue Recognition Schedule";
+                GenJnlManagement: Codeunit GenJnlManagement;
+                GenJnlBatch: Record "Gen. Journal Batch";
             begin
                 if IsPost then begin
                     Codeunit.Run(Codeunit::"Gen. Jnl.-Post Batch", GenJnlLine);
-                    RevenueRecognitionScheduleL.SetCurrentKey("Sales Order No.", "SO Line No.");
-                    RevenueRecognitionScheduleL.SetRange("Sales Order No.", "Sales Order No.");
-                    RevenueRecognitionScheduleL.SetRange("SO Line No.", "SO Line No.");
-                    RevenueRecognitionScheduleL.SetFilter("Sales invoice No.", '<>%1', '');
-                    RevenueRecognitionScheduleL.SetRange(Posted, false);
-                    if RevenueRecognitionScheduleL.FindSet() then
-                        repeat
-                            RevenueRecognitionScheduleL.Posted := true;
-                            RevenueRecognitionScheduleL.Modify();
-                        until RevenueRecognitionScheduleL.Next() = 0;
                 end else begin
-                    Clear(PageGenJnl);
-                    PageGenJnl.SetTableView(GenJnlLine);
-                    if PageGenJnl.RunModal() in [Action::OK, Action::Cancel, Action::LookupOK] then begin
-                        Clear(RecGenJournal);
-                        RecGenJournal.SetRange("Journal Template Name", SalesSetup."Revenue Rec. Template Name");
-                        RecGenJournal.SetRange("Journal Batch Name", SalesSetup."Revenue Rec. Batch Name");
-                        RecGenJournal.SetFilter("Line No.", '>%1', FromLineNumber);
-                        if RecGenJournal.FindSet() then
-                            RecGenJournal.DeleteAll(true);
-                    end
+                    Commit();
+                    Clear(GenJnlBatch);
+                    GenJnlBatch.SetRange("Journal Template Name", SalesSetup."Revenue Rec. Template Name");
+                    GenJnlBatch.SetRange(Name, SalesSetup."Revenue Rec. Batch Name");
+                    if GenJnlBatch.FindFirst() then begin
+                        GenJnlManagement.TemplateSelectionFromBatch(GenJnlBatch);
+                    end;
                 end;
             end;
         }
@@ -86,6 +81,7 @@ report 50022 "Recognize Revenue"
 
     requestpage
     {
+        SaveValues = true;
         layout
         {
             area(Content)
@@ -111,19 +107,25 @@ report 50022 "Recognize Revenue"
 
 
     local procedure GetLastLineNumber(): Integer
+
     begin
         SalesSetup.GET;
         SalesSetup.TestField("Revenue Rec. Template Name");
         SalesSetup.TestField("Revenue Rec. Batch Name");
         SalesSetup.TestField("Revenue Recognition Nos.");
-        clear(GenJnlLine);
-        GenJnlLine.SetCurrentKey("Journal Template Name", "Journal Batch Name", "Line No.");
+        Clear(GenJnlLine);
         GenJnlLine.SetRange("Journal Template Name", SalesSetup."Revenue Rec. Template Name");
         GenJnlLine.SetRange("Journal Batch Name", SalesSetup."Revenue Rec. Batch Name");
-        if GenJnlLine.FindLast() then
-            exit(GenJnlLine."Line No.")
-        else
-            exit(0);
+        if GenJnlLine.FindSet() then
+            GenJnlLine.DeleteAll(true);
+        // clear(GenJnlLine);
+        // GenJnlLine.SetCurrentKey("Journal Template Name", "Journal Batch Name", "Line No.");
+        // GenJnlLine.SetRange("Journal Template Name", SalesSetup."Revenue Rec. Template Name");
+        // GenJnlLine.SetRange("Journal Batch Name", SalesSetup."Revenue Rec. Batch Name");
+        // if GenJnlLine.FindLast() then
+        //     exit(GenJnlLine."Line No.")
+        // else
+        exit(0);
     end;
 
     var

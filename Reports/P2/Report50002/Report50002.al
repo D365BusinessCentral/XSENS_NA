@@ -388,28 +388,28 @@ report 50002 "Proforma Invoice XSS DCR"
             column(ShipmentMethodDesc; ShipmentMethodG.Description) //"Shipment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetShipmMethodTrl("Shipment Method Code"))//Krishna)
             {
             }
-            column(ShipToAddr1; wgCustAddr[1])
+            column(ShipToAddr1; ShipToAddr[1])
             {
             }
-            column(ShipToAddr2; wgCustAddr[2])
+            column(ShipToAddr2; ShipToAddr[2])
             {
             }
-            column(ShipToAddr3; wgCustAddr[3])
+            column(ShipToAddr3; ShipToAddr[3])
             {
             }
-            column(ShipToAddr4; wgCustAddr[4])
+            column(ShipToAddr4; ShipToAddr[4])
             {
             }
-            column(ShipToAddr5; wgCustAddr[5])
+            column(ShipToAddr5; ShipToAddr[5])
             {
             }
-            column(ShipToAddr6; wgCustAddr[6])
+            column(ShipToAddr6; ShipToAddr[6])
             {
             }
-            column(ShipToAddr7; wgCustAddr[7])
+            column(ShipToAddr7; ShipToAddr[7])
             {
             }
-            column(ShipToAddr8; wgCustAddr[8])
+            column(ShipToAddr8; ShipToAddr[8])
             {
             }
             column(ShipToAddrSet; wgShowShippingAddr)
@@ -929,10 +929,23 @@ report 50002 "Proforma Invoice XSS DCR"
             var
                 wlCduSalesPost: Codeunit "Sales-Post";
                 wlRecRef: RecordRef;
+                CountryRegionL: Record "Country/Region";
+                Test: Record AllObjWithCaption;
             begin
                 CalcFields("Ava Tax Amount");
                 //CurrReport.LANGUAGE := wgRecLanguage.GetLanguageID('ENU'); //GW//krishna
                 //wgCduDocCreatorTransLationMgt.wgSetLanguageCode('ENU');    //GW//Krishna   //GW
+
+                ShipToAddr[1] := SalesHdr."Ship-to Name";
+                ShipToAddr[2] := SalesHdr."Ship-to Contact";
+                ShipToAddr[3] := SalesHdr."Ship-to Address";
+                ShipToAddr[4] := SalesHdr."Ship-to Address 2";
+                ShipToAddr[5] := SalesHdr."Ship-to City";
+                ShipToAddr[6] := SalesHdr."Ship-to Post Code";
+                ShipToAddr[7] := SalesHdr."Ship-to County";
+                Clear(CountryRegionL);
+                if CountryRegionL.Get(SalesHdr."Ship-to Country/Region Code") then;
+                ShipToAddr[8] := CountryRegionL.Name;
 
                 wlFncFormatAddressFields(SalesHdr);
                 // wlFncFormatDocumentFields(SalesHdr);
@@ -1176,6 +1189,7 @@ report 50002 "Proforma Invoice XSS DCR"
         wgCustAddr: array[8] of Text[50];
         wgDimText: Text[120];
         wgShipToAddr: array[8] of Text[50];
+        ShipToAddr: array[8] of Text[50];
         wgTotalExclVATText: Text[50];
         wgTotalInclVATText: Text[50];
         wgTotalText: Text[50];

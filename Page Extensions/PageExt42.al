@@ -341,6 +341,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 SalesLineL.SetRange("Document No.", Rec."No.");
                 if SalesLineL.FindSet() then
                     repeat
+                        SalesLineL.TestField("Contract Start Date");
                         CreateRevenueSchedule.InsertRevenueRecognitionSchedule(Rec, SalesLineL);
                     until SalesLineL.Next() = 0;
             end;
@@ -349,6 +350,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
         {
             trigger OnAfterAction()
             begin
+                Message('Revenue Schedule will be deleted.');
                 DeleteRevenueSchedule();
             end;
 

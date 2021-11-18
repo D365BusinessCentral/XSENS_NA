@@ -26,6 +26,14 @@ pageextension 50029 GLEntry extends "General Ledger Entries"
             {
                 ApplicationArea = All;
             }
+            field("Item Code"; Rec."Item Code")
+            {
+                ApplicationArea = All;
+            }
+            field("Item Description"; Rec."Item Description")
+            {
+                ApplicationArea = All;
+            }
             field("Country/Region Code"; Rec."Country/Region Code")
             {
                 ApplicationArea = All;
@@ -57,6 +65,7 @@ pageextension 50029 GLEntry extends "General Ledger Entries"
                 ToolTip = 'Specifies the value of the Revenue Sales Invoice Date field.';
                 ApplicationArea = All;
             }
+
         }
     }
 }

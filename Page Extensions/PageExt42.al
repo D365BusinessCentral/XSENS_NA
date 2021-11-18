@@ -355,6 +355,24 @@ pageextension 50006 "Sales Order" extends "Sales Order"
             end;
 
         }
+        addbefore(Release)
+        {
+            action("Check SalesForce Order")
+            {
+                ApplicationArea = All;
+                Image = CheckRulesSyntax;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = true;
+
+                trigger OnAction()
+                var
+                    lCduCheckSalesForceOrder: Codeunit "XSS Check Sales Force Order";
+                begin
+                    lCduCheckSalesForceOrder.CheckOnRelease(Rec, FALSE); //TWI 20181026
+                end;
+            }
+        }
         addfirst(processing)
         {
             action("Revenue Schedule")

@@ -72,11 +72,23 @@ page 50003 "Revenue Recognition Schedule"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Customer No."; "Customer No.")
+                {
+                    ApplicationArea = All;
+                }
                 field("Customer Name"; Rec."Customer Name")
                 {
                     ToolTip = 'Specifies the value of the Customer Name field.';
                     ApplicationArea = All;
                     Editable = false;
+                }
+                field("Item Code"; Rec."Item Code")
+                {
+                    ApplicationArea = All;
+                }
+                field("Item Description"; Rec."Item Description")
+                {
+                    ApplicationArea = All;
                 }
                 field(Country; Rec.Country)
                 {

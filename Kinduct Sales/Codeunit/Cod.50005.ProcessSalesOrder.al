@@ -171,6 +171,8 @@ codeunit 50005 "Process Contract Information"
         GLEntry."Global Dimension 2 Code" := GenJournalLine."Shortcut Dimension 2 Code";
         GLEntry."Dimension Set ID" := GenJournalLine."Dimension Set ID";
         GLEntry."Country/Region Code" := GenJournalLine."Country/Region Code";
+        GLEntry."Item Code" := GenJournalLine."Item Code";
+        GLEntry."Item Description" := GenJournalLine."Item Description";
     end;
 
     var

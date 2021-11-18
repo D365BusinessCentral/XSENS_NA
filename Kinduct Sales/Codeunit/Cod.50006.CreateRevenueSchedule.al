@@ -62,6 +62,8 @@ codeunit 50007 "Create Revenue Schedule"
                     RecRevRecSchedule."Shortcut Dimension 1 Code" := RecSalesLinep."Shortcut Dimension 1 Code";
                     RecRevRecSchedule."Shortcut Dimension 2 Code" := RecSalesLinep."Shortcut Dimension 2 Code";
                     RecRevRecSchedule."Dimension Set Id" := RecSalesLinep."Dimension Set ID";
+                    RecRevRecSchedule."Item Code" := RecSalesLinep."No.";
+                    RecRevRecSchedule."Item Description" := RecSalesLinep.Description;
                     RecRevRecSchedule.Insert();
                 until DeferralLine.Next() = 0;
             end;

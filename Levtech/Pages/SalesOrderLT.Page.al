@@ -2117,16 +2117,16 @@ page 50099 "Sales Order LT"
         SetExtDocNoMandatoryCondition;
     end;
 
-    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    /*trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     begin
         if DocNoVisible then
             Rec.CheckCreditMaxBeforeInsert;
 
         if (Rec."Sell-to Customer No." = '') and (Rec.GetFilter("Sell-to Customer No.") <> '') then
             CurrPage.Update(false);
-    end;
+    end;*/
 
-    trigger OnNewRecord(BelowxRec: Boolean)
+    /*trigger OnNewRecord(BelowxRec: Boolean)
     begin
         xRec.Init;
         Rec."Responsibility Center" := UserMgt.GetSalesFilter;
@@ -2135,39 +2135,39 @@ page 50099 "Sales Order LT"
 
         Rec.SetDefaultPaymentServices;
         UpdateShipToBillToGroupVisibility;
-    end;
+    end;*/
 
-    trigger OnOpenPage()
-    var
-        PaymentServiceSetup: Record "Payment Service Setup";
-        CRMIntegrationManagement: Codeunit "CRM Integration Management";
-        OfficeMgt: Codeunit "Office Management";
-        PermissionManager: Codeunit "Permission Manager";
-    begin
-        if UserMgt.GetSalesFilter <> '' then begin
-            Rec.FilterGroup(2);
-            Rec.SetRange("Responsibility Center", UserMgt.GetSalesFilter);
-            Rec.FilterGroup(0);
-        end;
+    /* trigger OnOpenPage()
+     var
+         PaymentServiceSetup: Record "Payment Service Setup";
+         CRMIntegrationManagement: Codeunit "CRM Integration Management";
+         OfficeMgt: Codeunit "Office Management";
+         PermissionManager: Codeunit "Permission Manager";
+     begin
+         if UserMgt.GetSalesFilter <> '' then begin
+             Rec.FilterGroup(2);
+             Rec.SetRange("Responsibility Center", UserMgt.GetSalesFilter);
+             Rec.FilterGroup(0);
+         end;
 
-        Rec.SetRange("Date Filter", 0D, WorkDate);
+         Rec.SetRange("Date Filter", 0D, WorkDate);
 
-        ActivateFields;
+         ActivateFields;
 
-        SetDocNoVisible;
+         SetDocNoVisible;
 
-        CRMIntegrationEnabled := CRMIntegrationManagement.IsCRMIntegrationEnabled;
-        IsOfficeHost := OfficeMgt.IsAvailable;
-        //IsSaas := PermissionManager.SoftwareAsAService;
+         CRMIntegrationEnabled := CRMIntegrationManagement.IsCRMIntegrationEnabled;
+         IsOfficeHost := OfficeMgt.IsAvailable;
+         //IsSaas := PermissionManager.SoftwareAsAService;
 
-        if Rec."Quote No." <> '' then
-            ShowQuoteNo := true;
-        if (Rec."No." <> '') and (Rec."Sell-to Customer No." = '') then
-            DocumentIsPosted := (not Rec.Get(Rec."Document Type", Rec."No."));
-        PaymentServiceVisible := PaymentServiceSetup.IsPaymentServiceVisible;
-    end;
+         if Rec."Quote No." <> '' then
+             ShowQuoteNo := true;
+         if (Rec."No." <> '') and (Rec."Sell-to Customer No." = '') then
+             DocumentIsPosted := (not Rec.Get(Rec."Document Type", Rec."No."));
+         PaymentServiceVisible := PaymentServiceSetup.IsPaymentServiceVisible;
+     end;*/
 
-    trigger OnQueryClosePage(CloseAction: Action): Boolean
+    /*trigger OnQueryClosePage(CloseAction: Action): Boolean
     var
         InstructionMgt: Codeunit "Instruction Mgt.";
     begin
@@ -2176,7 +2176,7 @@ page 50099 "Sales Order LT"
                 exit(false);
         if not DocumentIsPosted then
             exit(Rec.ConfirmCloseUnposted);
-    end;
+    end;*/
 
     var
         CopySalesDoc: Report "Copy Sales Document";

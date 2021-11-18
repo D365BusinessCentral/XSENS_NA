@@ -101,6 +101,14 @@ table 50012 "Revenue Recognition Schedule"
             TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2),
                                                           Blocked = CONST(false));
         }
+        field(22; "Item Code"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(23; "Item Description"; Text[100])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

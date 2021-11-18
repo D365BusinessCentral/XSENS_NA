@@ -105,6 +105,14 @@ tableextension 50016 "Gen. Journal Line" extends "Gen. Journal Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(50015; "Item Code"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50016; "Item Description"; Text[100])
+        {
+            DataClassification = ToBeClassified;
+        }
         //- Above two fields added by LT - 22JUNE2021
         field(87000; Permanence; Boolean)
         {
@@ -131,5 +139,6 @@ tableextension 50016 "Gen. Journal Line" extends "Gen. Journal Line"
         {
             DataClassification = ToBeClassified;
         }
+
     }
 }

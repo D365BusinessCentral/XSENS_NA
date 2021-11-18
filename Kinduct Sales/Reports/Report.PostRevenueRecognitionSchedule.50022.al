@@ -41,6 +41,8 @@ report 50022 "Recognize Revenue"
                 GenJnlLine."Customer No." := "Revenue Recognition Schedule"."Customer No.";
                 GenJnlLine."Customer Name" := "Revenue Recognition Schedule"."Customer Name";
                 GenJnlLine."Country/Region Code" := "Revenue Recognition Schedule".Country;
+                GenJnlLine."Item Code" := "Revenue Recognition Schedule"."Item Code";
+                GenJnlLine."Item Description" := "Revenue Recognition Schedule"."Item Description";
                 "Revenue Recognition Schedule".Posted := IsPost;
                 if IsPost then begin
                     "Revenue Recognition Schedule"."Document No." := GenJnlLine."Document No.";

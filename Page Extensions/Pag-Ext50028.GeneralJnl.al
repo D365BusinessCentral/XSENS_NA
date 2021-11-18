@@ -16,5 +16,25 @@ pageextension 50030 GeneralJnl extends "General Journal"
                 Caption = 'Credit Card Payee Name';
             }
         }*/
+        addlast(Control1)
+        {
+            field("Customer No."; Rec."Customer No.")
+            {
+                ApplicationArea = All;
+            }
+            field("Customer Name"; Rec."Customer Name")
+            {
+                ApplicationArea = All;
+            }
+            field("Item Code"; Rec."Item Code")
+            {
+                ApplicationArea = All;
+            }
+            field("Item Description"; Rec."Item Description")
+            {
+                ApplicationArea = All;
+            }
+        }
+
     }
 }

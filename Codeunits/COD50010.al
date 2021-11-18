@@ -122,6 +122,8 @@ codeunit 50010 "XSS Check Sales Force Order"
         pRecSalesLine."Sorting" := lRecTMPSalesLine."Sorting"; //20130408 GW  30312
         pRecSalesLine.ExternalID := lRecTMPSalesLine.ExternalID;
         pRecSalesLine.COC := lRecTMPSalesLine.COC;  //20180417 KBG 12766
+        pRecSalesHeader.PopulateCustomFields();
+        pRecSalesHeader.Modify();
         pRecSalesLine.MODIFY(true);
     end;
 

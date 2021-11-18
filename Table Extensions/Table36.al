@@ -53,6 +53,28 @@ tableextension 50011 "Sales Header" extends "Sales Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(50022; "Payment Terms Code IT"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50023; "Payment Method Code IT"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+
+        field(50024; "Salesperson Code IT"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50025; "Shipment Date IT"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(50026; "Currency Code IT"; code[10])
+        {
+            DataClassification = ToBeClassified;
+        }
+
         field(50100; "VAT Customer Name"; Text[50])
         {
             DataClassification = ToBeClassified;
@@ -242,6 +264,15 @@ tableextension 50011 "Sales Header" extends "Sales Header"
         {
         }
     }
+
+    procedure PopulateCustomFields()
+    begin
+        Rec.Validate("Shipment Date", Rec."Shipment Date IT");
+        Rec.Validate("Payment Terms Code", Rec."Payment Terms Code IT");
+        Rec.Validate("Payment Method Code", Rec."Payment Method Code IT");
+        Rec.validate("Salesperson Code", Rec."Salesperson Code IT");
+        Rec.Validate("Currency Code", Rec."Currency Code IT");
+    end;
 
     var
         gCduAlgemeen: Codeunit Algemeen;

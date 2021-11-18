@@ -243,7 +243,7 @@ page 50099 "Sales Order LT"
                     Importance = Additional;
                     ToolTip = 'Specifies the customer''s reference. The content will be printed on sales documents.';
                 }
-                field("Salesperson Code"; Rec."Salesperson Code")
+                field("Salesperson Code"; Rec."Salesperson Code IT")
                 {
                     ApplicationArea = Suite;
                     Importance = Additional;
@@ -252,7 +252,8 @@ page 50099 "Sales Order LT"
 
                     trigger OnValidate()
                     begin
-                        SalespersonCodeOnAfterValidate;
+                        //SalespersonCodeOnAfterValidate;
+                        Rec.PopulateCustomFields();
                     end;
                 }
                 field("Campaign No."; Rec."Campaign No.")
@@ -339,7 +340,7 @@ page 50099 "Sales Order LT"
             group("Invoice Details")
             {
                 Caption = 'Invoice Details';
-                field("Currency Code"; Rec."Currency Code")
+                field("Currency Code"; Rec."Currency Code IT")
                 {
                     ApplicationArea = Suite;
                     Importance = Promoted;
@@ -357,12 +358,14 @@ page 50099 "Sales Order LT"
                             SaveInvoiceDiscountAmount;
                         end;
                         Clear(ChangeExchangeRate);
+
                     end;
 
                     trigger OnValidate()
                     begin
-                        CurrPage.SaveRecord;
-                        SalesCalcDiscountByType.ApplyDefaultInvoiceDiscount(0, Rec);
+                        //CurrPage.SaveRecord;
+                        //SalesCalcDiscountByType.ApplyDefaultInvoiceDiscount(0, Rec);
+                        Rec.PopulateCustomFields();
                     end;
                 }
                 field("Prices Including VAT"; Rec."Prices Including VAT")
@@ -388,13 +391,17 @@ page 50099 "Sales Order LT"
                         CurrPage.Update;
                     end;
                 }
-                field("Payment Terms Code"; Rec."Payment Terms Code")
+                field("Payment Terms Code"; Rec."Payment Terms Code IT")
                 {
                     ApplicationArea = Basic, Suite;
                     Importance = Promoted;
                     ToolTip = 'Specifies a formula that calculates the payment due date, payment discount date, and payment discount amount.';
+                    trigger OnValidate()
+                    begin
+                        Rec.PopulateCustomFields();
+                    end;
                 }
-                field("Payment Method Code"; Rec."Payment Method Code")
+                field("Payment Method Code"; Rec."Payment Method Code IT")
                 {
                     ApplicationArea = Basic, Suite;
                     Importance = Additional;
@@ -402,7 +409,8 @@ page 50099 "Sales Order LT"
 
                     trigger OnValidate()
                     begin
-                        UpdatePaymentService;
+                        //  UpdatePaymentService;
+                        Rec.PopulateCustomFields();
                     end;
                 }
                 field("EU 3-Party Trade"; Rec."EU 3-Party Trade")
@@ -786,11 +794,15 @@ page 50099 "Sales Order LT"
                     ApplicationArea = Location;
                     ToolTip = 'Specifies the location from where inventory items to the customer on the sales document are to be shipped by default.';
                 }
-                field("Shipment Date"; Rec."Shipment Date")
+                field("Shipment Date"; Rec."Shipment Date IT")
                 {
                     ApplicationArea = Basic, Suite;
                     Importance = Promoted;
                     ToolTip = 'Specifies when items on the document are shipped or were shipped. A shipment date is usually calculated from a requested delivery date plus lead time.';
+                    trigger OnValidate()
+                    begin
+                        Rec.PopulateCustomFields();
+                    end;
                 }
                 field("Shipping Advice"; Rec."Shipping Advice")
                 {
@@ -2125,7 +2137,10 @@ page 50099 "Sales Order LT"
         if (Rec."Sell-to Customer No." = '') and (Rec.GetFilter("Sell-to Customer No.") <> '') then
             CurrPage.Update(false);
     end;*/
-
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        Rec.PopulateCustomFields();
+    end;
     /*trigger OnNewRecord(BelowxRec: Boolean)
     begin
         xRec.Init;
@@ -2136,7 +2151,10 @@ page 50099 "Sales Order LT"
         Rec.SetDefaultPaymentServices;
         UpdateShipToBillToGroupVisibility;
     end;*/
-
+    trigger OnNewRecord(BelowxRec: Boolean)
+    begin
+        Rec.PopulateCustomFields();
+    end;
     /* trigger OnOpenPage()
      var
          PaymentServiceSetup: Record "Payment Service Setup";

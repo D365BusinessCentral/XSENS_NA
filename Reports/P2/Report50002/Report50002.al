@@ -941,8 +941,8 @@ report 50002 "Proforma Invoice XSS DCR"
                 ShipToAddr[3] := SalesHdr."Ship-to Address";
                 ShipToAddr[4] := SalesHdr."Ship-to Address 2";
                 ShipToAddr[5] := SalesHdr."Ship-to City";
-                ShipToAddr[6] := SalesHdr."Ship-to Post Code";
-                ShipToAddr[7] := SalesHdr."Ship-to County";
+                ShipToAddr[6] := SalesHdr."Ship-to County";
+                ShipToAddr[7] := SalesHdr."Ship-to Post Code";
                 Clear(CountryRegionL);
                 if CountryRegionL.Get(SalesHdr."Ship-to Country/Region Code") then;
                 ShipToAddr[8] := CountryRegionL.Name;

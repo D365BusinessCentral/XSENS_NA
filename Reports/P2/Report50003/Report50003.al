@@ -641,8 +641,8 @@ report 50003 "Sales - Shipment XSS DCR"
                 ShipToAddr[3] := ShptHdr."Ship-to Address";
                 ShipToAddr[4] := ShptHdr."Ship-to Address 2";
                 ShipToAddr[5] := ShptHdr."Ship-to City";
-                ShipToAddr[6] := ShptHdr."Ship-to Post Code";
-                ShipToAddr[7] := ShptHdr."Ship-to County";
+                ShipToAddr[6] := ShptHdr."Ship-to County";
+                ShipToAddr[7] := ShptHdr."Ship-to Post Code";
                 Clear(CountryRegionL);
                 if CountryRegionL.Get(ShptHdr."Ship-to Country/Region Code") then;
                 ShipToAddr[8] := CountryRegionL.Name;

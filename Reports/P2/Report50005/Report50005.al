@@ -1009,8 +1009,8 @@ report 50005 "Purchase - Order XSS DCR"
                 ShipToAddr[3] := PurchHdr."Ship-to Address";
                 ShipToAddr[4] := PurchHdr."Ship-to Address 2";
                 ShipToAddr[5] := PurchHdr."Ship-to City";
-                ShipToAddr[6] := PurchHdr."Ship-to Post Code";
-                ShipToAddr[7] := PurchHdr."Ship-to County";
+                ShipToAddr[6] := PurchHdr."Ship-to County";
+                ShipToAddr[7] := PurchHdr."Ship-to Post Code";
                 Clear(CountryRegionL);
                 if CountryRegionL.Get(PurchHdr."Ship-to Country/Region Code") then;
                 ShipToAddr[8] := CountryRegionL.Name;
@@ -1020,8 +1020,8 @@ report 50005 "Purchase - Order XSS DCR"
                 BuyFromAddr[3] := PurchHdr."Buy-from Address";
                 BuyFromAddr[4] := PurchHdr."Buy-from Address 2";
                 BuyFromAddr[5] := PurchHdr."Buy-from City";
-                BuyFromAddr[6] := PurchHdr."Buy-from Post Code";
-                BuyFromAddr[7] := PurchHdr."Buy-from County";
+                BuyFromAddr[6] := PurchHdr."Buy-from County";
+                BuyFromAddr[7] := PurchHdr."Buy-from Post Code";
                 Clear(CountryRegionL);
                 if CountryRegionL.Get(PurchHdr."Buy-from Country/Region Code") then;
                 BuyFromAddr[8] := CountryRegionL.Name;

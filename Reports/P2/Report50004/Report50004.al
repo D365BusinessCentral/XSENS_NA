@@ -942,8 +942,8 @@ report 50004 "Sales - Credit Memo XSS DCR"
                 ShipToAddr[3] := InvHdr."Ship-to Address";
                 ShipToAddr[4] := InvHdr."Ship-to Address 2";
                 ShipToAddr[5] := InvHdr."Ship-to City";
-                ShipToAddr[6] := InvHdr."Ship-to Post Code";
-                ShipToAddr[7] := InvHdr."Ship-to County";
+                ShipToAddr[6] := InvHdr."Ship-to County";
+                ShipToAddr[7] := InvHdr."Ship-to Post Code";
                 if CountryRegionL.Get(InvHdr."Ship-to Country/Region Code") then;
                 ShipToAddr[8] := CountryRegionL.Name;
                 wlFncFormatAddressFields(InvHdr);

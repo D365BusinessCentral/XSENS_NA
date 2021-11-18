@@ -1036,8 +1036,8 @@ report 50000 "Sales - Invoice XSS DCR"
                 BillToAddr[3] := InvHdr."Bill-to Address";
                 BillToAddr[4] := InvHdr."Bill-to Address 2";
                 BillToAddr[5] := InvHdr."Bill-to City";
-                BillToAddr[6] := InvHdr."Bill-to Post Code";
-                BillToAddr[7] := InvHdr."Bill-to County";
+                BillToAddr[6] := InvHdr."Bill-to County";
+                BillToAddr[7] := InvHdr."Bill-to Post Code";
                 Clear(CountryRegionL);
                 if CountryRegionL.Get(InvHdr."Bill-to Country/Region Code") then;
                 BillToAddr[8] := CountryRegionL.Name;

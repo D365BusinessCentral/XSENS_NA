@@ -976,11 +976,10 @@ report 50001 "Sales - Order Confirm XSS DCR"
                 ShipToAddr[4] := SalesHdr."Ship-to Address 2";
                 ShipToAddr[5] := SalesHdr."Ship-to City";
                 ShipToAddr[6] := SalesHdr."Ship-to County";
+                ShipToAddr[7] := SalesHdr."Ship-to Post Code";
                 Clear(CountryRegionL);
                 if CountryRegionL.Get(SalesHdr."Ship-to Country/Region Code") then;
-                ShipToAddr[7] := CountryRegionL.Name;
-
-                ShipToAddr[8] := SalesHdr."Ship-to Post Code";
+                ShipToAddr[8] := CountryRegionL.Name;
 
                 BillToAddr[1] := SalesHdr."Bill-to Name";
                 BillToAddr[2] := SalesHdr."Bill-to Contact";
@@ -988,11 +987,12 @@ report 50001 "Sales - Order Confirm XSS DCR"
                 BillToAddr[4] := SalesHdr."Bill-to Address 2";
                 BillToAddr[5] := SalesHdr."Bill-to City";
                 BillToAddr[6] := SalesHdr."Bill-to County";
+                BillToAddr[7] := SalesHdr."Bill-to Post Code";
                 Clear(CountryRegionL);
                 if CountryRegionL.Get(SalesHdr."Bill-to Country/Region Code") then;
-                BillToAddr[7] := CountryRegionL.Name;
+                BillToAddr[8] := CountryRegionL.Name;
 
-                BillToAddr[8] := SalesHdr."Bill-to Post Code";
+
 
                 wlFncFormatAddressFields(SalesHdr);
                 //wlFncFormatDocumentFields(SalesHdr);

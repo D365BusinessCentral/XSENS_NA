@@ -267,7 +267,8 @@ tableextension 50011 "Sales Header" extends "Sales Header"
 
     procedure PopulateCustomFields()
     begin
-        Rec.Validate("Shipment Date", Rec."Shipment Date IT");
+        if "Shipment Date IT" <> 0D then
+            Rec.Validate("Shipment Date", Rec."Shipment Date IT");
         Rec.Validate("Payment Terms Code", Rec."Payment Terms Code IT");
         Rec.Validate("Payment Method Code", Rec."Payment Method Code IT");
         Rec.validate("Salesperson Code", Rec."Salesperson Code IT");

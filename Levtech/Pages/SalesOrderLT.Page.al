@@ -243,7 +243,7 @@ page 50099 "Sales Order LT"
                     Importance = Additional;
                     ToolTip = 'Specifies the customer''s reference. The content will be printed on sales documents.';
                 }
-                field("Salesperson Code"; Rec."Salesperson Code IT")
+                field("Salesperson Code"; Rec."Salesperson Code")
                 {
                     ApplicationArea = Suite;
                     Importance = Additional;
@@ -252,10 +252,15 @@ page 50099 "Sales Order LT"
 
                     trigger OnValidate()
                     begin
-                        //SalespersonCodeOnAfterValidate;
-                        Rec.PopulateCustomFields();
+                        SalespersonCodeOnAfterValidate;
+                        //Rec.PopulateCustomFields();
                     end;
                 }
+                field("Salesperson Code IT"; Rec."Salesperson Code IT")
+                {
+                    ApplicationArea = All;
+                }
+
                 field("Campaign No."; Rec."Campaign No.")
                 {
                     ApplicationArea = RelationshipMgmt;
@@ -340,7 +345,7 @@ page 50099 "Sales Order LT"
             group("Invoice Details")
             {
                 Caption = 'Invoice Details';
-                field("Currency Code"; Rec."Currency Code IT")
+                field("Currency Code"; Rec."Currency Code")
                 {
                     ApplicationArea = Suite;
                     Importance = Promoted;
@@ -363,10 +368,14 @@ page 50099 "Sales Order LT"
 
                     trigger OnValidate()
                     begin
-                        //CurrPage.SaveRecord;
-                        //SalesCalcDiscountByType.ApplyDefaultInvoiceDiscount(0, Rec);
-                        Rec.PopulateCustomFields();
+                        CurrPage.SaveRecord;
+                        SalesCalcDiscountByType.ApplyDefaultInvoiceDiscount(0, Rec);
+                        //Rec.PopulateCustomFields();
                     end;
+                }
+                field("Currency Code IT"; Rec."Currency Code IT")
+                {
+                    ApplicationArea = All;
                 }
                 field("Prices Including VAT"; Rec."Prices Including VAT")
                 {
@@ -391,17 +400,21 @@ page 50099 "Sales Order LT"
                         CurrPage.Update;
                     end;
                 }
-                field("Payment Terms Code"; Rec."Payment Terms Code IT")
+                field("Payment Terms Code"; Rec."Payment Terms Code")
                 {
                     ApplicationArea = Basic, Suite;
                     Importance = Promoted;
                     ToolTip = 'Specifies a formula that calculates the payment due date, payment discount date, and payment discount amount.';
                     trigger OnValidate()
                     begin
-                        Rec.PopulateCustomFields();
+                        //   Rec.PopulateCustomFields();
                     end;
                 }
-                field("Payment Method Code"; Rec."Payment Method Code IT")
+                field("Payment Terms Code IT"; Rec."Payment Terms Code IT")
+                {
+                    ApplicationArea = All;
+                }
+                field("Payment Method Code"; Rec."Payment Method Code")
                 {
                     ApplicationArea = Basic, Suite;
                     Importance = Additional;
@@ -409,9 +422,13 @@ page 50099 "Sales Order LT"
 
                     trigger OnValidate()
                     begin
-                        //  UpdatePaymentService;
-                        Rec.PopulateCustomFields();
+                        UpdatePaymentService;
+                        // Rec.PopulateCustomFields();
                     end;
+                }
+                field("Payment Method Code IT"; Rec."Payment Method Code IT")
+                {
+                    ApplicationArea = All;
                 }
                 field("EU 3-Party Trade"; Rec."EU 3-Party Trade")
                 {
@@ -794,15 +811,19 @@ page 50099 "Sales Order LT"
                     ApplicationArea = Location;
                     ToolTip = 'Specifies the location from where inventory items to the customer on the sales document are to be shipped by default.';
                 }
-                field("Shipment Date"; Rec."Shipment Date IT")
+                field("Shipment Date"; Rec."Shipment Date")
                 {
                     ApplicationArea = Basic, Suite;
                     Importance = Promoted;
                     ToolTip = 'Specifies when items on the document are shipped or were shipped. A shipment date is usually calculated from a requested delivery date plus lead time.';
                     trigger OnValidate()
                     begin
-                        Rec.PopulateCustomFields();
+                        // Rec.PopulateCustomFields();
                     end;
+                }
+                field("Shipment Date IT"; Rec."Shipment Date IT")
+                {
+                    ApplicationArea = All;
                 }
                 field("Shipping Advice"; Rec."Shipping Advice")
                 {
@@ -2129,19 +2150,16 @@ page 50099 "Sales Order LT"
         SetExtDocNoMandatoryCondition;
     end;
 
-    /*trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     begin
         if DocNoVisible then
             Rec.CheckCreditMaxBeforeInsert;
 
         if (Rec."Sell-to Customer No." = '') and (Rec.GetFilter("Sell-to Customer No.") <> '') then
             CurrPage.Update(false);
-    end;*/
-    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
-    begin
-        Rec.PopulateCustomFields();
     end;
-    /*trigger OnNewRecord(BelowxRec: Boolean)
+
+    trigger OnNewRecord(BelowxRec: Boolean)
     begin
         xRec.Init;
         Rec."Responsibility Center" := UserMgt.GetSalesFilter;
@@ -2150,42 +2168,39 @@ page 50099 "Sales Order LT"
 
         Rec.SetDefaultPaymentServices;
         UpdateShipToBillToGroupVisibility;
-    end;*/
-    trigger OnNewRecord(BelowxRec: Boolean)
-    begin
-        Rec.PopulateCustomFields();
     end;
-    /* trigger OnOpenPage()
-     var
-         PaymentServiceSetup: Record "Payment Service Setup";
-         CRMIntegrationManagement: Codeunit "CRM Integration Management";
-         OfficeMgt: Codeunit "Office Management";
-         PermissionManager: Codeunit "Permission Manager";
-     begin
-         if UserMgt.GetSalesFilter <> '' then begin
-             Rec.FilterGroup(2);
-             Rec.SetRange("Responsibility Center", UserMgt.GetSalesFilter);
-             Rec.FilterGroup(0);
-         end;
 
-         Rec.SetRange("Date Filter", 0D, WorkDate);
+    trigger OnOpenPage()
+    var
+        PaymentServiceSetup: Record "Payment Service Setup";
+        CRMIntegrationManagement: Codeunit "CRM Integration Management";
+        OfficeMgt: Codeunit "Office Management";
+        PermissionManager: Codeunit "Permission Manager";
+    begin
+        if UserMgt.GetSalesFilter <> '' then begin
+            Rec.FilterGroup(2);
+            Rec.SetRange("Responsibility Center", UserMgt.GetSalesFilter);
+            Rec.FilterGroup(0);
+        end;
 
-         ActivateFields;
+        Rec.SetRange("Date Filter", 0D, WorkDate);
 
-         SetDocNoVisible;
+        ActivateFields;
 
-         CRMIntegrationEnabled := CRMIntegrationManagement.IsCRMIntegrationEnabled;
-         IsOfficeHost := OfficeMgt.IsAvailable;
-         //IsSaas := PermissionManager.SoftwareAsAService;
+        SetDocNoVisible;
 
-         if Rec."Quote No." <> '' then
-             ShowQuoteNo := true;
-         if (Rec."No." <> '') and (Rec."Sell-to Customer No." = '') then
-             DocumentIsPosted := (not Rec.Get(Rec."Document Type", Rec."No."));
-         PaymentServiceVisible := PaymentServiceSetup.IsPaymentServiceVisible;
-     end;*/
+        CRMIntegrationEnabled := CRMIntegrationManagement.IsCRMIntegrationEnabled;
+        IsOfficeHost := OfficeMgt.IsAvailable;
+        //IsSaas := PermissionManager.SoftwareAsAService;
 
-    /*trigger OnQueryClosePage(CloseAction: Action): Boolean
+        if Rec."Quote No." <> '' then
+            ShowQuoteNo := true;
+        if (Rec."No." <> '') and (Rec."Sell-to Customer No." = '') then
+            DocumentIsPosted := (not Rec.Get(Rec."Document Type", Rec."No."));
+        PaymentServiceVisible := PaymentServiceSetup.IsPaymentServiceVisible;
+    end;
+
+    trigger OnQueryClosePage(CloseAction: Action): Boolean
     var
         InstructionMgt: Codeunit "Instruction Mgt.";
     begin
@@ -2194,7 +2209,7 @@ page 50099 "Sales Order LT"
                 exit(false);
         if not DocumentIsPosted then
             exit(Rec.ConfirmCloseUnposted);
-    end;*/
+    end;
 
     var
         CopySalesDoc: Report "Copy Sales Document";

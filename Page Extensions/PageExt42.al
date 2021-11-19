@@ -419,6 +419,10 @@ pageextension 50006 "Sales Order" extends "Sales Order"
     begin
         RecCompInfo.GET;
         IsKinduct := RecCompInfo."Kinduct Deferral";
+        if Rec."Created By Rapidi" then begin
+            Rec.PopulateCustomFields();
+            Rec.Modify();
+        end;
     end;
 
     var

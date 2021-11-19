@@ -388,28 +388,28 @@ report 50002 "Proforma Invoice XSS DCR"
             column(ShipmentMethodDesc; ShipmentMethodG.Description) //"Shipment Method Code")//wgCduDocCreatorTransLationMgt.wgFncGetShipmMethodTrl("Shipment Method Code"))//Krishna)
             {
             }
-            column(ShipToAddr1; ShipToAddr[1])
+            column(ShipToAddr1; BillToAddr[1])
             {
             }
-            column(ShipToAddr2; ShipToAddr[2])
+            column(ShipToAddr2; BillToAddr[2])
             {
             }
-            column(ShipToAddr3; ShipToAddr[3])
+            column(ShipToAddr3; BillToAddr[3])
             {
             }
-            column(ShipToAddr4; ShipToAddr[4])
+            column(ShipToAddr4; BillToAddr[4])
             {
             }
-            column(ShipToAddr5; ShipToAddr[5])
+            column(ShipToAddr5; BillToAddr[5])
             {
             }
-            column(ShipToAddr6; ShipToAddr[6])
+            column(ShipToAddr6; BillToAddr[6])
             {
             }
-            column(ShipToAddr7; ShipToAddr[7])
+            column(ShipToAddr7; BillToAddr[7])
             {
             }
-            column(ShipToAddr8; ShipToAddr[8])
+            column(ShipToAddr8; BillToAddr[8])
             {
             }
             column(ShipToAddrSet; wgShowShippingAddr)
@@ -936,16 +936,16 @@ report 50002 "Proforma Invoice XSS DCR"
                 //CurrReport.LANGUAGE := wgRecLanguage.GetLanguageID('ENU'); //GW//krishna
                 //wgCduDocCreatorTransLationMgt.wgSetLanguageCode('ENU');    //GW//Krishna   //GW
 
-                ShipToAddr[1] := SalesHdr."Ship-to Name";
-                ShipToAddr[2] := SalesHdr."Ship-to Contact";
-                ShipToAddr[3] := SalesHdr."Ship-to Address";
-                ShipToAddr[4] := SalesHdr."Ship-to Address 2";
-                ShipToAddr[5] := SalesHdr."Ship-to City";
-                ShipToAddr[6] := SalesHdr."Ship-to County";
-                ShipToAddr[7] := SalesHdr."Ship-to Post Code";
+                BillToAddr[1] := SalesHdr."Bill-to Name";
+                BillToAddr[2] := SalesHdr."Bill-to Contact";
+                BillToAddr[3] := SalesHdr."Bill-to Address";
+                BillToAddr[4] := SalesHdr."Bill-to Address 2";
+                BillToAddr[5] := SalesHdr."Bill-to City";
+                BillToAddr[6] := SalesHdr."Bill-to County";
+                BillToAddr[7] := SalesHdr."Bill-to Post Code";
                 Clear(CountryRegionL);
-                if CountryRegionL.Get(SalesHdr."Ship-to Country/Region Code") then;
-                ShipToAddr[8] := CountryRegionL.Name;
+                if CountryRegionL.Get(SalesHdr."Bill-to Country/Region Code") then;
+                BillToAddr[8] := CountryRegionL.Name;
 
                 wlFncFormatAddressFields(SalesHdr);
                 // wlFncFormatDocumentFields(SalesHdr);
@@ -1189,7 +1189,7 @@ report 50002 "Proforma Invoice XSS DCR"
         wgCustAddr: array[8] of Text[50];
         wgDimText: Text[120];
         wgShipToAddr: array[8] of Text[50];
-        ShipToAddr: array[8] of Text[50];
+        BillToAddr: array[8] of Text[50];
         wgTotalExclVATText: Text[50];
         wgTotalInclVATText: Text[50];
         wgTotalText: Text[50];

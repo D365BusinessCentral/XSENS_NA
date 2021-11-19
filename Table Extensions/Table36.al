@@ -74,6 +74,10 @@ tableextension 50011 "Sales Header" extends "Sales Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(50027; "Created By Rapidi"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
 
         field(50100; "VAT Customer Name"; Text[50])
         {

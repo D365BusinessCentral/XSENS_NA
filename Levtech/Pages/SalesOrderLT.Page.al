@@ -430,6 +430,10 @@ page 50099 "Sales Order LT"
                 {
                     ApplicationArea = All;
                 }
+                field("Created By Rapidi"; Rec."Created By Rapidi")
+                {
+                    ApplicationArea = All;
+                }
                 field("EU 3-Party Trade"; Rec."EU 3-Party Trade")
                 {
                     ApplicationArea = Basic, Suite;

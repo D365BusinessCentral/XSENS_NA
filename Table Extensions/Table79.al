@@ -8,6 +8,10 @@ tableextension 50000 CompanyInformation extends "Company Information"
             CaptionML = ENU = 'Use US Tax System',
                         NLD = 'Gebruik belastingsysteem VS';
         }
+        field(50001; "Kinduct Deferral"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
         field(50304; "Std. Purchasing Code"; Code[10])
         {
             CaptionML = ENU = 'Purchasing Code',

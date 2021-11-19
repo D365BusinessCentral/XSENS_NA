@@ -336,6 +336,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 SalesLineL: Record "Sales Line";
                 CreateRevenueSchedule: Codeunit "Create Revenue Schedule";
             begin
+                if not IsKinduct then exit;
                 DeleteRevenueSchedule();
                 Clear(SalesLineL);
                 SalesLineL.SetRange("Document No.", Rec."No.");
@@ -350,10 +351,10 @@ pageextension 50006 "Sales Order" extends "Sales Order"
         {
             trigger OnAfterAction()
             begin
+                if not IsKinduct then exit;
                 Message('Revenue Schedule will be deleted.');
                 DeleteRevenueSchedule();
             end;
-
         }
         addbefore(Release)
         {
@@ -369,7 +370,8 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 var
                     lCduCheckSalesForceOrder: Codeunit "XSS Check Sales Force Order";
                 begin
-                    lCduCheckSalesForceOrder.CheckOnRelease(Rec, FALSE); //TWI 20181026
+                    if IsKinduct then
+                        lCduCheckSalesForceOrder.CheckOnRelease(Rec, FALSE); //TWI 20181026
                 end;
             }
         }
@@ -382,6 +384,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedOnly = true;
+                Visible = IsKinduct;
                 trigger OnAction()
                 var
                     RecRevRecSchedule: Record "Revenue Recognition Schedule";
@@ -411,4 +414,14 @@ pageextension 50006 "Sales Order" extends "Sales Order"
         If RecRevRecSchedule.FindSet() then
             RecRevRecSchedule.DeleteAll();
     end;
+
+    trigger OnAfterGetRecord()
+    begin
+        RecCompInfo.GET;
+        IsKinduct := RecCompInfo."Kinduct Deferral";
+    end;
+
+    var
+        RecCompInfo: Record "Company Information";
+        IsKinduct: Boolean;
 }

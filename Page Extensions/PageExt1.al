@@ -23,6 +23,10 @@ pageextension 50000 "Company Information" extends "Company Information"
                 ToolTipML = ENU = 'Specifies that the profile will be synchronized with the one in Office 365.',
                                 NLD = 'Hiermee wordt opgegeven dat het profiel wordt gesynchroniseerd met het profiel in Office 365.';
             }
+            field("Kinduct Deferral"; "Kinduct Deferral")
+            {
+                ApplicationArea = All;
+            }
         }
         addlast(Payments)
         {

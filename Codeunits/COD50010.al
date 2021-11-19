@@ -16,6 +16,8 @@ codeunit 50010 "XSS Check Sales Force Order"
         lRecSalesLine: Record "Sales Line";
         lIntSortingNo: Integer;
     begin
+        SalesHeader.PopulateCustomFields();
+        SalesHeader.Modify(true);
         with lRecSalesLine do begin
             // Check the sorting number.
             SETRANGE("Document Type", "Document Type"::Order);
@@ -122,8 +124,6 @@ codeunit 50010 "XSS Check Sales Force Order"
         pRecSalesLine."Sorting" := lRecTMPSalesLine."Sorting"; //20130408 GW  30312
         pRecSalesLine.ExternalID := lRecTMPSalesLine.ExternalID;
         pRecSalesLine.COC := lRecTMPSalesLine.COC;  //20180417 KBG 12766
-        pRecSalesHeader.PopulateCustomFields();
-        pRecSalesHeader.Modify();
         pRecSalesLine.MODIFY(true);
     end;
 

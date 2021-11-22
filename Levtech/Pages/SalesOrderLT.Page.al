@@ -481,6 +481,10 @@ page 50099 "Sales Order LT"
                 field("Shortcut Dimension 4 Code"; Rec."Shortcut Dimension 4 Code")
                 {
                     ApplicationArea = Dimensions;
+                    trigger OnValidate()
+                    begin
+                        ShortcutDimension1CodeOnAfterV;
+                    end;
                 }
                 field("Payment Discount %"; Rec."Payment Discount %")
                 {

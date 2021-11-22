@@ -81,22 +81,34 @@ xmlport 50006 "Journal Transaction"
                     MinOccurs = Zero;//kk
                     XmlName = 'Field10';
                     Width = 25;
+                    // trigger OnAfterAssignVariable()
+                    // begin
+                    //     fImportRecord;
+                    // end;
+                }
+                textelement(gTxtDimension6)
+                {
+                    MinOccurs = Zero;//kk
+                    XmlName = 'Field11';
+                    Width = 25;
+                }
+                textelement(gTxtDimension7)
+                {
+                    MinOccurs = Zero;//kk
+                    XmlName = 'Field12';
+                    Width = 25;
+                }
+                textelement(gTxtDimension8)
+                {
+                    MinOccurs = Zero;//kk
+                    XmlName = 'Field13';
+                    Width = 25;
+
                     trigger OnAfterAssignVariable()
                     begin
                         fImportRecord;
                     end;
                 }
-                // textelement(gtxtCreditCardPayee)
-                // {
-                //     MinOccurs = Zero;//kk
-                //     XmlName = 'Field11';
-                //     Width = 25;
-
-                //     trigger OnAfterAssignVariable()
-                //     begin
-                //         fImportRecord;
-                //     end;
-                // }
 
                 trigger OnBeforeInsertRecord();
                 begin
@@ -200,10 +212,12 @@ xmlport 50006 "Journal Transaction"
         [InDataSet]
         gBlnDocNoVisible: Boolean;
         gCodFinJournalTemplate: Code[10];
-        gCodShortcutDimCode3: Code[20];
-        gShortcutDim8: Code[20];
+        gCodShortcutDimCode4: Code[20];
+        gShortcutDim6: Code[20];
         gShortcutDim7: Code[20];
+        gShortcutDim8: Code[20];
         gShortcutDim5: Code[20];
+        gShortcutDim3: Code[20];
 
     procedure fConvertStringToDate(pTxtString: Text[30]): Date;
     var
@@ -254,6 +268,9 @@ xmlport 50006 "Journal Transaction"
         gTxtDimension3 := '';
         gtxtTax := '';
         gtxtInterCompanyPartner := '';
+        gTxtDimension6 := '';
+        gTxtDimension7 := '';
+        gTxtDimension8 := '';
     end;
 
     procedure fImportRecord();
@@ -338,17 +355,23 @@ xmlport 50006 "Journal Transaction"
         //LT-Start
         //pRecGenJournalLine.Validate("Credit Card Payee No.", gtxtVendorNumber);
 
-        if Evaluate(gShortcutDim5, gtxtInterCompanyPartner) then
-            pRecGenJournalLine.ValidateShortcutDimCode(3, gShortcutDim5);
+        if Evaluate(gShortcutDim3, gtxtInterCompanyPartner) then
+            pRecGenJournalLine.ValidateShortcutDimCode(3, gShortcutDim3);
 
-        if EVALUATE(gCodShortcutDimCode3, gTxtDimension3) then
-            pRecGenJournalLine.ValidateShortcutDimCode(4, gCodShortcutDimCode3); //20190102 KBG NMSD-240
+        if EVALUATE(gCodShortcutDimCode4, gTxtDimension3) then
+            pRecGenJournalLine.ValidateShortcutDimCode(4, gCodShortcutDimCode4); //20190102 KBG NMSD-240
 
-        if Evaluate(gShortcutDim7, gtxtTax) then
-            pRecGenJournalLine.ValidateShortcutDimCode(5, gShortcutDim7);
+        if Evaluate(gShortcutDim5, gtxtTax) then
+            pRecGenJournalLine.ValidateShortcutDimCode(5, gShortcutDim5);
 
-        // if Evaluate(gShortcutDim8, gtxtCreditCardPayee) then
-        //     pRecGenJournalLine.ValidateShortcutDimCode(8, gShortcutDim8);
+        if Evaluate(gShortcutDim6, gTxtDimension6) then
+            pRecGenJournalLine.ValidateShortcutDimCode(6, gShortcutDim6);
+
+        if Evaluate(gShortcutDim7, gTxtDimension7) then
+            pRecGenJournalLine.ValidateShortcutDimCode(7, gShortcutDim7);
+
+        if Evaluate(gShortcutDim8, gTxtDimension8) then
+            pRecGenJournalLine.ValidateShortcutDimCode(8, gShortcutDim8);
 
         //LT-End
         //pRecGenJournalLine."Shortcut Dimension 3 Code"         := gTxtDimension3;

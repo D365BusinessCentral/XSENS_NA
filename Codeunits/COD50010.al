@@ -16,8 +16,8 @@ codeunit 50010 "XSS Check Sales Force Order"
         lRecSalesLine: Record "Sales Line";
         lIntSortingNo: Integer;
     begin
-        SalesHeader.PopulateCustomFields();
-        SalesHeader.Modify(true);
+        //SalesHeader.PopulateCustomFields();
+        //SalesHeader.Modify(true);
         with lRecSalesLine do begin
             // Check the sorting number.
             SETRANGE("Document Type", "Document Type"::Order);

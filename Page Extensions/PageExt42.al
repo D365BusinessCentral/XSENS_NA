@@ -356,6 +356,13 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 DeleteRevenueSchedule();
             end;
         }
+        modify(Dimensions)
+        {
+            trigger OnBeforeAction()
+            begin
+                Commit();
+            end;
+        }
         addbefore(Release)
         {
             action("Check SalesForce Order")
@@ -401,6 +408,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                     end;
                 end;
             }
+
         }
     }
     local procedure DeleteRevenueSchedule()
@@ -415,7 +423,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
             RecRevRecSchedule.DeleteAll();
     end;
 
-    trigger OnAfterGetRecord()
+    trigger OnOpenPage()
     begin
         RecCompInfo.GET;
         IsKinduct := RecCompInfo."Kinduct Deferral";

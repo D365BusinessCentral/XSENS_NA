@@ -148,5 +148,16 @@ tableextension 50022 "Sales Invoice Line" extends "Sales Invoice Line"
             CaptionML = ENU = 'No. of Periods',
                         NLD = 'Aantal periodes';
         }
+        field(87004; "Contract Start Date"; Date)
+        {
+            Caption = 'Contract Start Date';
+            DataClassification = ToBeClassified;
+        }
+        field(87005; "Invoice Interval"; Integer)
+        {
+            Caption = 'Deferral Interval';
+            DataClassification = ToBeClassified;
+            TableRelation = "Deferral Template"."Deferral Code";
+        }
     }
 }

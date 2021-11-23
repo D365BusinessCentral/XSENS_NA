@@ -12,6 +12,7 @@ codeunit 50007 "Create Revenue Schedule"
     begin
         if RecSalesLinep."Invoice Interval" = 0 then
             exit;
+        RecSalesLinep.TestField("Contract Start Date");
         Clear(LineNo);
         Clear(RecRevRecSchedule);
         RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");

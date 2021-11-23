@@ -342,7 +342,6 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 SalesLineL.SetRange("Document No.", Rec."No.");
                 if SalesLineL.FindSet() then
                     repeat
-                        SalesLineL.TestField("Contract Start Date");
                         CreateRevenueSchedule.InsertRevenueRecognitionSchedule(Rec, SalesLineL);
                     until SalesLineL.Next() = 0;
             end;
@@ -427,8 +426,9 @@ pageextension 50006 "Sales Order" extends "Sales Order"
     begin
         RecCompInfo.GET;
         IsKinduct := RecCompInfo."Kinduct Deferral";
-        if Rec."Created By Rapidi" then begin
+        if (Rec."Created By Rapidi") AND (Rec."Rapidi Fields Updated" = false) then begin
             Rec.PopulateCustomFields();
+            Rec."Rapidi Fields Updated" := true;
             Rec.Modify();
         end;
     end;

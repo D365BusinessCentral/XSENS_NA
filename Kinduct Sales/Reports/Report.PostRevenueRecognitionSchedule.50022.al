@@ -21,7 +21,7 @@ report 50022 "Recognize Revenue"
                 GenJnlLine.Validate("Journal Template Name", SalesSetup."Revenue Rec. Template Name");
                 GenJnlLine.Validate("Journal Batch Name", SalesSetup."Revenue Rec. Batch Name");
                 GenJnlLine.Validate("Line No.", LineNo);
-                GenJnlLine.Validate("Posting Date", "Revenue Recognition Schedule"."Posting Date");
+                GenJnlLine.Validate("Posting Date", CalcDate('CM', "Revenue Recognition Schedule"."Posting Date"));
                 GenJnlLine.Validate("Document No.", NoSeriesMgmt.GetNextNo(SalesSetup."Revenue Recognition Nos.", WorkDate(), true));
                 GenJnlLine.Validate("Account Type", GenJnlLine."Account Type"::"G/L Account");
                 GenJnlLine.Validate("Account No.", "Revenue Recognition Schedule"."Deferral Account");

@@ -82,22 +82,6 @@ codeunit 50007 "Create Revenue Schedule"
              Rec.Validate("Deferral Code", Format(Rec."Invoice Interval"));
      end;*/
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnBeforeInsertGLEntryBuffer', '', false, false)]
-    local procedure OnBeforeInsertGLEntryBuffer(var BalanceCheckAddCurrAmount2: Decimal; var BalanceCheckAddCurrAmount: Decimal;
-    var BalanceCheckAmount2: Decimal; var BalanceCheckAmount: Decimal; var GenJournalLine: Record "Gen. Journal Line";
-    var GLEntry: Record "G/L Entry"; var NextEntryNo: Integer; var TempGLEntryBuf: Record "G/L Entry";
-    var TotalAddCurrAmount: Decimal; var TotalAmount: Decimal);
-    begin
-        if GLEntry."Document Type" = GLEntry."Document Type"::Invoice then begin
-            //Sales Information
-            GLEntry."Customer No." := GenJournalLine."Customer No.";
-            GLEntry."Customer Name" := GenJournalLine."Customer Name";
-            TempGLEntryBuf."Posting Date" := CalcDate('CM', GLEntry."Posting Date");
-            TempGLEntryBuf."Customer No." := GLEntry."Customer No.";
-            TempGLEntryBuf."Customer Name" := GLEntry."Customer Name";
-        end;
-    end;
-
     [EventSubscriber(ObjectType::Table, Database::"Gen. Journal Line", 'OnAfterCopyGenJnlLineFromSalesHeader', '', false, false)]
     local procedure OnAfterCopyGenJnlLineFromSalesHeader(var GenJournalLine: Record "Gen. Journal Line";
     SalesHeader: Record "Sales Header")

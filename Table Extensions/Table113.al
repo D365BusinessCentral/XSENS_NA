@@ -157,7 +157,7 @@ tableextension 50022 "Sales Invoice Line" extends "Sales Invoice Line"
         {
             Caption = 'Deferral Interval';
             DataClassification = ToBeClassified;
-            TableRelation = "Deferral Template"."Deferral Code";
+            //TableRelation = "Deferral Template"."Deferral Code";
         }
     }
 }

@@ -41,5 +41,11 @@ pageextension 50009 "Sales Order Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
             }
         }
+        modify("Deferral Code")
+        {
+            Visible = false;
+            Enabled = false;
+            Editable = false;
+        }
     }
 }

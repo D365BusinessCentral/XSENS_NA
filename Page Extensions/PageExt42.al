@@ -430,6 +430,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
             Rec.PopulateCustomFields();
             Rec."Rapidi Fields Updated" := true;
             Rec.Modify();
+            Commit();// used commit as it was throwing error while opening other Runmodal pages on SO card like Dimensions
         end;
     end;
 

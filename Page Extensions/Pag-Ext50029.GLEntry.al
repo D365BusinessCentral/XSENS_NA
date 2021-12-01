@@ -65,7 +65,14 @@ pageextension 50029 GLEntry extends "General Ledger Entries"
                 ToolTip = 'Specifies the value of the Revenue Sales Invoice Date field.';
                 ApplicationArea = All;
             }
-
+        }
+        modify("Source Type")
+        {
+            Visible = true;
+        }
+        modify("Source No.")
+        {
+            Visible = true;
         }
     }
 }

@@ -114,5 +114,6 @@ codeunit 50003 Service
 
     var
         a: Page 615;
+        h: page 20;
 }
 

@@ -65,6 +65,8 @@ codeunit 50007 "Create Revenue Schedule"
                     RecRevRecSchedule."Dimension Set Id" := RecSalesLinep."Dimension Set ID";
                     RecRevRecSchedule."Item Code" := RecSalesLinep."No.";
                     RecRevRecSchedule."Item Description" := RecSalesLinep.Description;
+                    //Need to remove from Live
+                    RecRevRecSchedule."Reason Code" := SalesHeader."Reason Code";
                     RecRevRecSchedule.Insert();
                 until DeferralLine.Next() = 0;
             end;

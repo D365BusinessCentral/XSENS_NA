@@ -109,6 +109,12 @@ table 50012 "Revenue Recognition Schedule"
         {
             DataClassification = ToBeClassified;
         }
+        //Need to remove from Live
+        field(24; "Reason Code"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Reason Code";
+        }
     }
     keys
     {

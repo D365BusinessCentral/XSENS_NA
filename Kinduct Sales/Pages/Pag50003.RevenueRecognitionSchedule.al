@@ -96,6 +96,11 @@ page 50003 "Revenue Recognition Schedule"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                //Need to remove from Live
+                field("Reason Code"; Rec."Reason Code")
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }

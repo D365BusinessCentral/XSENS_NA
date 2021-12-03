@@ -84,7 +84,7 @@ codeunit 50101 "Events"
                     RecSalesHeader.GET(RecSalesHeader."Document Type"::Order, ReqLine."Sales Order No.");
                     if RecSalesHeader."Currency Code" = PurchOrderHeader."Currency Code" then begin
                         //Need to remove from Live
-                        // PurchOrderLine.Validate("Direct Unit Cost", (RecSalesLine."Line Amount" * RecVendor.Percentage / 100) / RecSalesLine.Quantity);
+                        //PurchOrderLine.Validate("Direct Unit Cost", (RecSalesLine."Line Amount" * RecVendor.Percentage / 100) / RecSalesLine.Quantity);
                         //commented above code as suggested by Biplab sir on 30th November 2021- in case of 100% discount line Amount is becoming 0
                         PurchOrderLine.Validate("Direct Unit Cost", Round(RecSalesLine."Unit Price" * RecVendor.Percentage / 100, 0.01, '='));
                         PurchOrderLine.Validate("Line Discount %", RecSalesLine."Line Discount %");

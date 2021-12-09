@@ -111,6 +111,59 @@ codeunit 50101 "Events"
         end
     end;
 
+    //Need to remove from Live
+    //Inserting Comment lines in Purchase Order from Sales Order After creating purhase order from Req. worksheet
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", 'OnAfterPurchOrderLineInsert', '', false, false)]
+    local procedure OnAfterPurchOrderLineInsert(var PurchOrderLine: Record "Purchase Line"; var RequisitionLine: Record "Requisition Line"; var NextLineNo: Integer);
+    var
+        RecSalesLineL: Record "Sales Line";
+        RecPurchaseLine: Record "Purchase Line";
+        NextSalesLineNumber, LineNumber : Integer;
+    begin
+        Clear(NextSalesLineNumber);
+        Clear(LineNumber);
+        if (PurchOrderLine."Sales Order No." <> '') AND (PurchOrderLine."Sales Order Line No." <> 0) then begin
+            Clear(RecSalesLineL);
+            RecSalesLineL.SetRange("Document Type", RecSalesLineL."Document Type"::Order);
+            RecSalesLineL.SetRange("Document No.", PurchOrderLine."Sales Order No.");
+            RecSalesLineL.SetFilter(Type, '<>%1', RecSalesLineL.Type::" ");
+            RecSalesLineL.SetFilter("Line No.", '>%1', PurchOrderLine."Sales Order Line No.");
+            if RecSalesLineL.FindFirst() then
+                NextSalesLineNumber := RecSalesLineL."Line No.";
+
+            LineNumber := PurchOrderLine."Line No.";
+            Clear(RecSalesLineL);
+            RecSalesLineL.SetRange("Document Type", RecSalesLineL."Document Type"::Order);
+            RecSalesLineL.SetRange("Document No.", PurchOrderLine."Sales Order No.");
+            RecSalesLineL.SetRange(Type, RecSalesLineL.Type::" ");
+            if NextSalesLineNumber <> 0 then
+                RecSalesLineL.SetFilter("Line No.", '>%1&<%2', PurchOrderLine."Sales Order Line No.", NextSalesLineNumber)
+            else
+                RecSalesLineL.SetFilter("Line No.", '>%1', PurchOrderLine."Sales Order Line No.");
+            if RecSalesLineL.FindSet() then begin
+                repeat
+                    LineNumber += 10;
+                    Clear(RecPurchaseLine);
+                    RecPurchaseLine.Init();
+                    RecPurchaseLine.Validate("Document Type", PurchOrderLine."Document Type");
+                    RecPurchaseLine.Validate("Document No.", PurchOrderLine."Document No.");
+                    RecPurchaseLine.Validate(Type, RecPurchaseLine.Type::" ");
+                    RecPurchaseLine.Validate("Line No.", LineNumber);
+                    RecPurchaseLine.Validate("No.", RecSalesLineL."No.");
+                    RecPurchaseLine.Validate(Description, RecSalesLineL.Description);
+                    RecPurchaseLine.Validate("Description 2", RecSalesLineL."Description 2");
+                    RecPurchaseLine.Validate("Order Date", RecSalesLineL."Posting Date");
+                    RecPurchaseLine.Validate("Currency Code", RecSalesLineL."Currency Code");
+                    /*RecPurchaseLine.Validate("Drop Shipment", RecSalesLineL."Drop Shipment");
+                    RecPurchaseLine.Validate("Sales Order No.", RecSalesLineL."Document No.");
+                    RecPurchaseLine.Validate("Sales Order Line No.", RecSalesLineL."Line No.");*/
+                    RecPurchaseLine.Insert(true);
+                until RecSalesLineL.Next() = 0;
+            end;
+        end;
+    end;
+
+
     //Calculate Amount LCY for Queries
     [EventSubscriber(ObjectType::Table, Database::"Sales Invoice Line", 'OnBeforeInsertEvent', '', false, false)]
     local procedure OnAfterValidateEventSalesInvLine(var Rec: Record "Sales Invoice Line"; RunTrigger: Boolean);

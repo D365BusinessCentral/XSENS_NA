@@ -550,11 +550,65 @@ codeunit 50101 "Events"
         IsHandled := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforeReleaseSalesDoc', '', false, false)]
+    local procedure OnBeforeReleaseSalesDocOnPost(var SalesHeader: Record "Sales Header");
     var
-        x: XmlPort 12;
-        c: Codeunit 435;
-        d: Page "Service Item Component List";
-        f: Codeunit "Sales-Post";
-        g: page "Sales Order";
-        h: page "IC Outbox Transactions";
+        SalesLineL: Record "Sales Line";
+        CreateRevenueSchedule: Codeunit "Create Revenue Schedule";
+    begin
+        ReccompanyInfo.GET;
+        if not ReccompanyInfo."Kinduct Deferral" then exit;
+        if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then exit;
+        DeleteRevenueSchedule(SalesHeader."No.");
+        Clear(SalesLineL);
+        SalesLineL.SetRange("Document No.", SalesHeader."No.");
+        if SalesLineL.FindSet() then
+            repeat
+                CreateRevenueSchedule.InsertRevenueRecognitionSchedule(SalesHeader, SalesLineL);
+            until SalesLineL.Next() = 0;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", 'OnBeforeReopenSalesDoc', '', false, false)]
+    local procedure OnBeforeReopenSalesDoc(var SalesHeader: Record "Sales Header"; PreviewMode: Boolean; var IsHandled: Boolean);
+
+    begin
+        ReccompanyInfo.GET;
+        if not ReccompanyInfo."Kinduct Deferral" then exit;
+        if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then exit;
+        Message('Revenue Schedule will be deleted.');
+        DeleteRevenueSchedule(SalesHeader."No.");
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", 'OnBeforeReleaseSalesDoc', '', false, false)]
+    local procedure OnBeforeReleaseSalesDoc(var SalesHeader: Record "Sales Header"; PreviewMode: Boolean; var IsHandled: Boolean);
+    var
+        SalesLineL: Record "Sales Line";
+        CreateRevenueSchedule: Codeunit "Create Revenue Schedule";
+    begin
+        ReccompanyInfo.GET;
+        if not ReccompanyInfo."Kinduct Deferral" then exit;
+        if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then exit;
+        DeleteRevenueSchedule(SalesHeader."No.");
+        Clear(SalesLineL);
+        SalesLineL.SetRange("Document No.", SalesHeader."No.");
+        if SalesLineL.FindSet() then
+            repeat
+                CreateRevenueSchedule.InsertRevenueRecognitionSchedule(SalesHeader, SalesLineL);
+            until SalesLineL.Next() = 0;
+    end;
+
+    local procedure DeleteRevenueSchedule(SalesOrderNO: code[20])
+    var
+        RecRevRecSchedule: Record "Revenue Recognition Schedule";
+    begin
+        Clear(RecRevRecSchedule);
+        RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");
+        RecRevRecSchedule.SetRange("Sales Order No.", SalesOrderNO);
+        RecRevRecSchedule.SetFilter("Sales invoice No.", '=%1', '');
+        If RecRevRecSchedule.FindSet() then
+            RecRevRecSchedule.DeleteAll();
+    end;
+
+    var
+        ReccompanyInfo: Record "Company Information";
 }

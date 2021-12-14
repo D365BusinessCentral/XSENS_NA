@@ -69,12 +69,13 @@ pageextension 50025 "Sales Order List" extends "Sales Order List"
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedOnly = true;
+                Visible = IsKinduct;
                 trigger OnAction()
                 var
                     RecRevRecSchedule: Record "Revenue Recognition Schedule";
                     PageRevRecog: Page "Revenue Recognition Schedule";
                 begin
-                    Rec.TestField("Created From Contract");
+                    //Rec.TestField("Created From Contract");
                     Clear(RecRevRecSchedule);
                     RecRevRecSchedule.SetCurrentKey("Sales Order No.", "SO Line No.", "Line No.");
                     RecRevRecSchedule.SetRange("Sales Order No.", Rec."No.");
@@ -97,4 +98,15 @@ pageextension 50025 "Sales Order List" extends "Sales Order List"
         if lRecSalesCommentLine.FINDLAST then
             exit(lRecSalesCommentLine.Comment);
     end;
+
+
+    trigger OnOpenPage()
+    begin
+        RecCompInfo.GET;
+        IsKinduct := RecCompInfo."Kinduct Deferral";
+    end;
+
+    var
+        RecCompInfo: Record "Company Information";
+        IsKinduct: Boolean;
 }

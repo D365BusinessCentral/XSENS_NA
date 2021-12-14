@@ -331,24 +331,24 @@ pageextension 50006 "Sales Order" extends "Sales Order"
     }
     actions
     {
-        modify(Release)
-        {
-            trigger OnAfterAction()
-            var
-                SalesLineL: Record "Sales Line";
-                CreateRevenueSchedule: Codeunit "Create Revenue Schedule";
-            begin
-                if not IsKinduct then exit;
-                DeleteRevenueSchedule();
-                Clear(SalesLineL);
-                SalesLineL.SetRange("Document No.", Rec."No.");
-                if SalesLineL.FindSet() then
-                    repeat
-                        CreateRevenueSchedule.InsertRevenueRecognitionSchedule(Rec, SalesLineL);
-                    until SalesLineL.Next() = 0;
-            end;
-        }
-        modify(Reopen)
+        /* modify(Release)
+         {
+             trigger OnAfterAction()
+             var
+                 SalesLineL: Record "Sales Line";
+                 CreateRevenueSchedule: Codeunit "Create Revenue Schedule";
+             begin
+                 if not IsKinduct then exit;
+                 DeleteRevenueSchedule();
+                 Clear(SalesLineL);
+                 SalesLineL.SetRange("Document No.", Rec."No.");
+                 if SalesLineL.FindSet() then
+                     repeat
+                         CreateRevenueSchedule.InsertRevenueRecognitionSchedule(Rec, SalesLineL);
+                     until SalesLineL.Next() = 0;
+             end;
+         }*/
+        /*modify(Reopen)
         {
             trigger OnAfterAction()
             begin
@@ -356,7 +356,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
                 Message('Revenue Schedule will be deleted.');
                 DeleteRevenueSchedule();
             end;
-        }
+        }*/
         modify(Dimensions)
         {
             trigger OnBeforeAction()
@@ -412,7 +412,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
 
         }
     }
-    local procedure DeleteRevenueSchedule()
+    /*local procedure DeleteRevenueSchedule()
     var
         RecRevRecSchedule: Record "Revenue Recognition Schedule";
     begin
@@ -422,7 +422,7 @@ pageextension 50006 "Sales Order" extends "Sales Order"
         RecRevRecSchedule.SetFilter("Sales invoice No.", '=%1', '');
         If RecRevRecSchedule.FindSet() then
             RecRevRecSchedule.DeleteAll();
-    end;
+    end;*/
 
     trigger OnOpenPage()
     begin

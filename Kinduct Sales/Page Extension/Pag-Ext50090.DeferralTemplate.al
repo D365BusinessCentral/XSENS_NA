@@ -9,5 +9,13 @@ pageextension 50090 "Deferral Template" extends "Deferral Template Card"
                 ApplicationArea = All;
             }
         }
+        modify("Start Date")
+        {
+            Visible = false;
+        }
+        modify("Calc. Method")
+        {
+            Visible = false;
+        }
     }
 }

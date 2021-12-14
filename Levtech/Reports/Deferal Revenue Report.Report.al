@@ -57,7 +57,8 @@ report 50101 "Deferral Revenue Report"
             trigger OnPreDataItem()
             begin
                 CompInfo.get();
-                PrevoiusSOLineNo := 0;
+                PreviousSOLineNo := 0;
+                PreviousSONo := '';
             end;
 
             trigger OnAfterGetRecord()
@@ -71,28 +72,33 @@ report 50101 "Deferral Revenue Report"
                 SalesInvoiceLineL.SetRange("Line No.", "Revenue Recognition Schedule"."SO Line No.");
                 if SalesInvoiceLineL.FindFirst() then begin
                     Type := format(SalesInvoiceLineL.Type);
-                    Noofperiods := SalesInvoiceLineL."Deferral Code";
+                    Noofperiods := Format(SalesInvoiceLineL."Invoice Interval");
+
                 end;
-                if PrevoiusSOLineNo = "Revenue Recognition Schedule"."SO Line No." then CurrReport.Skip();
+                if PreviousSOLineNo = "Revenue Recognition Schedule"."SO Line No." then CurrReport.Skip();
                 Clear(AmtRecognized);
                 Clear(RevenueRecogSchedule);
                 RevenueRecogSchedule.SetRange("Sales invoice No.", "Revenue Recognition Schedule"."Sales invoice No.");
                 RevenueRecogSchedule.SetRange("SO Line No.", "Revenue Recognition Schedule"."SO Line No.");
                 RevenueRecogSchedule.SetRange(Posted, true);
-                if RevenueRecogSchedule.FindSet() then
+                if RevenueRecogSchedule.FindSet() then begin
                     repeat
-                        PrevoiusSOLineNo := RevenueRecogSchedule."SO Line No.";
+                        PreviousSONo := RevenueRecogSchedule."Sales Order No.";
+                        PreviousSOLineNo := RevenueRecogSchedule."SO Line No.";
                         AmtRecognized := AmtRecognized + RevenueRecogSchedule.Amount;
                     until RevenueRecogSchedule.Next() = 0;
+                end;
                 Clear(RevenueRecogSchedule1);
-                RevenueRecogSchedule1.SetRange("Sales invoice No.", "Revenue Recognition Schedule"."Sales invoice No.");
+                RevenueRecogSchedule1.SetRange("Sales Order No.", "Revenue Recognition Schedule"."Sales Order No.");
                 RevenueRecogSchedule1.SetRange("SO Line No.", "Revenue Recognition Schedule"."SO Line No.");
                 RevenueRecogSchedule1.SetRange(Posted, false);
-                if RevenueRecogSchedule1.FindSet() then
+                if RevenueRecogSchedule1.FindSet() then begin
                     repeat
-                        PrevoiusSOLineNo := RevenueRecogSchedule1."SO Line No.";
+                        PreviousSONo := RevenueRecogSchedule1."Sales Order No.";
+                        PreviousSOLineNo := RevenueRecogSchedule1."SO Line No.";
                         RemainingAmtRecognized := RemainingAmtRecognized + RevenueRecogSchedule1.Amount;
                     until RevenueRecogSchedule1.Next() = 0;
+                end;
             end;
         }
     }
@@ -122,5 +128,6 @@ report 50101 "Deferral Revenue Report"
         Noofperiods: Code[10];
         CompInfo: Record "Company Information";
         Balanceasof: Date;
-        PrevoiusSOLineNo: Integer;
+        PreviousSOLineNo: Integer;
+        PreviousSONo: Code[20];
 }

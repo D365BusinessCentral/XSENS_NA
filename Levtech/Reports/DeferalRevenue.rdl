@@ -459,7 +459,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Posted_Invoice.Value</Value>
+                                  <Value>=iif(Fields!Sales_invoice_No_.Value="","", Fields!Posted_Invoice.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>

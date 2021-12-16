@@ -76,17 +76,6 @@ codeunit 50007 "Create Revenue Schedule"
         end;
     end;
 
-    /* [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", 'OnBeforeValidateEvent', 'Invoice Interval', false, false)]
-     local procedure OnAfterValidateEvent(var Rec: Record "Sales Line"; var xRec: Record "Sales Line")
-     var
-         RecRevRecSchedule: Record "Revenue Recognition Schedule";
-     begin
-         if Rec."Quantity Invoiced" <> 0 then
-             Error('You cannot change the invoice interval for the invoiced Item')
-         else
-             Rec.Validate("Deferral Code", Format(Rec."Invoice Interval"));
-     end;*/
-
     [EventSubscriber(ObjectType::Table, Database::"Gen. Journal Line", 'OnAfterCopyGenJnlLineFromSalesHeader', '', false, false)]
     local procedure OnAfterCopyGenJnlLineFromSalesHeader(var GenJournalLine: Record "Gen. Journal Line";
     SalesHeader: Record "Sales Header")

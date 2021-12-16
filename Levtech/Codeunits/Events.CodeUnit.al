@@ -154,9 +154,9 @@ codeunit 50101 "Events"
                     RecPurchaseLine.Validate("Description 2", RecSalesLineL."Description 2");
                     RecPurchaseLine.Validate("Order Date", RecSalesLineL."Posting Date");
                     RecPurchaseLine.Validate("Currency Code", RecSalesLineL."Currency Code");
-                    /*RecPurchaseLine.Validate("Drop Shipment", RecSalesLineL."Drop Shipment");
-                    RecPurchaseLine.Validate("Sales Order No.", RecSalesLineL."Document No.");
-                    RecPurchaseLine.Validate("Sales Order Line No.", RecSalesLineL."Line No.");*/
+                    // RecPurchaseLine.Validate("Drop Shipment", RecSalesLineL."Drop Shipment");
+                    // RecPurchaseLine.Validate("Sales Order No.", RecSalesLineL."Document No.");
+                    // RecPurchaseLine.Validate("Sales Order Line No.", RecSalesLineL."Line No.");
                     RecPurchaseLine.Insert(true);
                 until RecSalesLineL.Next() = 0;
             end;

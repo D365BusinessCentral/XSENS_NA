@@ -122,7 +122,7 @@ report 50101 "Deferral Revenue Report"
         {
             area(Content)
             {
-                group(GroupName)
+                group(General)
                 {
                     field(Balanceasof; Balanceasof)
                     {

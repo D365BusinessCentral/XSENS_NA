@@ -45,12 +45,13 @@ report 50022 "Recognize Revenue"
                 GenJnlLine."Item Description" := "Revenue Recognition Schedule"."Item Description";
                 //Need to remove from Live
                 GenJnlLine.Validate("Reason Code", "Revenue Recognition Schedule"."Reason Code");
-                "Revenue Recognition Schedule".Posted := IsPost;
-                if IsPost then begin
-                    "Revenue Recognition Schedule"."Document No." := GenJnlLine."Document No.";
-                    "Revenue Recognition Schedule"."Document Date" := GenJnlLine."Posting Date";
-                end;
-                "Revenue Recognition Schedule".Modify();
+                //Modifying revenue while posting Gen journal using event
+                //"Revenue Recognition Schedule".Posted := IsPost;
+                // if IsPost then begin
+                //     "Revenue Recognition Schedule"."Document No." := GenJnlLine."Document No.";
+                //     "Revenue Recognition Schedule"."Document Date" := GenJnlLine."Posting Date";
+                // end;
+                //"Revenue Recognition Schedule".Modify();
                 GenJnlLine.Insert(true);
             end;
 

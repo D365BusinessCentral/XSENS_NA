@@ -152,12 +152,17 @@ codeunit 50005 "Process Contract Information"
                 RecRevRecSchedule."Sales Invoice Date" := SalesInvLine."Posting Date";
                 RecRevRecSchedule.Modify();
             until RecRevRecSchedule.Next() = 0;
-        end
+        end;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitGLEntry', '', false, false)]
     local procedure OnAfterInitGLEntry(var GLEntry: Record "G/L Entry"; GenJournalLine: Record "Gen. Journal Line"; Amount: Decimal; AddCurrAmount: Decimal; UseAddCurrAmount: Boolean; var CurrencyFactor: Decimal);
+    var
+        RecRevSchedule: Record "Revenue Recognition Schedule";
+        RecCompany: Record "Company Information";
     begin
+        RecCompany.GET;
+        if not RecCompany."Kinduct Deferral" then exit;
         GLEntry."Revenue SO No." := GenJournalLine."Revenue SO No.";
         GLEntry."Revenue SO Line No." := GenJournalLine."Revenue SO Line No.";
         GLEntry."Revenue Line No." := GenJournalLine."Revenue Line No.";
@@ -173,6 +178,19 @@ codeunit 50005 "Process Contract Information"
         GLEntry."Country/Region Code" := GenJournalLine."Country/Region Code";
         GLEntry."Item Code" := GenJournalLine."Item Code";
         GLEntry."Item Description" := GenJournalLine."Item Description";
+        if GenJournalLine."Revenue SO No." <> '' then begin
+            Clear(RecRevSchedule);
+            RecRevSchedule.SetRange("Sales Order No.", GenJournalLine."Revenue SO No.");
+            RecRevSchedule.SetRange("SO Line No.", GenJournalLine."Revenue SO Line No.");
+            RecRevSchedule.SetRange("Sales invoice No.", GenJournalLine."Revenue Sales Invoice No.");
+            RecRevSchedule.SetRange("Line No.", GenJournalLine."Revenue Line No.");
+            if RecRevSchedule.FindFirst() then begin
+                RecRevSchedule."Document No." := GLEntry."Document No.";
+                RecRevSchedule."Document Date" := GLEntry."Posting Date";
+                RecRevSchedule.Posted := true;
+                RecRevSchedule.Modify();
+            end;
+        end
     end;
 
     var

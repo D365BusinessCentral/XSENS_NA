@@ -1154,8 +1154,9 @@
                     <TablixMember>
                       <Group Name="Details">
                         <GroupExpressions>
-                          <GroupExpression>=Fields!Sales_invoice_No_.Value</GroupExpression>
+                          <GroupExpression>=Fields!Sales_Order_No_.Value</GroupExpression>
                           <GroupExpression>=Fields!SO_Line_No_.Value</GroupExpression>
+                          <GroupExpression>=Fields!Sales_invoice_No_.Value</GroupExpression>
                         </GroupExpressions>
                       </Group>
                       <TablixMembers>
@@ -1359,7 +1360,6 @@
               </Paragraphs>
               <rd:DefaultName>Textbox25</rd:DefaultName>
               <Top>0.83612in</Top>
-              <Left>0in</Left>
               <Height>0.23264in</Height>
               <Width>4.8916in</Width>
               <ZIndex>5</ZIndex>
@@ -1893,6 +1893,9 @@ End Function
         </Field>
         <Field Name="Sales_invoice_No_">
           <DataField>Sales_invoice_No_</DataField>
+        </Field>
+        <Field Name="Sales_Order_No_">
+          <DataField>Sales_Order_No_</DataField>
         </Field>
         <Field Name="SO_Line_No_">
           <DataField>SO_Line_No_</DataField>

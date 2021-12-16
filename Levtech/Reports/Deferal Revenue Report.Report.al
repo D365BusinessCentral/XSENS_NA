@@ -18,6 +18,9 @@ report 50101 "Deferral Revenue Report"
             column(Sales_invoice_No_; "Sales invoice No.")
             {
             }
+            column(Sales_Order_No_; "Sales Order No.")
+            {
+            }
             column(SO_Line_No_; "SO Line No.")
             {
             }

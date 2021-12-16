@@ -116,7 +116,7 @@ report 50101 "Deferral Revenue Report"
     }
     requestpage
     {
-        SaveValues = true;
+        // SaveValues = true;
 
         layout
         {

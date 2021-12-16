@@ -54,7 +54,10 @@ codeunit 50007 "Create Revenue Schedule"
                     RecRevRecSchedule."SO Line No." := RecSalesLinep."Line No.";
                     RecRevRecSchedule."Line No." := LineNo;
                     RecRevRecSchedule."Posting Date" := CalcDate('CM', DeferralLine."Posting Date");
-                    RecRevRecSchedule.Amount := DeferralLine.Amount;
+                    if RecSalesLinep."Invoice Interval" = 1 then
+                        RecRevRecSchedule.Amount := RecSalesLinep.Amount
+                    else
+                        RecRevRecSchedule.Amount := DeferralLine.Amount;
                     RecRevRecSchedule."Deferral Account" := DeferralTemplate."Deferral Account";
                     RecRevRecSchedule."Revenue Account" := DeferralTemplate."Revenue Account";
                     RecRevRecSchedule."Customer Name" := SalesHeader."Sell-to Customer Name";
@@ -68,7 +71,7 @@ codeunit 50007 "Create Revenue Schedule"
                     //Need to remove from Live
                     RecRevRecSchedule."Reason Code" := SalesHeader."Reason Code";
                     RecRevRecSchedule.Insert();
-                until DeferralLine.Next() = 0;
+                until (RecSalesLinep."Invoice Interval" = 1) OR (DeferralLine.Next() = 0);
             end;
         end;
     end;

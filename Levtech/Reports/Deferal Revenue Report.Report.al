@@ -57,8 +57,10 @@ report 50101 "Deferral Revenue Report"
             trigger OnPreDataItem()
             begin
                 CompInfo.get();
-                PreviousSOLineNo := 0;
+                PrevoiusSOLineNo := 0;
                 PreviousSONo := '';
+                if Balanceasof <> 0D then
+                    SetRange("Posting Date", Balanceasof);
             end;
 
             trigger OnAfterGetRecord()
@@ -68,34 +70,44 @@ report 50101 "Deferral Revenue Report"
                 RevenueRecogSchedule1: Record "Revenue Recognition Schedule";
             begin
                 Clear(Type);
+                Clear(Noofperiods);
                 SalesInvoiceLineL.SetRange("Document No.", "Revenue Recognition Schedule"."Sales invoice No.");
                 SalesInvoiceLineL.SetRange("Line No.", "Revenue Recognition Schedule"."SO Line No.");
                 if SalesInvoiceLineL.FindFirst() then begin
                     Type := format(SalesInvoiceLineL.Type);
-                    Noofperiods := Format(SalesInvoiceLineL."Invoice Interval");
-
+                    if SalesInvoiceLineL."Invoice Interval" <> 0 then
+                        Noofperiods := FORMAT(SalesInvoiceLineL."Invoice Interval"); //"Deferral Code";
                 end;
-                if PreviousSOLineNo = "Revenue Recognition Schedule"."SO Line No." then CurrReport.Skip();
+
+                // if (PrevoiusSOLineNo = "Revenue Recognition Schedule"."SO Line No.") and (PreviousSONo = "Revenue Recognition Schedule"."Sales Order No.") then
+                //    CurrReport.Skip();
+                if not CheckList.Contains(FORMAT("Revenue Recognition Schedule"."SO Line No.") + FORMAT("Revenue Recognition Schedule"."Sales Order No.")) then begin
+                    CheckList.Add(FORMAT("Revenue Recognition Schedule"."SO Line No.") + FORMAT("Revenue Recognition Schedule"."Sales Order No."));
+                end else
+                    CurrReport.Skip();
+
                 Clear(AmtRecognized);
                 Clear(RevenueRecogSchedule);
+                RevenueRecogSchedule.SetRange("Sales Order No.", "Revenue Recognition Schedule"."Sales Order No.");
                 RevenueRecogSchedule.SetRange("Sales invoice No.", "Revenue Recognition Schedule"."Sales invoice No.");
                 RevenueRecogSchedule.SetRange("SO Line No.", "Revenue Recognition Schedule"."SO Line No.");
                 RevenueRecogSchedule.SetRange(Posted, true);
                 if RevenueRecogSchedule.FindSet() then begin
                     repeat
-                        PreviousSONo := RevenueRecogSchedule."Sales Order No.";
-                        PreviousSOLineNo := RevenueRecogSchedule."SO Line No.";
+                        // PreviousSONo := RevenueRecogSchedule."Sales Order No.";
+                        // PrevoiusSOLineNo := RevenueRecogSchedule."SO Line No.";
                         AmtRecognized := AmtRecognized + RevenueRecogSchedule.Amount;
                     until RevenueRecogSchedule.Next() = 0;
                 end;
                 Clear(RevenueRecogSchedule1);
+                Clear(RemainingAmtRecognized);
                 RevenueRecogSchedule1.SetRange("Sales Order No.", "Revenue Recognition Schedule"."Sales Order No.");
                 RevenueRecogSchedule1.SetRange("SO Line No.", "Revenue Recognition Schedule"."SO Line No.");
                 RevenueRecogSchedule1.SetRange(Posted, false);
                 if RevenueRecogSchedule1.FindSet() then begin
                     repeat
-                        PreviousSONo := RevenueRecogSchedule1."Sales Order No.";
-                        PreviousSOLineNo := RevenueRecogSchedule1."SO Line No.";
+                        // PreviousSONo := RevenueRecogSchedule1."Sales Order No.";
+                        // PrevoiusSOLineNo := RevenueRecogSchedule1."SO Line No.";
                         RemainingAmtRecognized := RemainingAmtRecognized + RevenueRecogSchedule1.Amount;
                     until RevenueRecogSchedule1.Next() = 0;
                 end;
@@ -128,6 +140,7 @@ report 50101 "Deferral Revenue Report"
         Noofperiods: Code[10];
         CompInfo: Record "Company Information";
         Balanceasof: Date;
-        PreviousSOLineNo: Integer;
+        PrevoiusSOLineNo: Integer;
         PreviousSONo: Code[20];
+        CheckList: List of [Text];
 }

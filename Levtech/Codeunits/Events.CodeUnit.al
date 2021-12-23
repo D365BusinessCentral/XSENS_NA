@@ -91,14 +91,14 @@ codeunit 50101 "Events"
                         //flowing dicsount from sales line to purchase line as we were having 100% discunt case
                     end else begin
 
-                        Clear(CurrencyFactor);
-                        if PurchOrderHeader."Currency Factor" <> 0 then
-                            CurrencyFactor := PurchOrderHeader."Currency Factor"
-                        else
+                        CLEAR(CurrencyFactor);
+                        IF RecSalesHeader."Currency Factor" <> 0 THEN
+                            CurrencyFactor := RecSalesHeader."Currency Factor"
+                        ELSE
                             CurrencyFactor := 1;
 
                         Clear(CurrencyExchangeRate);
-                        ExchangeRateAmt := CurrencyExchangeRate.GetCurrentCurrencyFactor(RecSalesHeader."Currency Code");
+                        ExchangeRateAmt := CurrencyExchangeRate.GetCurrentCurrencyFactor(PurchOrderHeader."Currency Code");
                         //Need to remove from Live
                         //PurchOrderLine.Validate("Direct Unit Cost", Round((RecSalesLine."Unit Price" / CurrencyFactor) * ExchangeRateAmt, 0.01, '=') * RecVendor.Percentage / 100);
                         //commented above code as suggested by Biplab sir on 30th November 2021- in case of 100% discount line Amount is becoming 0

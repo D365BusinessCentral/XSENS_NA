@@ -103,8 +103,8 @@ codeunit 50101 "Events"
                         //PurchOrderLine.Validate("Direct Unit Cost", Round((RecSalesLine."Unit Price" / CurrencyFactor) * ExchangeRateAmt, 0.01, '=') * RecVendor.Percentage / 100);
                         //commented above code as suggested by Biplab sir on 30th November 2021- in case of 100% discount line Amount is becoming 0
                         PurchOrderLine.Validate("Direct Unit Cost", Round(((RecSalesLine."Unit Price" / CurrencyFactor) * ExchangeRateAmt) * RecVendor.Percentage / 100, 0.01, '='));
-                        //flowing dicsount from sales line to purchase line as we were having 100% discunt case
                         PurchOrderLine.Validate("Line Discount %", RecSalesLine."Line Discount %");
+                        //flowing dicsount from sales line to purchase line as we were having 100% discunt case
                     end;
                 end;
             end;
@@ -154,9 +154,6 @@ codeunit 50101 "Events"
                     RecPurchaseLine.Validate("Description 2", RecSalesLineL."Description 2");
                     RecPurchaseLine.Validate("Order Date", RecSalesLineL."Posting Date");
                     RecPurchaseLine.Validate("Currency Code", RecSalesLineL."Currency Code");
-                    // RecPurchaseLine.Validate("Drop Shipment", RecSalesLineL."Drop Shipment");
-                    // RecPurchaseLine.Validate("Sales Order No.", RecSalesLineL."Document No.");
-                    // RecPurchaseLine.Validate("Sales Order Line No.", RecSalesLineL."Line No.");
                     RecPurchaseLine.Insert(true);
                 until RecSalesLineL.Next() = 0;
             end;

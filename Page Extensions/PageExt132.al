@@ -2,6 +2,38 @@ pageextension 50014 "Posted Sales Invoice" extends "Posted Sales Invoice"
 {
     layout
     {
+        addlast(General)
+        {
+            field(ExternalID; Rec.ExternalID)
+            {
+                ApplicationArea = All;
+            }
+            group(SalesForce)
+            {
+                CaptionML = ENU = 'SalesForce',
+                                  NLD = 'SalesForce';
+                field("SalesForce Comment"; Rec."SalesForce Comment")
+                {
+                    CaptionML = ENU = 'Comment 1',
+                                      NLD = 'Opmerking';
+                    ApplicationArea = All;
+                }
+                field("Comment 2"; Rec."Comment 2")
+                {
+                    ApplicationArea = All;
+                }
+                field("US Payment Terms"; Rec."US Payment Terms")
+                {
+                    ApplicationArea = All;
+                    Caption = 'IC Payment Terms';
+                }
+                field("US Sales Order No."; Rec."US Sales Order No.")
+                {
+                    ApplicationArea = All;
+                    Caption = 'IC Sales Order No.';
+                }
+            }
+        }
         addlast(content)
         {
             group("Chinese Localization")

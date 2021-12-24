@@ -55,7 +55,7 @@ codeunit 50007 "Create Revenue Schedule"
                     RecRevRecSchedule."Line No." := LineNo;
                     RecRevRecSchedule."Posting Date" := CalcDate('CM', DeferralLine."Posting Date");
                     if RecSalesLinep."Invoice Interval" = 1 then
-                        RecRevRecSchedule.Amount := RecSalesLinep.Amount
+                        RecRevRecSchedule.Amount := RecSalesLinep."Amount Including VAT"
                     else
                         RecRevRecSchedule.Amount := DeferralLine.Amount;
                     RecRevRecSchedule."Deferral Account" := DeferralTemplate."Deferral Account";

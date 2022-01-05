@@ -167,7 +167,7 @@ page 50002 "Contract Information"
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedOnly = true;
-                Image = card;
+                Image = Document;
 
                 trigger OnAction()
                 var

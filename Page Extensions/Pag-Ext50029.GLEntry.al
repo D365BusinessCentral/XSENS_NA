@@ -41,7 +41,7 @@ pageextension 50029 GLEntry extends "General Ledger Entries"
         }
         addlast(Control1)
         {
-            field("Revenue SO No."; "Revenue SO No.")
+            field("Revenue SO No."; Rec."Revenue SO No.")
             {
                 ApplicationArea = All;
             }

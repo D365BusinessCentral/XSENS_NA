@@ -12,7 +12,7 @@ table 50009 "Sales Tax Amount Difference LT"
 
     fields
     {
-        field(1; "Document Type"; Option)
+        /*field(1; "Document Type"; Option)
         {
             CaptionML = ENU = 'Document Type',
                         ESM = 'Tipo documento',
@@ -23,6 +23,13 @@ table 50009 "Sales Tax Amount Difference LT"
                               FRC = 'Devis,Commande,Facture,Note de crédit,Commande permanente,Retour',
                               ENC = 'Quote,Order,Invoice,Credit Memo,Blanket Order,Return Order';
             OptionMembers = Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order";
+        }*/
+        field(1; "Document Type"; Enum "Sales Document Type")
+        {
+            CaptionML = ENU = 'Document Type',
+                        ESM = 'Tipo documento',
+                        FRC = 'Type de document',
+                        ENC = 'Document Type';
         }
         field(2; "Document Product Area"; Option)
         {
@@ -42,11 +49,11 @@ table 50009 "Sales Tax Amount Difference LT"
                         ESM = 'Nº documento',
                         FRC = 'N° de document',
                         ENC = 'Document No.';
-            TableRelation = IF ("Document Product Area" = CONST(Sales)) "Sales Header"."No." WHERE("Document Type" = FIELD("Document Type"))
+            TableRelation = IF ("Document Product Area" = CONST(Sales)) "Sales Header"."No." WHERE("Document Type" = field("Document Type"))
             ELSE
-            IF ("Document Product Area" = CONST(Purchase)) "Purchase Header"."No." WHERE("Document Type" = FIELD("Document Type"))
+            IF ("Document Product Area" = CONST(Purchase)) "Purchase Header"."No." WHERE("Document Type" = field("Document Type"))
             ELSE
-            IF ("Document Product Area" = CONST(Service)) "Service Header"."No." WHERE("Document Type" = FIELD("Document Type"))
+            IF ("Document Product Area" = CONST(Service)) "Service Header"."No." WHERE("Document Type" = field("Document Type"))
             ELSE
             IF ("Document Type" = CONST(Invoice),
                                      "Document Product Area" = CONST("Posted Sale")) "Sales Invoice Header"
@@ -168,7 +175,8 @@ table 50009 "Sales Tax Amount Difference LT"
         EXIT(TaxAmountDifference.FIND('-'));
     end;
 
-    procedure CopyTaxDifferenceRecords(FromProductArea: Option Sales,Purchase; FromDocType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order"; FromDocNo: Code[20]; ToProductArea: Option "Posted Sale","Posted Purchase"; ToDocType: Option Invoice,"Credit Memo"; ToDocNo: Code[20]);
+    //procedure CopyTaxDifferenceRecords(FromProductArea: Option Sales,Purchase; FromDocType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order"; FromDocNo: Code[20]; ToProductArea: Option "Posted Sale","Posted Purchase"; ToDocType: Option Invoice,"Credit Memo"; ToDocNo: Code[20]);
+    procedure CopyTaxDifferenceRecords(FromProductArea: Option Sales,Purchase; FromDocType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order"; FromDocNo: Code[20]; ToProductArea: Option "Posted Sale","Posted Purchase"; ToDocType: enum "Sales Document Type"; ToDocNo: Code[20]);
     var
         FromTaxAmountDifference: Record 50009;
         ToTaxAmountDifference: Record 50009;

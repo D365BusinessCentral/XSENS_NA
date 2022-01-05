@@ -1305,23 +1305,21 @@ report 50005 "Purchase - Order XSS DCR"
         // TEMPORARY
         // According "VAT Amount Line".DeductVATAmountLine wich is not available in NAVW1 CU1
         // Note: If available "VAT Amount Line".DeductVATAmountLine can be use instead
-        with VATAmounLine do begin
-            if FINDSET then
-                repeat
-                    VATAmountLineDeduct := VATAmounLine;
-                    if VATAmountLineDeduct.FIND then begin
-                        "VAT Base" -= VATAmountLineDeduct."VAT Base";
-                        "VAT Amount" -= VATAmountLineDeduct."VAT Amount";
-                        "Amount Including VAT" -= VATAmountLineDeduct."Amount Including VAT";
-                        "Line Amount" -= VATAmountLineDeduct."Line Amount";
-                        "Inv. Disc. Base Amount" -= VATAmountLineDeduct."Inv. Disc. Base Amount";
-                        "Invoice Discount Amount" -= VATAmountLineDeduct."Invoice Discount Amount";
-                        "Calculated VAT Amount" -= VATAmountLineDeduct."Calculated VAT Amount";
-                        "VAT Difference" -= VATAmountLineDeduct."VAT Difference";
-                        MODIFY;
-                    end;
-                until NEXT = 0;
-        end;
+        if VATAmounLine.FINDSET then
+            repeat
+                VATAmountLineDeduct := VATAmounLine;
+                if VATAmountLineDeduct.FIND then begin
+                    VATAmounLine."VAT Base" -= VATAmountLineDeduct."VAT Base";
+                    VATAmounLine."VAT Amount" -= VATAmountLineDeduct."VAT Amount";
+                    VATAmounLine."Amount Including VAT" -= VATAmountLineDeduct."Amount Including VAT";
+                    VATAmounLine."Line Amount" -= VATAmountLineDeduct."Line Amount";
+                    VATAmounLine."Inv. Disc. Base Amount" -= VATAmountLineDeduct."Inv. Disc. Base Amount";
+                    VATAmounLine."Invoice Discount Amount" -= VATAmountLineDeduct."Invoice Discount Amount";
+                    VATAmounLine."Calculated VAT Amount" -= VATAmountLineDeduct."Calculated VAT Amount";
+                    VATAmounLine."VAT Difference" -= VATAmountLineDeduct."VAT Difference";
+                    VATAmounLine.MODIFY;
+                end;
+            until VATAmounLine.NEXT = 0;
     end;
 
     local procedure wlFncFormatDocumentFields(pRecPurchHeader: Record "Purchase Header");
@@ -1329,26 +1327,24 @@ report 50005 "Purchase - Order XSS DCR"
         wlPurchPersonText: Text[30];
         wlCurrencyCode: Code[10];
     begin
-        with pRecPurchHeader do begin
-            wlCurrencyCode := "Currency Code";
-            if wlCurrencyCode = '' then begin
-                wgRecGLSetup.TESTFIELD("LCY Code");
-                wlCurrencyCode := wgRecGLSetup."LCY Code";
-            end;
-            wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
-            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-            wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
+        wlCurrencyCode := pRecPurchHeader."Currency Code";
+        if wlCurrencyCode = '' then begin
+            wgRecGLSetup.TESTFIELD("LCY Code");
+            wlCurrencyCode := wgRecGLSetup."LCY Code";
+        end;
+        wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
+        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
+        wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
 
-            case wgRecCompanyInfo.Name of
-                'Kinduct Tech - Backup101121':
-                    HeaderFooterVisible := false;
-                'Kinduct Technologies':
-                    HeaderFooterVisible := false;
-                else begin
-                        HeaderFooterVisible := true;
-                        wgCduFormatDoc.SetPurchaser(wgRecSalesPurchPerson, "Purchaser Code", wlPurchPersonText);
-                    end;
-            end;
+        case wgRecCompanyInfo.Name of
+            'Kinduct Tech - Backup101121':
+                HeaderFooterVisible := false;
+            'Kinduct Technologies':
+                HeaderFooterVisible := false;
+            else begin
+                    HeaderFooterVisible := true;
+                    wgCduFormatDoc.SetPurchaser(wgRecSalesPurchPerson, pRecPurchHeader."Purchaser Code", wlPurchPersonText);
+                end;
         end;
     end;
 

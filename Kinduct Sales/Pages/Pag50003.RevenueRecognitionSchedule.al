@@ -72,7 +72,7 @@ page 50003 "Revenue Recognition Schedule"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Customer No."; "Customer No.")
+                field("Customer No."; Rec."Customer No.")
                 {
                     ApplicationArea = All;
                 }

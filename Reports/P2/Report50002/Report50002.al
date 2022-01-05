@@ -1038,7 +1038,7 @@ report 50002 "Proforma Invoice XSS DCR"
                 if wgShowLotSN then begin
                     wgCduItemTrackingDocMgt.SetRetrieveAsmItemTracking(true);
                     wgCduItemTrackingDocMgt.RetrieveDocumentItemTracking(TrackingSpec, SalesHdr."No.",
-                        DATABASE::"Sales Header", SalesHdr."Document Type");
+                        DATABASE::"Sales Header", SalesHdr."Document Type".AsInteger());
                 end;
 
                 //Set HideLineDiscount
@@ -1272,45 +1272,43 @@ report 50002 "Proforma Invoice XSS DCR"
         wlSalesPersonText: Text[30];
         wlCurrencyCode: Code[10];
     begin
-        with pRecSalesHeader do begin
-            wlCurrencyCode := "Currency Code";
-            if wlCurrencyCode = '' then begin
-                wgRecGLSetup.TESTFIELD("LCY Code");
-                wlCurrencyCode := wgRecGLSetup."LCY Code";
-            end;
-            wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
-            //NM_BEGIN GW
-            // case wgRecCompanyInfo."Company Location" of
-            //     wgRecCompanyInfo."Company Location"::Holland:
-            //         begin
-            //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
-            //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
-            //         end;
-            //     wgRecCompanyInfo."Company Location"::"North America":
-            //         begin
-            //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
-            //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
-            //         end;
-            // end;
-            //NM_END
-            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl. Sales Tax'), wlCurrencyCode);
-            if VATAmount = 0 then
-                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
-            else
-                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
-
-            case wgRecCompanyInfo.Name of
-                'Kinduct Tech - Backup101121':
-                    HeaderFooterVisible := false;
-                'Kinduct Technologies':
-                    HeaderFooterVisible := false;
-                else begin
-                        HeaderFooterVisible := true;
-                        wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
-                    end;
-            end;
-            //wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+        wlCurrencyCode := pRecSalesHeader."Currency Code";
+        if wlCurrencyCode = '' then begin
+            wgRecGLSetup.TESTFIELD("LCY Code");
+            wlCurrencyCode := wgRecGLSetup."LCY Code";
         end;
+        wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
+        //NM_BEGIN GW
+        // case wgRecCompanyInfo."Company Location" of
+        //     wgRecCompanyInfo."Company Location"::Holland:
+        //         begin
+        //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
+        //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
+        //         end;
+        //     wgRecCompanyInfo."Company Location"::"North America":
+        //         begin
+        //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
+        //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
+        //         end;
+        // end;
+        //NM_END
+        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl. Sales Tax'), wlCurrencyCode);
+        if VATAmount = 0 then
+            wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
+        else
+            wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
+
+        case wgRecCompanyInfo.Name of
+            'Kinduct Tech - Backup101121':
+                HeaderFooterVisible := false;
+            'Kinduct Technologies':
+                HeaderFooterVisible := false;
+            else begin
+                    HeaderFooterVisible := true;
+                    wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, pRecSalesHeader."Salesperson Code", wlSalesPersonText);
+                end;
+        end;
+        //wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
     end;
 
     local procedure wlFncFormatAddressFields(var vRecSalesHeader: Record "Sales Header");

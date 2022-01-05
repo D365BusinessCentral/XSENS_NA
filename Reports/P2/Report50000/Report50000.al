@@ -1396,15 +1396,13 @@ report 50000 "Sales - Invoice XSS DCR"
         vRecPostedAsmLine.DELETEALL;
         if vRecSalesInvLine.Type <> vRecSalesInvLine.Type::Item then
             exit;
-        with wlRecValueEntry do begin
-            SETCURRENTKEY("Document No.");
-            SETRANGE("Document No.", vRecSalesInvLine."Document No.");
-            SETRANGE("Document Type", "Document Type"::"Sales Invoice");
-            SETRANGE("Document Line No.", vRecSalesInvLine."Line No.");
-            SETRANGE(Adjustment, false);
-            if not FINDSET then
-                exit;
-        end;
+        wlRecValueEntry.SETCURRENTKEY("Document No.");
+        wlRecValueEntry.SETRANGE("Document No.", vRecSalesInvLine."Document No.");
+        wlRecValueEntry.SETRANGE("Document Type", wlRecValueEntry."Document Type"::"Sales Invoice");
+        wlRecValueEntry.SETRANGE("Document Line No.", vRecSalesInvLine."Line No.");
+        wlRecValueEntry.SETRANGE(Adjustment, false);
+        if not wlRecValueEntry.FINDSET then
+            exit;
         repeat
             if wlRecItemLedgerEntry.GET(wlRecValueEntry."Item Ledger Entry No.") then
                 if wlRecItemLedgerEntry."Document Type" = wlRecItemLedgerEntry."Document Type"::"Sales Shipment" then begin
@@ -1601,17 +1599,15 @@ report 50000 "Sales - Invoice XSS DCR"
             exit;
         end;
 
-        with ShipmentBuf do begin
-            "Document No." := vRecSalesInvLine."Document No.";
-            "Line No." := vRecSalesInvLine."Line No.";
-            "Entry No." := wgShipmentLineNextEntryNo;
-            Type := vRecSalesInvLine.Type;
-            "No." := vRecSalesInvLine."No.";
-            Quantity := pQtyOnShipment;
-            "Posting Date" := pPostingDate;
-            INSERT;
-            wgShipmentLineNextEntryNo += 1;
-        end;
+        ShipmentBuf."Document No." := vRecSalesInvLine."Document No.";
+        ShipmentBuf."Line No." := vRecSalesInvLine."Line No.";
+        ShipmentBuf."Entry No." := wgShipmentLineNextEntryNo;
+        ShipmentBuf.Type := vRecSalesInvLine.Type;
+        ShipmentBuf."No." := vRecSalesInvLine."No.";
+        ShipmentBuf.Quantity := pQtyOnShipment;
+        ShipmentBuf."Posting Date" := pPostingDate;
+        ShipmentBuf.INSERT;
+        wgShipmentLineNextEntryNo += 1;
     end;
 
     local procedure wlFncGetLineFeeNoteOnReportHist(pSalesInvNo: Code[20]);
@@ -1655,48 +1651,46 @@ report 50000 "Sales - Invoice XSS DCR"
         wlSalesPersonText: Text[30];
         wlCurrencyCode: Code[10];
     begin
-        with pRecSalesInvHeader do begin
-            wlCurrencyCode := "Currency Code";
-            if wlCurrencyCode = '' then begin
-                wgRecGLSetup.TESTFIELD("LCY Code");
-                wlCurrencyCode := wgRecGLSetup."LCY Code";
-            end;
-            wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
-            //NM_BEGIN GW
-            // case wgRecCompanyInfo."Company Location" of
-            //     wgRecCompanyInfo."Company Location"::Holland:
-            //         begin
-            //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
-            //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
-            //         end;
-            //     wgRecCompanyInfo."Company Location"::"North America":
-            //         begin
-            //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
-            //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
-            //         end;
-            // end;
-            //NM_END
-            wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl. Sales Tax'), wlCurrencyCode);
-            if VATAmount = 0 then
-                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
-            else
-                wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
-
-            case wgRecCompanyInfo.Name of
-                'Kinduct Tech - Backup101121':
-                    HeaderFooterVisible := false;
-                'Kinduct Technologies':
-                    HeaderFooterVisible := false;
-                else begin
-                        HeaderFooterVisible := true;
-                        wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
-                    end;
-            end;
-            // if Company.Name <> 'Kinduct Technologies' then begin
-            //     HeaderFooterVisible := true;
-            //     wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
-            // end;
+        wlCurrencyCode := pRecSalesInvHeader."Currency Code";
+        if wlCurrencyCode = '' then begin
+            wgRecGLSetup.TESTFIELD("LCY Code");
+            wlCurrencyCode := wgRecGLSetup."LCY Code";
         end;
+        wgTotalText := STRSUBSTNO(Trl('Total%1'), wlCurrencyCode);
+        //NM_BEGIN GW
+        // case wgRecCompanyInfo."Company Location" of
+        //     wgRecCompanyInfo."Company Location"::Holland:
+        //         begin
+        //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl VAT.'), wlCurrencyCode);
+        //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl VAT.'), wlCurrencyCode);
+        //         end;
+        //     wgRecCompanyInfo."Company Location"::"North America":
+        //         begin
+        //             wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl Tax.'), wlCurrencyCode);
+        //             wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl Tax.'), wlCurrencyCode);
+        //         end;
+        // end;
+        //NM_END
+        wgTotalInclVATText := STRSUBSTNO(Trl('Total %1 Incl. Sales Tax'), wlCurrencyCode);
+        if VATAmount = 0 then
+            wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 '), wlCurrencyCode)
+        else
+            wgTotalExclVATText := STRSUBSTNO(Trl('Total %1 Excl. Sales Tax'), wlCurrencyCode);
+
+        case wgRecCompanyInfo.Name of
+            'Kinduct Tech - Backup101121':
+                HeaderFooterVisible := false;
+            'Kinduct Technologies':
+                HeaderFooterVisible := false;
+            else begin
+                    HeaderFooterVisible := true;
+                    wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, pRecSalesInvHeader."Salesperson Code", wlSalesPersonText);
+                end;
+        end;
+        // if Company.Name <> 'Kinduct Technologies' then begin
+        //     HeaderFooterVisible := true;
+        //     wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+        // end;
     end;
 
     local procedure wlFncFormatAddressFields(var vRecSalesInvHeader: Record "Sales Invoice Header");

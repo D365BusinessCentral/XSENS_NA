@@ -25,10 +25,9 @@ codeunit 50014 "Sales Order Customization"
     var
         FormatAddressCUL: Codeunit "Format Address";
     begin
-        with CompanyInfo do
-            FormatAddressCUL.FormatAddr(
-             AddrArray, Name, "Name 2", '', Address, "Address 2",
-             City, "Post Code", County, "Country/Region Code");
+        FormatAddressCUL.FormatAddr(
+ AddrArray, CompanyInfo.Name, CompanyInfo."Name 2", '', CompanyInfo.Address, CompanyInfo."Address 2",
+ CompanyInfo.City, CompanyInfo."Post Code", CompanyInfo.County, CompanyInfo."Country/Region Code");
         IsHandled := true;
     end;
 
@@ -38,10 +37,9 @@ codeunit 50014 "Sales Order Customization"
     var
         FormatAddressCUL: Codeunit "Format Address";
     begin
-        with PurchaseHeader do
-            FormatAddressCUL.FormatAddr(
-              AddrArray, "Ship-to Name", '', "Ship-to Contact", "Ship-to Address", "Ship-to Address 2",
-              "Ship-to City", "Ship-to Post Code", "Ship-to County", "Ship-to Country/Region Code");
+        FormatAddressCUL.FormatAddr(
+  AddrArray, PurchaseHeader."Ship-to Name", '', PurchaseHeader."Ship-to Contact", PurchaseHeader."Ship-to Address", PurchaseHeader."Ship-to Address 2",
+  PurchaseHeader."Ship-to City", PurchaseHeader."Ship-to Post Code", PurchaseHeader."Ship-to County", PurchaseHeader."Ship-to Country/Region Code");
         IsHandled := true;
     end;
 
@@ -51,12 +49,10 @@ codeunit 50014 "Sales Order Customization"
     var
         FormatAddressCUL: Codeunit "Format Address";
     begin
-        with SalesHeader do begin
-            FormatAddressCUL.FormatAddr(
-              AddrArray, "Ship-to Name", '', "Ship-to Contact", "Ship-to Address", "Ship-to Address 2",
-              "Ship-to City", "Ship-to Post Code", "Ship-to County", "Ship-to Country/Region Code");
-            Handled := true;
-        end;
+        FormatAddressCUL.FormatAddr(
+  AddrArray, SalesHeader."Ship-to Name", '', SalesHeader."Ship-to Contact", SalesHeader."Ship-to Address", SalesHeader."Ship-to Address 2",
+  SalesHeader."Ship-to City", SalesHeader."Ship-to Post Code", SalesHeader."Ship-to County", SalesHeader."Ship-to Country/Region Code");
+        Handled := true;
     end;
 
     [EventSubscriber(ObjectType::Report, Report::"Get Sales Orders", 'OnBeforeInsertReqWkshLine', '', false, false)]

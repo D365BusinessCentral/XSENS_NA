@@ -888,8 +888,7 @@ report 50003 "Sales - Shipment XSS DCR"
                 HeaderFooterVisible := false;
             else begin
                     HeaderFooterVisible := true;
-                    with pRecSalesShptHeader do
-                        wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, "Salesperson Code", wlSalesPersonText);
+                    wgCduFormatDoc.SetSalesPerson(wgRecSalesPurchPerson, pRecSalesShptHeader."Salesperson Code", wlSalesPersonText);
                 end;
         end;
         // with pRecSalesShptHeader do begin

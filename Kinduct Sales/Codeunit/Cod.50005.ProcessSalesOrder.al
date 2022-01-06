@@ -150,7 +150,6 @@ codeunit 50005 "Process Contract Information"
             repeat
                 RecRevRecSchedule."Sales invoice No." := SalesInvLine."Document No.";
                 RecRevRecSchedule."Sales Invoice Date" := SalesInvLine."Posting Date";
-                //Need to remove from live
                 if SalesHeader."Currency Factor" <> 0 then
                     RecRevRecSchedule.Amount := RecRevRecSchedule.Amount / SalesHeader."Currency Factor";
                 RecRevRecSchedule.Modify();

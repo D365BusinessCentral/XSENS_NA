@@ -69,6 +69,10 @@ pageextension 50029 GLEntry extends "General Ledger Entries"
             {
                 ApplicationArea = All;
             }
+            field("Business Unit Code"; Rec."Business Unit Code")
+            {
+                ApplicationArea = All;
+            }
         }
         modify("Source Type")
         {

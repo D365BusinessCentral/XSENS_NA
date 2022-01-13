@@ -111,7 +111,6 @@ codeunit 50101 "Events"
         end
     end;
 
-    //Need to remove from Live
     //Inserting Comment lines in Purchase Order from Sales Order After creating purhase order from Req. worksheet
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", 'OnAfterPurchOrderLineInsert', '', false, false)]
     local procedure OnAfterPurchOrderLineInsert(var PurchOrderLine: Record "Purchase Line"; var RequisitionLine: Record "Requisition Line"; var NextLineNo: Integer);

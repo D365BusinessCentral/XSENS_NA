@@ -89,5 +89,13 @@ pageextension 50013 "Purch. Invoice Subform" extends "Purch. Invoice Subform"
                 end;
             }
         }
+        modify("Line Discount %")
+        {
+            Visible = true;
+        }
+        modify("Line Discount Amount")
+        {
+            Visible = true;
+        }
     }
 }

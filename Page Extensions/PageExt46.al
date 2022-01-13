@@ -47,5 +47,17 @@ pageextension 50009 "Sales Order Subform" extends "Sales Order Subform"
             Enabled = false;
             Editable = false;
         }
+        modify("Purchasing Code")
+        {
+            Visible = true;
+        }
+        modify("Line Discount %")
+        {
+            Visible = true;
+        }
+        modify("Line Discount Amount")
+        {
+            Visible = true;
+        }
     }
 }

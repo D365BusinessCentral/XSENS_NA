@@ -29,7 +29,7 @@ codeunit 50007 "Create Revenue Schedule"
         if DeferralHeader.Get("Deferral Document Type"::Sales.AsInteger(), '', '', RecSalesLinep."Document Type".AsInteger(), RecSalesLinep."Document No.", RecSalesLinep."Line No.") then
             DeferralHeader.Delete(true);//deleting to recreate lines with new Deferral Interval
         DeferralUtilities.CreateDeferralSchedule(format(RecSalesLinep."Invoice Interval"), "Deferral Document Type"::Sales.AsInteger(),
-           '', '', RecSalesLinep."Document Type".AsInteger(), RecSalesLinep."Document No.", RecSalesLinep."Line No.", RecSalesLinep.GetDeferralAmount,
+           '', '', RecSalesLinep."Document Type".AsInteger(), RecSalesLinep."Document No.", RecSalesLinep."Line No.", RecSalesLinep.CalcLineAmount(),//Need to remove from Live //RecSalesLinep.GetDeferralAmount,//Changed it to line amount as they request to use line amount exc VAT-13JAN2021
            DeferralTemplate."Calc. Method", RecSalesLinep."Shipment Date", DeferralTemplate."No. of Periods", true,
             RecSalesLinep.Description, true, RecSalesLinep."Currency Code");
 
@@ -55,7 +55,7 @@ codeunit 50007 "Create Revenue Schedule"
                     RecRevRecSchedule."Line No." := LineNo;
                     RecRevRecSchedule."Posting Date" := CalcDate('CM', DeferralLine."Posting Date");
                     if RecSalesLinep."Invoice Interval" = 1 then
-                        RecRevRecSchedule.Amount := RecSalesLinep."Amount Including VAT"
+                        RecRevRecSchedule.Amount := RecSalesLinep.CalcLineAmount() //Need to remove from live//RecSalesLinep."Amount Including VAT"//Changed it to line amount as they request to use line amount exc VAT-13JAN2021
                     else
                         RecRevRecSchedule.Amount := DeferralLine.Amount;
                     RecRevRecSchedule."Deferral Account" := DeferralTemplate."Deferral Account";
